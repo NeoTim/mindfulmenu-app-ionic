@@ -4,5 +4,13 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebaseConfig: {
+    apiKey: "AIzaSyB8eA24M8fnJajXZWH7HtuGnuCz4Nq0ZDE",
+    authDomain: "mindful-menu.firebaseapp.com",
+    databaseURL: "https://mindful-menu.firebaseio.com",
+    projectId: "mindful-menu",
+    storageBucket: "mindful-menu.appspot.com",
+    messagingSenderId: "415539829999"
+  }
 };
