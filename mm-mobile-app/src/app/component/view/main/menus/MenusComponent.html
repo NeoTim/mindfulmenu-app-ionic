@@ -1,0 +1,11 @@
+<div class="top-doodad"></div>
+
+<ion-content class="with-top-doodad" padding>
+  <h1 text-center>Menus</h1>
+
+  <ul>
+    <li *ngFor="let ingredient of ingredients | async">
+      {{ ingredient.item }} ({{ ingredient.category }})
+    </li>
+  </ul>
+</ion-content>

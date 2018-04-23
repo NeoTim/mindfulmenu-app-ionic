@@ -1,0 +1,59 @@
+main {
+
+  ion-tabs {
+    a.tab-button {
+
+      span.tab-button-text {
+        color: color($colors, secondary) !important;
+        font-family: 'Trocchi' !important;
+        font-size: 12px !important;
+        font-weight: normal;
+        font-style: normal;
+        margin-top: 2px !important;
+        margin-bottom: 2px !important;
+      }
+
+      ion-icon {
+        width: 30px;
+        height: 30px;
+      }
+
+      .ion-md-menus:before {
+        content: url('../asset/ic_menu_menu_inactive@3x.png') !important;
+        transform: scale(.35) !important;
+        transform-origin: top left !important;
+      }
+
+      &[aria-selected="true"] .ion-md-menus:before {
+        content: url('../asset/ic_menu_menu_active@3x.png') !important;
+        transform: scale(.35) !important;
+        transform-origin: top left !important;
+      }
+
+      .ion-md-myPlan:before {
+        content: url('../asset/ic_menu_myplan_inactive@3x.png') !important;
+        transform: scale(.35) !important;
+        transform-origin: top left !important;
+      }
+
+      &[aria-selected="true"] .ion-md-myPlan:before {
+        content: url('../asset/ic_menu_myplan_active@3x.png') !important;
+        transform: scale(.35) !important;
+        transform-origin: top left !important;
+      }
+
+      .ion-md-more:before {
+        content: url('../asset/ic_menu_more_inactive@3x.png') !important;
+        transform: scale(.35) !important;
+        transform-origin: top left !important;
+      }
+
+      &[aria-selected="true"] .ion-md-more:before {
+        content: url('../asset/ic_menu_more_active@3x.png') !important;
+        transform: scale(.35) !important;
+        transform-origin: top left !important;
+      }
+    }
+  }
+
+}
