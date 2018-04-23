@@ -5,9 +5,32 @@ import 'rxjs/add/operator/map';
 
 
 interface Meal {
+  id?: string;
   name: string;
+  imageUrl?: string;
   prepTime: number;
   cookTime: number;
+  sourceName?: string;
+  sourceUrl?: string;
+  tip?: string;
+  cookInstructions?: Array<string>;
+  prepInstructions?: Array<string>;
+  ingredients?: Array<Ingredient>;
+}
+
+interface Ingredient {
+  amount: number;
+  unit: string;
+  item: string;
+  category: string;
+}
+
+interface WeeklyMenu {
+  weekNumber: number;
+  startDate: Date;
+  endDate: Date;
+  publishDate: Date;
+  mealIds: Array<string>;
 }
 
 @Component({
