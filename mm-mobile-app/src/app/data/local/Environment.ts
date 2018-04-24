@@ -1,8 +1,13 @@
-import { FirebaseAppConfig } from "angularfire2";
-
 export class Environment {
 
-    firebase: FirebaseAppConfig;
+    firebase: {
+      apiKey: string,
+      authDomain: string,
+      databaseURL: string,
+      projectId: string,
+      storageBucket: string,
+      messagingSenderId: string
+    };
 
     websiteUrl: string;
 

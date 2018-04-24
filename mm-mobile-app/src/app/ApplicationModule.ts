@@ -16,9 +16,13 @@ import { ApplicationConfig } from "./config/ApplicationConfig";
 import { MenusComponent } from "./component/view/main/menus/MenusComponent";
 import { MoreComponent } from "./component/view/main/more/MoreComponent";
 import { MyPlanComponent } from "./component/view/main/myPlan/MyPlanComponent";
-import { AngularFireModule } from "angularfire2";
-import { AngularFirestoreModule } from "angularfire2/firestore";
-import { AngularFireAuthModule } from "angularfire2/auth";
+import { FirebaseManager } from "./util/FirebaseManager";
+import { WeeklyMenuModel } from "./model/WeeklyMenuModel";
+import { WeeklyMenuService } from "./service/WeeklyMenuService";
+import { MealService } from "./service/MealService";
+import { MealModel } from "./model/MealModel";
+import { IngredientModel } from "./model/IngredientModel";
+import { IngredientService } from "./service/IngredientService";
 
 @NgModule({
   declarations: [
@@ -39,20 +43,20 @@ import { AngularFireAuthModule } from "angularfire2/auth";
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(ApplicationComponent, {
-    }),
-    IonicStorageModule.forRoot(),
-    AngularFireModule.initializeApp(new ApplicationConfig().ENV.firebase),
-    AngularFirestoreModule,
-    AngularFireAuthModule
+    IonicModule.forRoot(ApplicationComponent, {}),
+    IonicStorageModule.forRoot()
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Network,
     ApplicationConfig,
+    FirebaseManager,
     AuthModel,
     NetworkModel,
+    IngredientModel, IngredientService,
+    MealModel, MealService,
+    WeeklyMenuModel, WeeklyMenuService,
     PlatformUtil,
     ViewUtil,
     {
@@ -63,12 +67,20 @@ import { AngularFireAuthModule } from "angularfire2/auth";
       provide: APP_INITIALIZER,
       multi: true,
       useFactory: (
+                   FirebaseManager: FirebaseManager,
                    AuthModel: AuthModel,
-                   NetworkModel: NetworkModel
+                   NetworkModel: NetworkModel,
+                   IngredientModel: IngredientModel,
+                   MealModel: MealModel,
+                   WeeklyMenuModel: WeeklyMenuModel
       ) => () => {},
       deps: [
+        FirebaseManager,
         AuthModel,
-        NetworkModel
+        NetworkModel,
+        IngredientModel,
+        MealModel,
+        WeeklyMenuModel
       ]
     }
   ],

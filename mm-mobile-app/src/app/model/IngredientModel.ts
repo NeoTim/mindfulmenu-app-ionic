@@ -1,0 +1,55 @@
+import { Injectable } from '@angular/core';
+import { Events } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
+import { Event } from '../common/Event';
+import { IngredientDTO } from "../data/dto/ingredient/IngredientDTO";
+import { IngredientService } from "../service/IngredientService";
+
+@Injectable()
+export class IngredientModel {
+
+  constructor(private events: Events,
+              private storage: Storage,
+              private ingredientService: IngredientService) {
+
+    this.setupListeners();
+  }
+
+  private setupListeners(): void {
+      //
+  }
+
+  public getIngredient(ingredientId: string): Promise<IngredientDTO> {
+    return this.ingredientService.getIngredient(ingredientId)
+      .then((ingredient: IngredientDTO) => {
+        return ingredient;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
+  }
+
+  public getIngredients(ingredientIds: string[]): Promise<IngredientDTO[]> {
+    return this.ingredientService.getIngredients(ingredientIds)
+      .then((ingredients: IngredientDTO[]) => {
+        return ingredients;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
+  }
+
+  public getAllIngredients(): Promise<IngredientDTO[]> {
+    return this.ingredientService.getAllIngredients()
+      .then((ingredients: IngredientDTO[]) => {
+        return ingredients;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
+  }
+
+}

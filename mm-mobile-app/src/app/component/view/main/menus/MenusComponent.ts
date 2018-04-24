@@ -1,7 +1,13 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { AngularFirestore } from "angularfire2/firestore";
-import { Observable } from "rxjs/Observable";
+import { WeeklyMenuModel } from "../../../../model/WeeklyMenuModel";
+import { WeeklyMenuDTO } from "../../../../data/dto/weeklyMenu/WeeklyMenuDTO";
+import { classToPlain } from "class-transformer";
+import { MealModel } from "../../../../model/MealModel";
+import { MealDTO } from "../../../../data/dto/meal/MealDTO";
+import { WeeklyMenu } from "../../../../data/local/weeklyMenu/WeeklyMenu";
+import { IngredientModel } from "../../../../model/IngredientModel";
+import { IngredientDTO } from "../../../../data/dto/ingredient/IngredientDTO";
 
 @Component({
   selector: 'menus',
@@ -9,10 +15,12 @@ import { Observable } from "rxjs/Observable";
 })
 export class MenusComponent {
 
-  ingredients: Observable<any[]>;
+  ingredients: IngredientDTO[];
 
   constructor(public navCtrl: NavController,
-              public db: AngularFirestore) {
+              public weeklyMenuModel: WeeklyMenuModel,
+              public mealModel: MealModel,
+              public ingredientModel: IngredientModel) {
   }
 
   ionViewDidLoad() {
@@ -20,19 +28,34 @@ export class MenusComponent {
   }
 
   init() {
-    this.ingredients = this.db.collection('ingredients').valueChanges();
-    this.ingredients.subscribe(value => {
-      console.log(value);
+    this.ingredientModel.getAllIngredients()
+      .then((ingredients: IngredientDTO[]) => {
+        this.ingredients = ingredients;
+      });
 
-      let meal = this.db.collection('meals', (ref) => ref.where('id', '==', value[0].mealId)).valueChanges();
-      meal.subscribe(value => {
-        console.log(value);
-      })
-    });
+    this.weeklyMenuModel.getWeeklyMenu('9mEinmBGOEgxLUfH3hI9')
+      .then((weeklyMenu: WeeklyMenuDTO) => {
+        console.log('weekly menu DTO after receive from server');
+        console.log(weeklyMenu);
 
-    let test = this.db.collection('test').valueChanges();
-    test.subscribe(value => {
-      console.log(value[2]['testDate'].toDate());
-    })
+        this.mealModel.getMeals(weeklyMenu.mealIds)
+          .then((meals: MealDTO[]) => {
+            console.log('weekly menu\'s meal DTOs after receive from server');
+            console.log(meals);
+
+            let wm: WeeklyMenu = WeeklyMenu.fromDTO(weeklyMenu);
+            wm.meals = meals;
+            console.log('local weekly menu object with meals');
+            console.log(wm);
+
+            let wm2: WeeklyMenuDTO = WeeklyMenu.toDTO(wm);
+            console.log('weekly menu DTO converted back from local weekly menu');
+            console.log(wm2);
+
+            let plain = classToPlain(wm2);
+            console.log('weekly menu DTO before send to server');
+            console.log(plain);
+          });
+      });
   }
 }

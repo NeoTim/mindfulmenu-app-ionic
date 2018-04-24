@@ -8,7 +8,6 @@ import { Event } from '../common/Event';
 import { ViewUtil } from "../util/ViewUtil";
 import { AuthLoginComponent } from "./view/auth/login/AuthLoginComponent";
 import { MainComponent } from "./view/main/MainComponent";
-import { AngularFirestore } from "angularfire2/firestore";
 
 @Component({
   templateUrl: 'ApplicationComponent.html'
@@ -28,14 +27,10 @@ export class ApplicationComponent implements OnInit {
               public events: Events,
               public platformUtil: PlatformUtil,
               public viewUtil: ViewUtil,
-              public networkModel: NetworkModel,
-              public afs: AngularFirestore) {
+              public networkModel: NetworkModel) {
   }
 
   ngOnInit() {
-    this.afs.app.firestore().settings({
-      timestampsInSnapshots: true
-    });
     this.init();
   }
 

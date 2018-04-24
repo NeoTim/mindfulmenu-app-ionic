@@ -1,5 +1,7 @@
 import { Environment } from "../data/local/Environment";
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class ApplicationConfig {
 
     public static ENVIRONMENTS: { [key: string]: string } = {

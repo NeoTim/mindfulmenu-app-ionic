@@ -4,7 +4,7 @@
   <h1 text-center>Menus</h1>
 
   <ul>
-    <li *ngFor="let ingredient of ingredients | async">
+    <li *ngFor="let ingredient of ingredients">
       {{ ingredient.item }} ({{ ingredient.category }})
     </li>
   </ul>
