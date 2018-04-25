@@ -6,6 +6,8 @@ import 'firebase/auth';
 import 'firebase/storage';
 import 'firebase/firestore';
 import 'firebase/messaging';
+import 'firebase/functions';
+import { FirebaseFunctions } from '@firebase/functions-types'
 
 @Injectable()
 export class FirebaseManager {
@@ -16,8 +18,10 @@ export class FirebaseManager {
   public storage: firebase.storage.Storage;
   public firestore: firebase.firestore.Firestore;
   public messaging: firebase.messaging.Messaging;
+  public functions: FirebaseFunctions;
 
   constructor(private config: ApplicationConfig) {
+
     this.firebaseApp = firebase.initializeApp(config.ENV.firebase);
     this.firebaseApp.firestore().settings({
         timestampsInSnapshots: true
@@ -27,6 +31,7 @@ export class FirebaseManager {
     this.storage = this.firebaseApp.storage();
     this.firestore = this.firebaseApp.firestore();
     this.messaging = this.firebaseApp.messaging();
+    this.functions = this.firebaseApp['functions'](); // Firebase SDK has some issues with types for this one
   }
 
   //
@@ -83,5 +88,16 @@ export class FirebaseManager {
         }
     })
   }
+
+  /* Cloud function call example
+
+    this.functions.httpsCallable('addTest')({ text: 'Test'})
+      .then(function(result) {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  */
 
 }

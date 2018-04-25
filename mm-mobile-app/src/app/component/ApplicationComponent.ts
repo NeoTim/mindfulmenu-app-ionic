@@ -8,6 +8,11 @@ import { Event } from '../common/Event';
 import { ViewUtil } from "../util/ViewUtil";
 import { AuthLoginComponent } from "./view/auth/login/AuthLoginComponent";
 import { MainComponent } from "./view/main/MainComponent";
+import { AuthModel } from "../model/AuthModel";
+import { FirebaseCredentialsDTO } from "../data/dto/auth/FirebaseCredentialsDTO";
+import { AuthOfflineComponent } from "./view/auth/offline/AuthOfflineComponent";
+import { UserDTO } from "../data/dto/user/UserDTO";
+import { UserModel } from "../model/UserModel";
 
 @Component({
   templateUrl: 'ApplicationComponent.html'
@@ -20,6 +25,8 @@ export class ApplicationComponent implements OnInit {
   rootPage: any = null;
 
   loaderVisible: boolean = false;
+  loaderRequestCount: number = 0;
+  loaderDebounceTime: number = 250; // ms
 
   constructor(public platform: Platform,
               public statusBar: StatusBar,
@@ -27,7 +34,9 @@ export class ApplicationComponent implements OnInit {
               public events: Events,
               public platformUtil: PlatformUtil,
               public viewUtil: ViewUtil,
-              public networkModel: NetworkModel) {
+              public networkModel: NetworkModel,
+              public authModel: AuthModel,
+              public userModel: UserModel) {
   }
 
   ngOnInit() {
@@ -35,23 +44,38 @@ export class ApplicationComponent implements OnInit {
   }
 
   init() {
-    this.platform.ready().then(() => {
-      if (this.platformUtil.isCordova()) {
-        this.networkModel.initializeNetworkCheck();
-      }
+    this.platform.ready()
+      .then(() => {
+        if (this.platformUtil.isCordova()) {
+          this.networkModel.initializeNetworkCheck();
+        }
 
-      this.rootPage = AuthLoginComponent;
+        this.setupListeners();
+        this.setupInterface();
 
-      this.setupListeners();
-      this.setupInterface();
+        if (this.networkModel.isOnline) {
+          this.authenticate();
+        }
+        else {
+          this.goOffline();
+        }
 
-      console.log('--- APP STARTED ---');
-    });
+        console.log('--- APP STARTED ---');
+      })
+      .catch((reason) => {
+      })
   }
 
   setupListeners() {
-    this.events.subscribe(Event.AUTH.LOGIN.SUCCESS, () => {
-      this.rootPage = MainComponent;
+    this.events.subscribe(Event.AUTH.LOGIN.SUCCESS, (credentials) => {
+      this.userModel.getUserByUID(credentials.uid)
+        .then((user: UserDTO) => {
+          this.userModel.currentUser = user;
+          this.rootPage = MainComponent;
+        })
+        .catch((error) => {
+          this.rootPage = AuthLoginComponent;
+        });
     });
 
     this.events.subscribe(Event.AUTH.LOGOUT.SUCCESS, () => {
@@ -59,11 +83,11 @@ export class ApplicationComponent implements OnInit {
     });
 
     this.events.subscribe(Event.NETWORK.ONLINE, () => {
-      //
+      this.goOnline();
     });
 
     this.events.subscribe(Event.NETWORK.OFFLINE, () => {
-      //
+      this.goOffline();
     });
 
     this.events.subscribe(Event.AUTH.ERROR.UNAUTHORIZED, (response: Response) => {
@@ -97,20 +121,37 @@ export class ApplicationComponent implements OnInit {
         }
       }
       else {
-        errorText = 'Something went wrong. Details: ' + error.toString();
+        if (error) {
+          errorText = 'Something went wrong. Details: ' + error.toString();
+        }
+        else {
+          errorText = 'Something went wrong.';
+        }
       }
 
       this.viewUtil.showToast(errorText, false, false);
     });
 
     this.events.subscribe(Event.SYSTEM.LOADING, (status) => {
-      if (status && !this.loaderVisible) {
-        this.loaderVisible = true;
-        this.viewUtil.showLoader();
+      if (status) {
+        this.loaderRequestCount++;
+
+        setTimeout(() => {
+          if ((this.loaderRequestCount > 0) && !this.loaderVisible) {
+            this.loaderVisible = true;
+            this.viewUtil.showLoader();
+          }
+        }, this.loaderDebounceTime);
       }
-      else if (!status && this.loaderVisible) {
-        this.loaderVisible = false;
-        this.viewUtil.hideLoader();
+      else if (!status) {
+        this.loaderRequestCount--;
+
+        setTimeout(() => {
+          if ((this.loaderRequestCount === 0) && this.loaderVisible) {
+            this.loaderVisible = false;
+            this.viewUtil.hideLoader();
+          }
+        }, this.loaderDebounceTime);
       }
     });
   }
@@ -119,6 +160,34 @@ export class ApplicationComponent implements OnInit {
     if (this.platformUtil.isCordova()) {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+    }
+  }
+
+  authenticate() {
+    this.authModel.recoverCredentials()
+      .then((credentials: FirebaseCredentialsDTO) => {
+        this.events.publish(Event.AUTH.LOGIN.SUCCESS, credentials);
+      })
+      .catch((error) => {
+        this.rootPage = AuthLoginComponent;
+      });
+  }
+
+  goOffline() {
+    if (this.rootPage === null) {
+      this.rootPage = AuthOfflineComponent;
+    }
+    else {
+      this.nav.push(AuthOfflineComponent);
+    }
+  }
+
+  goOnline() {
+    if (this.rootPage === AuthOfflineComponent) {
+      this.authenticate();
+    }
+    else {
+      this.nav.pop();
     }
   }
 }

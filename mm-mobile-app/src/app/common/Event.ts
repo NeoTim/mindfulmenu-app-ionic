@@ -1,10 +1,6 @@
 export class Event {
 
     public static readonly AUTH = {
-        TOKEN: {
-            UPDATED:        'auth_token_updated',
-            DELETED:        'auth_token_deleted',
-        },
         LOGIN: {
             SUCCESS:        'auth_login_success',
             ERROR:          'auth_login_error',

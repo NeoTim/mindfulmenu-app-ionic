@@ -3,9 +3,8 @@
 <ion-content class="with-top-doodad" padding>
   <h1 text-center>Menus</h1>
 
-  <ul>
-    <li *ngFor="let ingredient of ingredients">
-      {{ ingredient.item }} ({{ ingredient.category }})
-    </li>
-  </ul>
+  <div *ngIf="weeklyMenu" style="border-radius: 10px; border: 2px solid black; width: 100%; height: 200px; text-align: center; padding: 10px">
+    <h3 style="font-family: 'Trocchi' !important;">Weekly Menu</h3>
+    <h3 style="font-family: 'Trocchi' !important;">{{ weeklyMenu.startDate | date:'dd MMMM' }} - {{ weeklyMenu.endDate | date:'dd MMMM' }} </h3>
+  </div>
 </ion-content>

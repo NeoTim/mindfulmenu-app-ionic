@@ -6,8 +6,6 @@ import { classToPlain } from "class-transformer";
 import { MealModel } from "../../../../model/MealModel";
 import { MealDTO } from "../../../../data/dto/meal/MealDTO";
 import { WeeklyMenu } from "../../../../data/local/weeklyMenu/WeeklyMenu";
-import { IngredientModel } from "../../../../model/IngredientModel";
-import { IngredientDTO } from "../../../../data/dto/ingredient/IngredientDTO";
 
 @Component({
   selector: 'menus',
@@ -15,12 +13,11 @@ import { IngredientDTO } from "../../../../data/dto/ingredient/IngredientDTO";
 })
 export class MenusComponent {
 
-  ingredients: IngredientDTO[];
+  weeklyMenu: WeeklyMenu;
 
   constructor(public navCtrl: NavController,
               public weeklyMenuModel: WeeklyMenuModel,
-              public mealModel: MealModel,
-              public ingredientModel: IngredientModel) {
+              public mealModel: MealModel) {
   }
 
   ionViewDidLoad() {
@@ -28,34 +25,25 @@ export class MenusComponent {
   }
 
   init() {
-    this.ingredientModel.getAllIngredients()
-      .then((ingredients: IngredientDTO[]) => {
-        this.ingredients = ingredients;
-      });
-
-    this.weeklyMenuModel.getWeeklyMenu('9mEinmBGOEgxLUfH3hI9')
+    this.weeklyMenuModel.getWeeklyMenuInRelationToCurrent(-1)
       .then((weeklyMenu: WeeklyMenuDTO) => {
-        console.log('weekly menu DTO after receive from server');
-        console.log(weeklyMenu);
-
         this.mealModel.getMeals(weeklyMenu.mealIds)
           .then((meals: MealDTO[]) => {
-            console.log('weekly menu\'s meal DTOs after receive from server');
-            console.log(meals);
+            let weeklyMenuWithMeals: WeeklyMenu = WeeklyMenu.fromDTO(weeklyMenu);
+            weeklyMenuWithMeals.meals = meals;
 
-            let wm: WeeklyMenu = WeeklyMenu.fromDTO(weeklyMenu);
-            wm.meals = meals;
-            console.log('local weekly menu object with meals');
-            console.log(wm);
+            this.weeklyMenu = weeklyMenuWithMeals;
 
-            let wm2: WeeklyMenuDTO = WeeklyMenu.toDTO(wm);
+            let wm2: WeeklyMenuDTO = WeeklyMenu.toDTO(weeklyMenuWithMeals);
             console.log('weekly menu DTO converted back from local weekly menu');
             console.log(wm2);
 
             let plain = classToPlain(wm2);
             console.log('weekly menu DTO before send to server');
             console.log(plain);
-          });
-      });
+          })
+          .catch((error) => {});
+      })
+      .catch((error) => {});
   }
 }

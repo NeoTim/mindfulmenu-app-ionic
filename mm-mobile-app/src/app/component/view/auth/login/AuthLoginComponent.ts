@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 import { ApplicationConfig } from '../../../../config/ApplicationConfig';
 import { ViewUtil } from '../../../../util/ViewUtil';
 import { AuthModel } from '../../../../model/AuthModel';
-import { Token } from '../../../../data/local/auth/Token';
+import { FirebaseCredentialsDTO } from "../../../../data/dto/auth/FirebaseCredentialsDTO";
 
 @Component({
     selector: 'auth-login',
@@ -12,8 +12,8 @@ import { Token } from '../../../../data/local/auth/Token';
 export class AuthLoginComponent {
 
     loginData = {
-        username: '',
-        password: ''
+        username: 'u1@example.com',
+        password: 'chpwd!'
     };
 
     constructor(public navCtrl: NavController,
@@ -30,17 +30,16 @@ export class AuthLoginComponent {
     }
 
     submit() {
-        this.viewUtil.showLoader();
-
         this.authModel.login(this.loginData.username, this.loginData.password)
-            .then((token: Token) => {
-                this.viewUtil.hideLoader();
+            .then((auth: FirebaseCredentialsDTO) => {
+                // handled globally
             })
             .catch((error) => {
-                this.viewUtil.hideLoader();
-
-                if (error.status === 401) {
+                if (error.code && ((error.code === 'auth/wrong-password') || (error.code === 'auth/user-not-found'))) {
                     this.viewUtil.showToast('Incorrect email or password!');
+                }
+                else if (error.message) {
+                  this.viewUtil.showToast(error.message);
                 }
                 else {
                     this.viewUtil.showToast('Error! Login unsuccessful!');

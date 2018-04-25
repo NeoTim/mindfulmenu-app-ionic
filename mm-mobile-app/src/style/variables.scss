@@ -12,7 +12,6 @@ $app-direction: ltr;
 
 @import "ionic.globals";
 
-
 // Shared Variables
 // --------------------------------------------------
 // To customize the look and feel of this app, you can override
@@ -21,7 +20,6 @@ $app-direction: ltr;
 // http://ionicframework.com/docs/theming/overriding-ionic-variables/
 
 $img-placeholder-background: #ffffff;
-
 
 // Named Color Variables
 // --------------------------------------------------
@@ -40,26 +38,21 @@ $colors: (
   dark:       #222
 );
 
-
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here
 
-
-
+$toast-ios-background: color($colors, secondary-dark);
 
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
 
-
-
+$toast-md-background: color($colors, secondary-dark);
 
 // App Windows Variables
 // --------------------------------------------------
 // Windows only Sass variables can go here
-
-
 
 
 // App Theme
@@ -71,14 +64,12 @@ $colors: (
 
 @import "ionic.theme.default";
 
-
 // Ionicons
 // --------------------------------------------------
 // The premium icon font for Ionic. For more info, please see:
 // http://ionicframework.com/docs/ionicons/
 
 @import "ionic.ionicons";
-
 
 // Fonts
 // --------------------------------------------------

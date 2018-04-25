@@ -20,33 +20,45 @@ export class IngredientModel {
   }
 
   public getIngredient(ingredientId: string): Promise<IngredientDTO> {
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
     return this.ingredientService.getIngredient(ingredientId)
       .then((ingredient: IngredientDTO) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
         return ingredient;
       })
       .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
         this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
         return Promise.reject(error);
       })
   }
 
   public getIngredients(ingredientIds: string[]): Promise<IngredientDTO[]> {
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
     return this.ingredientService.getIngredients(ingredientIds)
       .then((ingredients: IngredientDTO[]) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
         return ingredients;
       })
       .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
         this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
         return Promise.reject(error);
       })
   }
 
   public getAllIngredients(): Promise<IngredientDTO[]> {
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
     return this.ingredientService.getAllIngredients()
       .then((ingredients: IngredientDTO[]) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
         return ingredients;
       })
       .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
         this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
         return Promise.reject(error);
       })

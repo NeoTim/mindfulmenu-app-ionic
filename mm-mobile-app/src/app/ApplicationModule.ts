@@ -23,11 +23,16 @@ import { MealService } from "./service/MealService";
 import { MealModel } from "./model/MealModel";
 import { IngredientModel } from "./model/IngredientModel";
 import { IngredientService } from "./service/IngredientService";
+import { AuthService } from "./service/AuthService";
+import { AuthOfflineComponent } from "./component/view/auth/offline/AuthOfflineComponent";
+import { UserModel } from "./model/UserModel";
+import { UserService } from "./service/UserService";
 
 @NgModule({
   declarations: [
     ApplicationComponent,
     AuthLoginComponent,
+    AuthOfflineComponent,
     MainComponent,
     MenusComponent,
     MoreComponent,
@@ -36,6 +41,7 @@ import { IngredientService } from "./service/IngredientService";
   entryComponents: [
     ApplicationComponent,
     AuthLoginComponent,
+    AuthOfflineComponent,
     MainComponent,
     MenusComponent,
     MoreComponent,
@@ -52,11 +58,12 @@ import { IngredientService } from "./service/IngredientService";
     Network,
     ApplicationConfig,
     FirebaseManager,
-    AuthModel,
     NetworkModel,
+    AuthModel, AuthService,
     IngredientModel, IngredientService,
     MealModel, MealService,
     WeeklyMenuModel, WeeklyMenuService,
+    UserModel, UserService,
     PlatformUtil,
     ViewUtil,
     {
@@ -72,7 +79,8 @@ import { IngredientService } from "./service/IngredientService";
                    NetworkModel: NetworkModel,
                    IngredientModel: IngredientModel,
                    MealModel: MealModel,
-                   WeeklyMenuModel: WeeklyMenuModel
+                   WeeklyMenuModel: WeeklyMenuModel,
+                   UserModel: UserModel
       ) => () => {},
       deps: [
         FirebaseManager,
@@ -80,7 +88,8 @@ import { IngredientService } from "./service/IngredientService";
         NetworkModel,
         IngredientModel,
         MealModel,
-        WeeklyMenuModel
+        WeeklyMenuModel,
+        UserModel
       ]
     }
   ],

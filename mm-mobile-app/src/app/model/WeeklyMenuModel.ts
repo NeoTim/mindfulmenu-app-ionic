@@ -4,6 +4,8 @@ import { Storage } from '@ionic/storage';
 import { Event } from '../common/Event';
 import { WeeklyMenuDTO } from "../data/dto/weeklyMenu/WeeklyMenuDTO";
 import { WeeklyMenuService } from "../service/WeeklyMenuService";
+import * as moment from 'moment';
+import { Moment } from "moment";
 
 @Injectable()
 export class WeeklyMenuModel {
@@ -19,15 +21,48 @@ export class WeeklyMenuModel {
       //
   }
 
+  public getCurrentWeeklyMenu(): Promise<WeeklyMenuDTO> {
+    const firstDayOfCurrentWeek: Moment = moment().startOf('isoWeek');
+    const currentWeekNumber: number = Number(firstDayOfCurrentWeek.format('YYYYMMDD'));
+
+    return this.getWeeklyMenuByWeekNumber(currentWeekNumber);
+  }
+
+  public getWeeklyMenuInRelationToCurrent(weekRelation: number): Promise<WeeklyMenuDTO> {
+    const firstDayOfTargetWeek: Moment = moment().add(weekRelation, 'week').startOf('isoWeek');
+    const targetWeekNumber: number = Number(firstDayOfTargetWeek.format('YYYYMMDD'));
+
+    return this.getWeeklyMenuByWeekNumber(targetWeekNumber);
+  }
+
   public getWeeklyMenu(weeklyMenuId: string): Promise<WeeklyMenuDTO> {
-      return this.weeklyMenuService.getWeeklyMenu(weeklyMenuId)
-          .then((weeklyMenu: WeeklyMenuDTO) => {
-              return weeklyMenu;
-          })
-          .catch((error) => {
-              this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
-              return Promise.reject(error);
-          })
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.weeklyMenuService.getWeeklyMenu(weeklyMenuId)
+        .then((weeklyMenu: WeeklyMenuDTO) => {
+          this.events.publish(Event.SYSTEM.LOADING, false);
+          return weeklyMenu;
+        })
+        .catch((error) => {
+          this.events.publish(Event.SYSTEM.LOADING, false);
+          this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+          return Promise.reject(error);
+        })
+  }
+
+  public getWeeklyMenuByWeekNumber(weekNumber: number): Promise<WeeklyMenuDTO> {
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.weeklyMenuService.getWeeklyMenuByWeekNumber(weekNumber)
+      .then((weeklyMenu: WeeklyMenuDTO) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return weeklyMenu;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
   }
 
 }

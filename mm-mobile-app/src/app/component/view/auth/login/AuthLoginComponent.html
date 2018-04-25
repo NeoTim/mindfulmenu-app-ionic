@@ -1,28 +1,30 @@
 <ion-content padding>
 
-  <div text-center margin-bottom>
-    <ion-img src="../asset/logo_mindful_menu@2x.png"></ion-img>
-  </div>
+  <div id="login">
+    <div text-center margin-bottom>
+      <ion-img src="../asset/logo_mindful_menu@2x.png"></ion-img>
+    </div>
 
-  <ion-grid>
-    <ion-row class="row">
-      <ion-col align-self-center class="col">
-        <div id="main-content">
-          <h1 class="header" text-center>Log In</h1>
-          <form (submit)="submit()">
-            <ion-item>
-              <ion-input [(ngModel)]="loginData.username" name="username" type="email" placeholder="email"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-input [(ngModel)]="loginData.password" name="password" type="password" placeholder="password"></ion-input>
-            </ion-item>
-            <div class="button-wrapper">
-              <button ion-button block type="submit">Log In</button>
-            </div>
-          </form>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+    <ion-grid>
+      <ion-row class="row">
+        <ion-col align-self-center class="col">
+          <div id="main-content">
+            <h1 class="header" text-center>Log In</h1>
+            <form (submit)="submit()">
+              <ion-item>
+                <ion-input [(ngModel)]="loginData.username" name="username" type="email" placeholder="email"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input [(ngModel)]="loginData.password" name="password" type="password" placeholder="password"></ion-input>
+              </ion-item>
+              <div class="button-wrapper">
+                <button ion-button block type="submit">Log In</button>
+              </div>
+            </form>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 
 </ion-content>

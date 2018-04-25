@@ -2,30 +2,34 @@ import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Event } from '../common/Event';
-import { MealService } from "../service/MealService";
-import { MealDTO } from "../data/dto/meal/MealDTO";
+import { UserDTO } from "../data/dto/user/UserDTO";
+import { UserService } from "../service/UserService";
 
 @Injectable()
-export class MealModel {
+export class UserModel {
+
+  public currentUser: UserDTO;
 
   constructor(private events: Events,
               private storage: Storage,
-              private mealService: MealService) {
+              private userService: UserService) {
 
     this.setupListeners();
   }
 
   private setupListeners(): void {
-      //
+    this.events.subscribe(Event.AUTH.LOGOUT.SUCCESS, () => {
+      this.currentUser = null;
+    });
   }
 
-  public getMeal(mealId: string): Promise<MealDTO> {
+  public getUser(userId: string): Promise<UserDTO> {
     this.events.publish(Event.SYSTEM.LOADING, true);
 
-    return this.mealService.getMeal(mealId)
-      .then((meal: MealDTO) => {
+    return this.userService.getUser(userId)
+      .then((user: UserDTO) => {
         this.events.publish(Event.SYSTEM.LOADING, false);
-        return meal;
+        return user;
       })
       .catch((error) => {
         this.events.publish(Event.SYSTEM.LOADING, false);
@@ -34,13 +38,13 @@ export class MealModel {
       })
   }
 
-  public getMeals(mealIds: string[]): Promise<MealDTO[]> {
+  public getUserByUID(userUID: string): Promise<UserDTO> {
     this.events.publish(Event.SYSTEM.LOADING, true);
 
-    return this.mealService.getMeals(mealIds)
-      .then((meals: MealDTO[]) => {
+    return this.userService.getUserByUID(userUID)
+      .then((user: UserDTO) => {
         this.events.publish(Event.SYSTEM.LOADING, false);
-        return meals;
+        return user;
       })
       .catch((error) => {
         this.events.publish(Event.SYSTEM.LOADING, false);

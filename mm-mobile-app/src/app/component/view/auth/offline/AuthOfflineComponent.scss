@@ -1,6 +1,7 @@
-auth-login {
+auth-offline {
 
-  #login {
+  #offline {
+    text-align: center;
     display: flex;
     height: 80vh;
     width: 100%;
@@ -11,17 +12,11 @@ auth-login {
     left: 0px;
     right: 0px;
     padding: 20px;
+
+    p {
+      font-size: 16px;
+      margin-bottom: 0px !important
+    }
   }
 
-  .header {
-    margin-bottom: 20px;
-  }
-
-  .item {
-    padding-left: 0px !important;
-  }
-
-  .button-wrapper {
-    margin-top: 40px;
-  }
 }

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AuthModel } from "../../../../model/AuthModel";
+import { UserDTO } from "../../../../data/dto/user/UserDTO";
+import { UserModel } from "../../../../model/UserModel";
 
 @Component({
   selector: 'more',
@@ -8,13 +10,19 @@ import { AuthModel } from "../../../../model/AuthModel";
 })
 export class MoreComponent {
 
-  constructor(public navCtrl: NavController,
-              public authModel: AuthModel) {
+  public currentUser: UserDTO;
 
+  constructor(public navCtrl: NavController,
+              public authModel: AuthModel,
+              public userModel: UserModel) {
+
+    this.currentUser = userModel.currentUser;
   }
 
   logout() {
-    this.authModel.logout();
+    this.authModel.logout()
+      .then((result) => {})
+      .catch((error) => {});
   }
 
 }

@@ -3,5 +3,7 @@
 <ion-content class="with-top-doodad" padding>
   <h1 text-center>More</h1>
 
+  <h3 class="user" text-center margin-top margin-bottom>{{ currentUser.firstName + ' ' + currentUser.lastName }}</h3>
+
   <button ion-button block margin-top type="button" (click)="logout()">Logout</button>
 </ion-content>
