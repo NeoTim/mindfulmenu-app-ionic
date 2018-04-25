@@ -1,2 +1,4 @@
 # Visual Studio Code
 .vscode
+/mm-firebase/.idea
+/mm-firebase/functions/firebase-debug.log
