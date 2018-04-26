@@ -13,6 +13,8 @@ import { FirebaseCredentialsDTO } from "../data/dto/auth/FirebaseCredentialsDTO"
 import { AuthOfflineComponent } from "./view/auth/offline/AuthOfflineComponent";
 import { UserDTO } from "../data/dto/user/UserDTO";
 import { UserModel } from "../model/UserModel";
+import { ApplicationConfig } from "../config/ApplicationConfig";
+import dedent from "dedent";
 
 @Component({
   templateUrl: 'ApplicationComponent.html'
@@ -34,6 +36,7 @@ export class ApplicationComponent implements OnInit {
               public events: Events,
               public platformUtil: PlatformUtil,
               public viewUtil: ViewUtil,
+              public config: ApplicationConfig,
               public networkModel: NetworkModel,
               public authModel: AuthModel,
               public userModel: UserModel) {
@@ -60,7 +63,14 @@ export class ApplicationComponent implements OnInit {
           this.goOffline();
         }
 
-        console.log('--- APP STARTED ---');
+        if (!this.config.production) {
+          console.log(dedent`
+          ---------------------------------------------------------------------------
+          Application "${this.config.applicationOwner} ${this.config.applicationName}" initialized.
+          ---------------------------------------------------------------------------
+          UI Version: ${this.config.version}
+          ---------------------------------------------------------------------------`);
+        }
       })
       .catch((reason) => {
       })

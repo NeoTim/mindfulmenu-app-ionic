@@ -1,16 +1,28 @@
 import { Environment } from "../data/local/Environment";
 import { Injectable } from "@angular/core";
+import { FirebaseConfig } from "../data/local/FirebaseConfig";
 
 @Injectable()
 export class ApplicationConfig {
 
-    public static ENVIRONMENTS: { [key: string]: string } = {
-        ENV_LIVE:       'ENV_LIVE',
-        ENV_DEVELOP:    'ENV_DEVELOP'
+    public applicationOwner: string = 'OurMindfulMenu';
+    public applicationName: string = 'OurMindfulMenu';
+    public version: string = '0.0.2 (2018-04-26)';
+    public production: boolean;
+    public firebase: FirebaseConfig;
+    public websiteUrl: string;
+    public environment: string;
+
+    // --
+
+    public static readonly ENVIRONMENT: { [key: string]: string } = {
+        LIVE:       'LIVE',
+        DEVELOP:    'DEVELOP'
     };
 
-    private environmentConfigs: { [key: string]: Environment } = {
-        ENV_LIVE: {
+    private readonly environmentConfigs: { [key: string]: Environment } = {
+        LIVE: {
+          production: true,
           firebase: {
             apiKey: 'AIzaSyB8eA24M8fnJajXZWH7HtuGnuCz4Nq0ZDE',
             authDomain: 'mindful-menu.firebaseapp.com',
@@ -20,8 +32,10 @@ export class ApplicationConfig {
             messagingSenderId: '415539829999'
           },
           websiteUrl: 'https://www.ourmindfulmenu.com/'
+
         },
-        ENV_DEVELOP: {
+        DEVELOP: {
+          production: false,
           firebase: {
             apiKey: 'AIzaSyB8eA24M8fnJajXZWH7HtuGnuCz4Nq0ZDE',
             authDomain: 'mindful-menu.firebaseapp.com',
@@ -34,17 +48,17 @@ export class ApplicationConfig {
         }
     };
 
-    public ENV: Environment;
-    public ENV_NAME: string;
-
     constructor() {
-        this.setEnvironment(ApplicationConfig.ENVIRONMENTS.ENV_DEVELOP);
+        this.setEnvironment(ApplicationConfig.ENVIRONMENT.DEVELOP);
     }
 
     setEnvironment(environmentName: string) {
         if (this.environmentConfigs[environmentName]) {
-            this.ENV = this.environmentConfigs[environmentName];
-            this.ENV_NAME = environmentName;
+          this.production = this.environmentConfigs[environmentName].production;
+          this.firebase = this.environmentConfigs[environmentName].firebase;
+          this.websiteUrl = this.environmentConfigs[environmentName].websiteUrl;
+
+          this.environment = environmentName;
         }
     }
 }

@@ -2,18 +2,15 @@ import * as $ from 'jquery';
 
 export class HtmlUtil {
 
-  constructor() {
-  }
-
-  static disableButtons() {
+  public static disableButtons() {
     return $('html button:not([disabled])').prop('disabled', true);
   }
 
-  static enableButtons(buttonElements: any) {
+  public static enableButtons(buttonElements: any) {
     buttonElements.prop('disabled', false);
   }
 
-  static scrollToTop(selector, animated) {
+  public static scrollToTop(selector, animated) {
     if (selector) {
       if (selector.length > 0) {
         setTimeout(function () {
@@ -46,7 +43,7 @@ export class HtmlUtil {
     }
   }
 
-  scrollToBottom(selector, animated) {
+  public static scrollToBottom(selector, animated) {
     if (selector) {
       if (selector.length > 0) {
         setTimeout(function () {
@@ -79,7 +76,7 @@ export class HtmlUtil {
     }
   }
 
-  static scrollToSelector(selector, parentSelector, animated) {
+  public static scrollToSelector(selector, parentSelector, animated) {
     if (selector) {
         if (parentSelector && (parentSelector.length > 0)) {
             if (selector.length > 0) {

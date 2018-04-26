@@ -3,9 +3,6 @@ import { TransformationType } from "class-transformer/TransformOperationExecutor
 
 export class DateUtil {
 
-  constructor() {
-  }
-
   public static firebaseTimestampToDate(timestamp: firebase.firestore.Timestamp): Date {
     return timestamp.toDate();
   }

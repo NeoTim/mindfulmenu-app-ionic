@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
 import { plainToClass } from 'class-transformer';
-import { FirebaseManager } from "../util/FirebaseManager";
-import * as _ from "lodash";
 import firebase from "firebase";
-import { MealDTO } from "../data/dto/meal/MealDTO";
+import { MealDTO } from "../data/dto/menu/MealDTO";
+import { FirestoreManager } from "../util/FirestoreManager";
 
 @Injectable()
 export class MealService {
 
-  constructor(private firebaseManager: FirebaseManager) {
+  constructor(private firestoreManager: FirestoreManager) {
   }
 
   public getMeal(mealId: string): Promise<MealDTO> {
     return new Promise((resolve, reject) => {
-      this.firebaseManager.firestore.collection('meals').doc(mealId).get()
+      this.firestoreManager.firestore.collection('meals').doc(mealId).get()
         .then((documentSnapshot: firebase.firestore.DocumentSnapshot) => {
-          let result: Object = this.firebaseManager.documentToObject(documentSnapshot);
-          let data: MealDTO = plainToClass(MealDTO, result as Object);
+          let result: object = this.firestoreManager.documentToObject(documentSnapshot);
+          let data: MealDTO = plainToClass(MealDTO, result as object);
           resolve(data);
         })
         .catch((error) => {
@@ -27,13 +26,10 @@ export class MealService {
 
   public getMeals(mealIds: string[]): Promise<MealDTO[]> {
     return new Promise((resolve, reject) => {
-      this.firebaseManager.getByIds(mealIds, this.firebaseManager.firestore.collection('meals'))
+      this.firestoreManager.getByIds(mealIds, this.firestoreManager.firestore.collection('meals'))
         .then((documentSnapshots: firebase.firestore.DocumentSnapshot[]) => {
-          let result: Object[] = _.map(documentSnapshots, (documentSnapshot: firebase.firestore.DocumentSnapshot) => {
-            return this.firebaseManager.documentToObject(documentSnapshot);
-          });
-
-          let data: MealDTO[] = plainToClass(MealDTO, result as Object[]);
+          let result: object[] = this.firestoreManager.documentArrayToObjectArray(documentSnapshots);
+          let data: MealDTO[] = plainToClass(MealDTO, result as object[]);
           resolve(data);
         })
         .catch((error) => {

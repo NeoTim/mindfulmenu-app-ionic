@@ -10,17 +10,27 @@
         <ion-col align-self-center class="col">
           <div id="main-content">
             <h1 class="header" text-center>Log In</h1>
-            <form (submit)="submit()">
+            <form #loginForm="ngForm" novalidate>
               <ion-item>
-                <ion-input [(ngModel)]="loginData.username" name="username" type="email" placeholder="email"></ion-input>
+                <ion-input [(ngModel)]="loginData.username" name="username" #username="ngModel" type="email" placeholder="email" required ngvemail></ion-input>
               </ion-item>
+              <div class="error" *ngIf="loginForm.submitted && username.invalid">
+                <div *ngIf="username.errors.required">This cannot be empty.</div>
+                <div *ngIf="username.errors.email">This doesn't look like a valid email address.</div>
+              </div>
               <ion-item>
-                <ion-input [(ngModel)]="loginData.password" name="password" type="password" placeholder="password"></ion-input>
+                <ion-input [(ngModel)]="loginData.password" name="password" #password="ngModel" type="password" placeholder="password" required></ion-input>
               </ion-item>
-              <div class="button-wrapper">
-                <button ion-button block type="submit">Log In</button>
+              <div class="error" *ngIf="loginForm.submitted && password.invalid">
+                <div *ngIf="password.errors.required">This cannot be empty.</div>
+              </div>
+              <div class="login-button-wrapper">
+                <button ion-button block type="button" (click)="login()">Log In</button>
               </div>
             </form>
+            <div class="signup-button-wrapper">
+              <button ion-button clear type="button" (click)="signup()">Sign Up</button>
+            </div>
           </div>
         </ion-col>
       </ion-row>

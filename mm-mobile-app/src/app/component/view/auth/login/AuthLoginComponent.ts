@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { App, NavController } from 'ionic-angular';
 import { ApplicationConfig } from '../../../../config/ApplicationConfig';
 import { ViewUtil } from '../../../../util/ViewUtil';
 import { AuthModel } from '../../../../model/AuthModel';
 import { FirebaseCredentialsDTO } from "../../../../data/dto/auth/FirebaseCredentialsDTO";
+import { NgForm } from "@angular/forms";
+import { InternalUrlBrowserComponent } from "../../../ui/internalUrlBrowser/InternalUrlBrowserComponent";
 
 @Component({
     selector: 'auth-login',
@@ -11,40 +13,54 @@ import { FirebaseCredentialsDTO } from "../../../../data/dto/auth/FirebaseCreden
 })
 export class AuthLoginComponent {
 
-    loginData = {
-        username: 'u1@example.com',
-        password: 'chpwd!'
-    };
+  @ViewChild('loginForm')
+  private loginForm: NgForm;
 
-    constructor(public navCtrl: NavController,
-                public config: ApplicationConfig,
-                private viewUtil: ViewUtil,
-                public authModel: AuthModel) {
-    }
+  loginData = {
+      username: 'u1@example.com',
+      password: 'chpwd!'
+  };
 
-    ionViewDidLoad() {
-        this.init();
-    }
+  constructor(public app: App,
+              public navCtrl: NavController,
+              public config: ApplicationConfig,
+              private viewUtil: ViewUtil,
+              public authModel: AuthModel) {
+  }
 
-    init() {
-    }
+  ionViewDidLoad() {
+      this.init();
+  }
 
-    submit() {
-        this.authModel.login(this.loginData.username, this.loginData.password)
-            .then((auth: FirebaseCredentialsDTO) => {
-                // handled globally
-            })
-            .catch((error) => {
-                if (error.code && ((error.code === 'auth/wrong-password') || (error.code === 'auth/user-not-found'))) {
-                    this.viewUtil.showToast('Incorrect email or password!');
-                }
-                else if (error.message) {
-                  this.viewUtil.showToast(error.message);
-                }
-                else {
-                    this.viewUtil.showToast('Error! Login unsuccessful!');
-                }
-            });
+  init() {
+  }
+
+  login() {
+    this.loginForm.onSubmit(null);
+
+    if (this.loginForm.form.valid) {
+      this.authModel.login(this.loginData.username, this.loginData.password)
+        .then((auth: FirebaseCredentialsDTO) => {
+          // handled globally
+        })
+        .catch((error) => {
+          if (error.code && ((error.code === 'auth/wrong-password') || (error.code === 'auth/user-not-found'))) {
+            this.viewUtil.showToast('Incorrect email or password!');
+          }
+          else if (error.message) {
+            this.viewUtil.showToast(error.message);
+          }
+          else {
+            this.viewUtil.showToast('Error! Login unsuccessful!');
+          }
+        });
     }
+  }
+
+  signup() {
+    this.app.getRootNav().push(InternalUrlBrowserComponent, { url: this.config.websiteUrl + 'monthly-menu-subscription' });
+  }
+
+
 
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Event } from '../common/Event';
-import { WeeklyMenuDTO } from "../data/dto/weeklyMenu/WeeklyMenuDTO";
+import { WeeklyMenuDTO } from "../data/dto/menu/WeeklyMenuDTO";
 import { WeeklyMenuService } from "../service/WeeklyMenuService";
 import * as moment from 'moment';
 import { Moment } from "moment";

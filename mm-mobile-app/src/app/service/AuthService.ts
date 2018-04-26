@@ -56,7 +56,7 @@ export class AuthService {
 
   // I've created FirebaseCredentialsDTO to extract the most important data (the rest of the object is just gibberish properties and functions named a,b,c, etc.)
   // firebase.User complains about accessing/copying some metadata (they're marked as readonly (?))
-  // note: FirebaseCredentialsDTO isn't really used anywhere, Firebase SDK maintains its own firebase.User in the background - we just story a simplified copy for reference
+  // note: FirebaseCredentialsDTO isn't really used anywhere, Firebase SDK maintains its own firebase.User in the background - we just store a simplified copy for reference
   private convertFirebaseUser(user: firebase.User): FirebaseCredentialsDTO  {
     const reflectionFirebaseCredentials: FirebaseCredentialsDTO = new FirebaseCredentialsDTO();
     let targetFirebaseCredentials: any = {};
@@ -70,7 +70,7 @@ export class AuthService {
     targetFirebaseCredentials.creationTime = moment(user.metadata.creationTime).toDate();
     targetFirebaseCredentials.lastSignInTime = moment(user.metadata.lastSignInTime).toDate();
 
-    let firebaseCredentials: FirebaseCredentialsDTO = plainToClass(FirebaseCredentialsDTO, targetFirebaseCredentials as Object);
+    let firebaseCredentials: FirebaseCredentialsDTO = plainToClass(FirebaseCredentialsDTO, targetFirebaseCredentials as object);
     return firebaseCredentials;
   }
 

@@ -3,7 +3,7 @@ import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Event } from '../common/Event';
 import { MealService } from "../service/MealService";
-import { MealDTO } from "../data/dto/meal/MealDTO";
+import { MealDTO } from "../data/dto/menu/MealDTO";
 
 @Injectable()
 export class MealModel {

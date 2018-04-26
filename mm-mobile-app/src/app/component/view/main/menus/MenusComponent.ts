@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { WeeklyMenuModel } from "../../../../model/WeeklyMenuModel";
-import { WeeklyMenuDTO } from "../../../../data/dto/weeklyMenu/WeeklyMenuDTO";
+import { WeeklyMenuDTO } from "../../../../data/dto/menu/WeeklyMenuDTO";
 import { classToPlain } from "class-transformer";
 import { MealModel } from "../../../../model/MealModel";
-import { MealDTO } from "../../../../data/dto/meal/MealDTO";
-import { WeeklyMenu } from "../../../../data/local/weeklyMenu/WeeklyMenu";
+import { MealDTO } from "../../../../data/dto/menu/MealDTO";
+import { WeeklyMenu } from "../../../../data/local/menu/WeeklyMenu";
 
 @Component({
   selector: 'menus',

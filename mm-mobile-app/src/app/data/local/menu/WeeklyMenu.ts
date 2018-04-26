@@ -1,5 +1,5 @@
-import { MealDTO } from "../../dto/meal/MealDTO";
-import { WeeklyMenuDTO } from "../../dto/weeklyMenu/WeeklyMenuDTO";
+import { MealDTO } from "../../dto/menu/MealDTO";
+import { WeeklyMenuDTO } from "../../dto/menu/WeeklyMenuDTO";
 
 export class WeeklyMenu {
 

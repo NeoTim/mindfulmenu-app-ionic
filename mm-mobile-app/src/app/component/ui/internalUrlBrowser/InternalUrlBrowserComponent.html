@@ -1,0 +1,9 @@
+<div class="close-button" (click)="close()"></div>
+
+<ion-content>
+  <ng-container *ngIf="this.desanitizedURI">
+    <iframe [src]="this.desanitizedURI" frameborder="0" allowfullscreen></iframe>
+  </ng-container>
+
+  <h1 text-center *ngIf="!this.desanitizedURI">Loading...</h1>
+</ion-content>

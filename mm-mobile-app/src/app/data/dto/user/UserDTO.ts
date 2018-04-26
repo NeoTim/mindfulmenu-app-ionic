@@ -8,4 +8,6 @@ export class UserDTO extends IdentifiableDTO {
 
   lastName: string;
 
+  email: string;
+
 }

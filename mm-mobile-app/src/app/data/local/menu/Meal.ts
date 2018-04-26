@@ -1,5 +1,5 @@
-import { IngredientDTO } from "../../dto/ingredient/IngredientDTO";
-import { MealDTO } from "../../dto/meal/MealDTO";
+import { IngredientDTO } from "../../dto/menu/IngredientDTO";
+import { MealDTO } from "../../dto/menu/MealDTO";
 import * as _ from "lodash";
 
 export class Meal {

@@ -27,37 +27,51 @@ import { AuthService } from "./service/AuthService";
 import { AuthOfflineComponent } from "./component/view/auth/offline/AuthOfflineComponent";
 import { UserModel } from "./model/UserModel";
 import { UserService } from "./service/UserService";
+import { FirestoreManager } from "./util/FirestoreManager";
+import { CustomFormsModule } from "ng4-validators";
+import { FormsModule } from "@angular/forms";
+import { InternalUrlBrowserComponent } from "./component/ui/internalUrlBrowser/InternalUrlBrowserComponent";
 
 @NgModule({
   declarations: [
+    // main entry point
     ApplicationComponent,
+    // component/view
     AuthLoginComponent,
     AuthOfflineComponent,
     MainComponent,
     MenusComponent,
     MoreComponent,
-    MyPlanComponent
+    MyPlanComponent,
+    // component/ui
+    InternalUrlBrowserComponent
   ],
   entryComponents: [
+    // main entry point
     ApplicationComponent,
+    // component/view
     AuthLoginComponent,
     AuthOfflineComponent,
     MainComponent,
     MenusComponent,
     MoreComponent,
-    MyPlanComponent
+    MyPlanComponent,
+    // component/ui
+    InternalUrlBrowserComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    CustomFormsModule,
     IonicModule.forRoot(ApplicationComponent, {}),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Network,
     ApplicationConfig,
-    FirebaseManager,
+    FirebaseManager, FirestoreManager,
     NetworkModel,
     AuthModel, AuthService,
     IngredientModel, IngredientService,
