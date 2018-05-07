@@ -17,4 +17,6 @@ export class WeeklyMenuDTO extends IdentifiableDTO {
 
   mealIds: string[];
 
+  imageUrl: string;
+
 }
