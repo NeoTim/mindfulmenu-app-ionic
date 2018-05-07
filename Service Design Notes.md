@@ -24,5 +24,6 @@ Extract the `prepInstructions` from each meal under the week's plan.
 
 ## Shopping list
 
-
+1. Iterate through each meal in the plan, extract and combine the arrays from `ingredientIds`. Append the ingredient IDs from `weeklyPlan.customIngredientIds`.  Fetch fetch all those ingredients.  
+2. For each ingredient retrieved, see if it has already been checked off, from the `weeklyPlan.checkedIngredientIds`.
 
