@@ -1,5 +1,4 @@
 import { IdentifiableDTO } from "../IdentifiableDTO";
-import { CustomShoppingItemDTO } from "./CustomShoppingItemDTO";
 
 export class WeeklyPlanDTO extends IdentifiableDTO {
 
@@ -9,7 +8,7 @@ export class WeeklyPlanDTO extends IdentifiableDTO {
 
   mealIds: string[];
 
-  customShoppingItems: CustomShoppingItemDTO[];
+  customIngredientIds: string[];
 
   checkedIngredientIds: string[];
 

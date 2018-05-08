@@ -1,15 +1,16 @@
 import { IdentifiableDTO } from '../IdentifiableDTO';
+import { IngredientCategory } from '../../enum/IngredientCategory';
 
 export class IngredientDTO extends IdentifiableDTO {
 
   /**
-   * Ingredients will either have a mealId OR and userId and weekNumber.
+   * Ingredients will either have a mealId OR weeklyPlanId (if isCustomItem = true).
    */
   mealId: string;
 
-  userId: string;
+  weeklyPlanId: string;
 
-  weekNumber: string;
+  isCustomItem: boolean;
   
   amount: number;
 
@@ -17,6 +18,6 @@ export class IngredientDTO extends IdentifiableDTO {
 
   item: string;
 
-  category: string;
+  category: IngredientCategory;
 
 }

@@ -13,4 +13,5 @@ export class UserDTO extends IdentifiableDTO {
   favoriteMealIds: string[];
 
   isAdmin: boolean;
+  
 }
