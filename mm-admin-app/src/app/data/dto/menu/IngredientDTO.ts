@@ -20,4 +20,6 @@ export class IngredientDTO extends IdentifiableDTO {
 
   category: IngredientCategory;
 
+  note: string;
+
 }
