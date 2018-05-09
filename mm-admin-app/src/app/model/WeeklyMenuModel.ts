@@ -6,7 +6,6 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 import { AsyncLocalStorage } from 'angular-async-local-storage';
 import { EventsService } from 'angular-event-service/dist';
-import { MealDTO } from '../data/dto/menu/MealDTO';
 
 @Injectable()
 export class WeeklyMenuModel {
@@ -73,6 +72,51 @@ export class WeeklyMenuModel {
       .then((weeklyMenus: WeeklyMenuDTO[]) => {
         this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
         return weeklyMenus;
+      })
+      .catch((error) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        this.eventsService.broadcast(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      });
+  }
+
+  public createWeeklyMenu(weeklyMenu: WeeklyMenuDTO): Promise<WeeklyMenuDTO> {
+    this.eventsService.broadcast(Event.SYSTEM.LOADING, true);
+
+    return this.weeklyMenuService.createWeeklyMenu(weeklyMenu)
+      .then((newWeeklyMenu: WeeklyMenuDTO) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        return newWeeklyMenu;
+      })
+      .catch((error) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        this.eventsService.broadcast(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      });
+  }
+
+  public updateWeeklyMenu(weeklyMenu: WeeklyMenuDTO): Promise<WeeklyMenuDTO> {
+    this.eventsService.broadcast(Event.SYSTEM.LOADING, true);
+
+    return this.weeklyMenuService.updateWeeklyMenu(weeklyMenu)
+      .then((updatedWeeklyMenu: WeeklyMenuDTO) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        return updatedWeeklyMenu;
+      })
+      .catch((error) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        this.eventsService.broadcast(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      });
+  }
+
+  public deleteWeeklyMenu(weeklyMenuId: string): Promise<void> {
+    this.eventsService.broadcast(Event.SYSTEM.LOADING, true);
+
+    return this.weeklyMenuService.deleteWeeklyMenu(weeklyMenuId)
+      .then(() => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        return;
       })
       .catch((error) => {
         this.eventsService.broadcast(Event.SYSTEM.LOADING, false);

@@ -1,0 +1,28 @@
+<div>
+  <div class="row">
+    <div class="col-sm-8">
+      <h3>Weekly Menus:</h3>
+    </div>
+    <div class="col-sm-4 text-right">
+      <button type="button" class="btn btn-primary float-right" (click)="addWeeklyMenu()">Add Weekly Menu</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+        <div class="list-group">
+            <a *ngFor="let weeklyMenu of weeklyMenus" class="list-group-item list-group-item-action flex-column align-items-start" (click)="editWeeklyMenu(weeklyMenu)">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Week of: {{ weeklyMenu.startDate | date }}</h5>
+                <small>Week #: {{ weeklyMenu.weekNumber }}</small>
+              </div>
+              <small>Published: {{ weeklyMenu.publishDate | date }} | Week Start: {{ weeklyMenu.startDate | date }} | Week End: {{ weeklyMenu.endDate | date }} </small>
+              <div class="float-right">
+                <button type="button" class="btn btn-danger btn-sm" (click)="deleteWeeklyMenu(weeklyMenu); $event.stopImmediatePropagation()">
+                  <span class="glyphicon glyphicon-remove-circle"></span>
+                </button>
+              </div>
+            </a>
+        </div>
+    </div>
+  </div>
+</div>

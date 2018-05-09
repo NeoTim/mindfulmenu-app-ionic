@@ -6,6 +6,8 @@ import { ErrorNotFoundComponent } from '../component/view/preliminary/error/Erro
 import { MainLayoutComponent } from '../component/view/main/MainLayoutComponent';
 import { HomeComponent } from '../component/view/main/home/HomeComponent';
 import { PreliminaryLayoutComponent } from '../component/view/preliminary/PreliminaryLayoutComponent';
+import { WeeklyMenusComponent } from '../component/view/main/weeklyMenus/WeeklyMenusComponent';
+import { MealsComponent } from '../component/view/main/meals/MealsComponent';
 
 @Component({ selector: 'abstract', template: '<ui-view></ui-view>' })
 export class AbstractStateComponent {}
@@ -19,5 +21,7 @@ export const StateConfig: Ng2StateDeclaration[] = [
       { url: '/not-found', name: State.PRELIMINARY.ERROR.NOT_FOUND, component: ErrorNotFoundComponent },
 
     { url: '^/home', name: State.MAIN.HOME, component: HomeComponent },
+    { url: '^/weekly-menus', name: State.MAIN.WEEKLY_MENUS, component: WeeklyMenusComponent },
+    { url: '^/meals', name: State.MAIN.MEALS, component: MealsComponent },
 
 ];

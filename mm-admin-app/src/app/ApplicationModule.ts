@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomFormsModule } from 'ng4-validators';
 import { HttpClientModule } from '@angular/common/http';
 import { AsyncLocalStorageModule } from 'angular-async-local-storage';
@@ -30,12 +30,21 @@ import { ToastrModule } from 'ngx-toastr';
 import { ApplicationModel } from './model/ApplicationModel';
 import { StateUtil } from './util/StateUtil';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { WeeklyMenusComponent } from './component/view/main/weeklyMenus/WeeklyMenusComponent';
+import { MealsComponent } from './component/view/main/meals/MealsComponent';
+import { WeeklyMenuEditPopupComponent } from './component/view/main/weeklyMenus/popup/WeeklyMenuEditPopupComponent';
+import { NgBootstrapDateAdapter } from './util/NgBootstrapDateAdapter';
+import { WeeklyMenuCreatePopupComponent } from './component/view/main/weeklyMenus/popup/WeeklyMenuCreatePopupComponent';
 
 @NgModule({
   declarations: [
     MainLayoutComponent, PreliminaryLayoutComponent, AbstractStateComponent,
     ErrorNotFoundComponent,
-    HomeComponent
+    HomeComponent, WeeklyMenusComponent, MealsComponent,
+    WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent
+  ],
+  entryComponents: [
+    WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -72,6 +81,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MealModel, MealService,
     WeeklyMenuModel, WeeklyMenuService,
     UserModel, UserService,
+    {
+      provide: NgbDateAdapter,
+      useClass: NgBootstrapDateAdapter
+    },
     {
       provide: APP_INITIALIZER,
       multi: true,

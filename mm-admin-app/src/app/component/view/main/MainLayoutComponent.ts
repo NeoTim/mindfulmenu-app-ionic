@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { ApplicationModel } from '../../../model/ApplicationModel';
+import { State } from '../../../common/State';
 
 @Component({
   selector: 'main-layout',
@@ -12,22 +13,24 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   public isLoading: boolean = false;
   private isLoadingSubscription: Subscription;
 
-  constructor(private applicationModel: ApplicationModel) {
-    // first view of the app is Home which instantly loads data, changing the isLoading flag in applicationModel (by broadcasting events)
-    // since it's all happening doing initial render and state initialization, give angular time to resolve stable state
-    setTimeout(() => {
-      this.isLoadingSubscription = applicationModel.isLoading.subscribe((value: boolean) => {
-        this.isLoading = value;
-      });
-    });
+  public State: any = State.values();
+
+  constructor(private applicationModel: ApplicationModel,
+              private changeDetector: ChangeDetectorRef) {
   }
 
   ngOnInit() {
+    this.isLoadingSubscription = this.applicationModel.isLoading.subscribe((value: boolean) => {
+      // firestore calls can be almost instant, which causes to change the subscription value few times within one digest cycle
+      // (as a result of quick Event.SYSTEM.LOADING broadcasts)
+      // we need to force change detection whenever it happens, to avoid ExpressionChangedAfterItHasBeenCheck error in the view
+      this.isLoading = value;
+      this.changeDetector.detectChanges();
+    });
   }
 
   ngOnDestroy() {
     this.isLoadingSubscription.unsubscribe();
   }
-
 
 }

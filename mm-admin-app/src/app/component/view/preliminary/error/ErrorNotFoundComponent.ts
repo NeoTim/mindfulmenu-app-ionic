@@ -10,7 +10,6 @@ export class ErrorNotFoundComponent implements OnInit {
   public State: any = State.values();
 
   constructor() {
-    console.log('created');
   }
 
   ngOnInit() {

@@ -1,0 +1,174 @@
+<div *ngIf="weeklyMenuWithMeals">
+  <div class="modal-header">
+    <h4 class="modal-title">Edit Weekly Menu</h4>
+    <button type="button" class="close" (click)="dismiss()">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #weeklyMenuForm="ngForm" novalidate>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label>Week Number</label>
+          <input type="number" class="form-control" id="weekNumber" name="weekNumber"
+                 [ngClass]="{'is-invalid': weeklyMenuForm.submitted && weekNumber.invalid, 'is-valid': weeklyMenuForm.submitted && weekNumber.valid }"
+                 (blur)="onNumberBlur(weekNumber)"
+                 #weekNumber="ngModel" [(ngModel)]="weeklyMenuWithMeals.weekNumber" required pattern="[0-9]{8}">
+          <div class="invalid-feedback" *ngIf="weeklyMenuForm.submitted && weekNumber.invalid">
+            <div *ngIf="weekNumber.errors?.required">This cannot be empty.</div>
+            <div *ngIf="weekNumber.errors?.pattern">This should follow YYYYMMDD pattern.</div>
+          </div>
+        </div>
+        <div class="form-group col-sm-6">
+          <label>Publish Date</label>
+          <div class="input-group">
+            <input class="form-control" id="publishDate" name="publishDate"
+                   [ngClass]="{'is-invalid': weeklyMenuForm.submitted && publishDate.invalid, 'is-valid': weeklyMenuForm.submitted && publishDate.valid }"
+                   #publishDateDatePicker="ngbDatepicker" #publishDate="ngModel" [(ngModel)]="weeklyMenuWithMeals.publishDate" ngbDatepicker [maxDate]="startDate" required>
+            <div class="input-group-append">
+              <button type="button" class="btn btn-outline-secondary" (click)="publishDateDatePicker.toggle()">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </button>
+            </div>
+            <div class="invalid-feedback" *ngIf="weeklyMenuForm.submitted && publishDate.invalid">
+              <div *ngIf="publishDate.errors?.required">This cannot be empty.</div>
+              <div *ngIf="publishDate.errors?.ngbDate">This should follow YYYY-MM-DD pattern.</div>
+              <div *ngIf="publishDate.errors?.maxDate">This cannot be after Start Date.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label>Start Date</label>
+          <div class="input-group">
+            <input class="form-control" id="startDate" name="startDate"
+                   [ngClass]="{'is-invalid': weeklyMenuForm.submitted && startDate.invalid, 'is-valid': weeklyMenuForm.submitted && startDate.valid }"
+                   #startDateDatePicker="ngbDatepicker" #startDate="ngModel" [(ngModel)]="weeklyMenuWithMeals.startDate" ngbDatepicker required>
+            <div class="input-group-append">
+              <button type="button" class="btn btn-outline-secondary" (click)="startDateDatePicker.toggle()">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </button>
+            </div>
+            <div class="invalid-feedback" *ngIf="weeklyMenuForm.submitted && startDate.invalid">
+              <div *ngIf="startDate.errors?.required">This cannot be empty.</div>
+              <div *ngIf="startDate.errors?.ngbDate">This should follow YYYY-MM-DD pattern.</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-sm-6">
+          <label>End Date</label>
+          <div class="input-group">
+            <input class="form-control" id="endDate" name="endDate"
+                   [ngClass]="{'is-invalid': weeklyMenuForm.submitted && endDate.invalid, 'is-valid': weeklyMenuForm.submitted && endDate.valid }"
+                   #endDateDatePicker="ngbDatepicker" #endDate="ngModel" [(ngModel)]="weeklyMenuWithMeals.endDate" ngbDatepicker [minDate]="startDate" required>
+            <div class="input-group-append">
+              <button type="button" class="btn btn-outline-secondary" (click)="endDateDatePicker.toggle()">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </button>
+            </div>
+            <div class="invalid-feedback" *ngIf="weeklyMenuForm.submitted && endDate.invalid">
+              <div *ngIf="endDate.errors?.required">This cannot be empty.</div>
+              <div *ngIf="endDate.errors?.ngbDate">This should follow YYYY-MM-DD pattern.</div>
+              <div *ngIf="endDate.errors?.minDate">This cannot be before Start Date.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Image URL</label>
+        <input type="text" class="form-control" id="imageUrl" name="imageUrl"
+               [ngClass]="{'is-invalid': weeklyMenuForm.submitted && imageUrl.invalid, 'is-valid': weeklyMenuForm.submitted && imageUrl.valid }"
+               #imageUrl="ngModel" [(ngModel)]="weeklyMenuWithMeals.imageUrl" required url>
+        <div class="invalid-feedback" *ngIf="weeklyMenuForm.submitted && imageUrl.invalid">
+          <div *ngIf="imageUrl.errors?.required">This cannot be empty.</div>
+          <div *ngIf="imageUrl.errors?.url">This needs to be a valid URL.</div>
+        </div>
+      </div>
+      <div class="form-group mb-0">
+        <label>Meals</label>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-1 col-form-label">#1</label>
+        <div class="col-sm-11">
+          <input type="text" class="form-control" id="meal1" name="meal1" [(ngModel)]="weeklyMenuWithMeals.meals[0]" #meal1="ngModel" (blur)="onMealBlur(meal1)"
+                 [ngClass]="{'is-invalid': weeklyMenuForm.submitted && meal1.invalid, 'is-valid': weeklyMenuForm.submitted && meal1.valid }"
+                 [ngbTypeahead]="search" [resultFormatter]="mealFormatter" [inputFormatter]="mealFormatter" required>
+          <div class="invalid-feedback" *ngIf="weeklyMenuForm.submitted && meal1.invalid">
+            <div *ngIf="meal1.errors?.required">This cannot be empty.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-1 col-form-label">#2</label>
+        <div class="col-sm-11">
+          <input type="text" class="form-control" id="meal2" name="meal2" [(ngModel)]="weeklyMenuWithMeals.meals[1]" #meal2="ngModel" (blur)="onMealBlur(meal2)"
+                 [ngClass]="{'is-invalid': weeklyMenuForm.submitted && meal2.invalid, 'is-valid': weeklyMenuForm.submitted && meal2.valid }"
+                 [ngbTypeahead]="search" [resultFormatter]="mealFormatter" [inputFormatter]="mealFormatter" required>
+          <div class="invalid-feedback" *ngIf="weeklyMenuForm.submitted && meal2.invalid">
+            <div *ngIf="meal2.errors?.required">This cannot be empty.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-1 col-form-label">#3</label>
+        <div class="col-sm-11">
+          <input type="text" class="form-control" id="meal3" name="meal3" [(ngModel)]="weeklyMenuWithMeals.meals[2]" #meal3="ngModel" (blur)="onMealBlur(meal3)"
+                 [ngClass]="{'is-invalid': weeklyMenuForm.submitted && meal3.invalid, 'is-valid': weeklyMenuForm.submitted && meal3.valid }"
+                 [ngbTypeahead]="search" [resultFormatter]="mealFormatter" [inputFormatter]="mealFormatter" required>
+          <div class="invalid-feedback" *ngIf="weeklyMenuForm.submitted && meal3.invalid">
+            <div *ngIf="meal3.errors?.required">This cannot be empty.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-1 col-form-label">#4</label>
+        <div class="col-sm-11">
+          <input type="text" class="form-control" id="meal4" name="meal4" [(ngModel)]="weeklyMenuWithMeals.meals[3]" #meal4="ngModel" (blur)="onMealBlur(meal4)"
+                 [ngClass]="{'is-invalid': weeklyMenuForm.submitted && meal4.invalid, 'is-valid': weeklyMenuForm.submitted && meal4.valid }"
+                 [ngbTypeahead]="search" [resultFormatter]="mealFormatter" [inputFormatter]="mealFormatter" required>
+          <div class="invalid-feedback" *ngIf="weeklyMenuForm.submitted && meal4.invalid">
+            <div *ngIf="meal4.errors?.required">This cannot be empty.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-1 col-form-label">#5</label>
+        <div class="col-sm-11">
+          <input type="text" class="form-control" id="meal5" name="meal5" [(ngModel)]="weeklyMenuWithMeals.meals[4]" #meal5="ngModel" (blur)="onMealBlur(meal5)"
+                 [ngClass]="{'is-invalid': weeklyMenuForm.submitted && meal5.invalid, 'is-valid': weeklyMenuForm.submitted && meal5.valid }"
+                 [ngbTypeahead]="search" [resultFormatter]="mealFormatter" [inputFormatter]="mealFormatter" required>
+          <div class="invalid-feedback" *ngIf="weeklyMenuForm.submitted && meal5.invalid">
+            <div *ngIf="meal5.errors?.required">This cannot be empty.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-1 col-form-label">#6</label>
+        <div class="col-sm-11">
+          <input type="text" class="form-control" id="meal6" name="meal6" [(ngModel)]="weeklyMenuWithMeals.meals[5]" #meal6="ngModel" (blur)="onMealBlur(meal6)"
+                 [ngClass]="{'is-invalid': weeklyMenuForm.submitted && meal6.invalid, 'is-valid': weeklyMenuForm.submitted && meal6.valid }"
+                 [ngbTypeahead]="search" [resultFormatter]="mealFormatter" [inputFormatter]="mealFormatter" required>
+          <div class="invalid-feedback" *ngIf="weeklyMenuForm.submitted && meal6.invalid">
+            <div *ngIf="meal6.errors?.required">This cannot be empty.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-1 col-form-label">#7</label>
+        <div class="col-sm-11">
+          <input type="text" class="form-control" id="meal7" name="meal7" [(ngModel)]="weeklyMenuWithMeals.meals[6]" #meal7="ngModel" (blur)="onMealBlur(meal7)"
+                 [ngClass]="{'is-invalid': weeklyMenuForm.submitted && meal7.invalid, 'is-valid': weeklyMenuForm.submitted && meal7.valid }"
+                 [ngbTypeahead]="search" [resultFormatter]="mealFormatter" [inputFormatter]="mealFormatter" required>
+          <div class="invalid-feedback" *ngIf="weeklyMenuForm.submitted && meal7.invalid">
+            <div *ngIf="meal7.errors?.required">This cannot be empty.</div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="close()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+  </div>
+</div>

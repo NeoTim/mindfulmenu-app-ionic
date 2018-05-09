@@ -1,6 +1,6 @@
-import { IngredientDTO } from "../../dto/menu/IngredientDTO";
-import { MealDTO } from "../../dto/menu/MealDTO";
-import * as _ from "lodash";
+import { IngredientDTO } from '../../dto/menu/IngredientDTO';
+import { MealDTO } from '../../dto/menu/MealDTO';
+import * as _ from 'lodash';
 
 export class Meal {
 
@@ -61,8 +61,11 @@ export class Meal {
 
     if (meal.ingredients && (meal.ingredients.length > 0)) {
       dto.ingredientIds = [];
+
       for (let ingredient of meal.ingredients) {
-        dto.ingredientIds.push(ingredient.id);
+        if (ingredient && ingredient.id) {
+          dto.ingredientIds.push(ingredient.id);
+        }
       }
     }
 

@@ -1,5 +1,5 @@
-import { MealDTO } from "../../dto/menu/MealDTO";
-import { WeeklyMenuDTO } from "../../dto/menu/WeeklyMenuDTO";
+import { MealDTO } from '../../dto/menu/MealDTO';
+import { WeeklyMenuDTO } from '../../dto/menu/WeeklyMenuDTO';
 
 export class WeeklyMenu {
 
@@ -15,6 +15,8 @@ export class WeeklyMenu {
 
   meals: MealDTO[];
 
+  imageUrl: string;
+
   // --
 
   public static fromDTO(dto: WeeklyMenuDTO): WeeklyMenu {
@@ -22,9 +24,16 @@ export class WeeklyMenu {
 
     weeklyMenu.id = dto.id;
     weeklyMenu.weekNumber = dto.weekNumber;
-    weeklyMenu.startDate = new Date(dto.startDate.getTime());
-    weeklyMenu.endDate = new Date(dto.endDate.getTime());
-    weeklyMenu.publishDate = new Date(dto.publishDate.getTime());
+    if (dto.startDate) {
+      weeklyMenu.startDate = new Date(dto.startDate.getTime());
+    }
+    if (dto.endDate) {
+      weeklyMenu.endDate = new Date(dto.endDate.getTime());
+    }
+    if (dto.publishDate) {
+      weeklyMenu.publishDate = new Date(dto.publishDate.getTime());
+    }
+    weeklyMenu.imageUrl = dto.imageUrl;
 
     return weeklyMenu;
   }
@@ -34,14 +43,24 @@ export class WeeklyMenu {
 
     dto.id = weeklyMenu.id;
     dto.weekNumber = weeklyMenu.weekNumber;
-    dto.startDate = new Date(weeklyMenu.startDate.getTime());
-    dto.endDate = new Date(weeklyMenu.endDate.getTime());
-    dto.publishDate = new Date(weeklyMenu.publishDate.getTime());
+    if (weeklyMenu.startDate) {
+      dto.startDate = new Date(weeklyMenu.startDate.getTime());
+    }
+    if (weeklyMenu.endDate) {
+      dto.endDate = new Date(weeklyMenu.endDate.getTime());
+    }
+    if (weeklyMenu.publishDate) {
+      dto.publishDate = new Date(weeklyMenu.publishDate.getTime());
+    }
+    dto.imageUrl = weeklyMenu.imageUrl;
 
     if (weeklyMenu.meals && (weeklyMenu.meals.length > 0)) {
       dto.mealIds = [];
+
       for (let meal of weeklyMenu.meals) {
-        dto.mealIds.push(meal.id);
+        if (meal && meal.id) {
+          dto.mealIds.push(meal.id);
+        }
       }
     }
 
