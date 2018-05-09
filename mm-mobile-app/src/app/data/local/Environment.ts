@@ -6,6 +6,8 @@ export class Environment {
 
     websiteUrl: string;
 
+    contactEmail: string;
+
     production: boolean;
 
 }

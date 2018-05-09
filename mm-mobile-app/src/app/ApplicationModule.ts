@@ -31,6 +31,9 @@ import { FirestoreManager } from "./util/FirestoreManager";
 import { CustomFormsModule } from "ng4-validators";
 import { FormsModule } from "@angular/forms";
 import { InternalUrlBrowserComponent } from "./component/ui/internalUrlBrowser/InternalUrlBrowserComponent";
+import { AboutComponent } from "./component/view/main/more/about/AboutComponent";
+import { AccountComponent } from "./component/view/main/more/account/AccountComponent";
+import { AccountChangePasswordComponent } from "./component/view/main/more/account/AccountChangePasswordComponent";
 
 @NgModule({
   declarations: [
@@ -41,7 +44,7 @@ import { InternalUrlBrowserComponent } from "./component/ui/internalUrlBrowser/I
     AuthOfflineComponent,
     MainComponent,
     MenusComponent,
-    MoreComponent,
+    MoreComponent, AboutComponent, AccountComponent, AccountChangePasswordComponent,
     MyPlanComponent,
     // component/ui
     InternalUrlBrowserComponent
@@ -54,7 +57,7 @@ import { InternalUrlBrowserComponent } from "./component/ui/internalUrlBrowser/I
     AuthOfflineComponent,
     MainComponent,
     MenusComponent,
-    MoreComponent,
+    MoreComponent, AboutComponent, AccountComponent, AccountChangePasswordComponent,
     MyPlanComponent,
     // component/ui
     InternalUrlBrowserComponent
@@ -63,7 +66,13 @@ import { InternalUrlBrowserComponent } from "./component/ui/internalUrlBrowser/I
     BrowserModule,
     FormsModule,
     CustomFormsModule,
-    IonicModule.forRoot(ApplicationComponent, {}),
+    IonicModule.forRoot(ApplicationComponent, {
+      mode: 'md',
+      tabsHideOnSubPages: true,
+      backButtonText: 'Back',
+      backButtonIcon: 'ios-arrow-back',
+      pageTransition: 'md-transition'
+    }),
     IonicStorageModule.forRoot(),
   ],
   providers: [

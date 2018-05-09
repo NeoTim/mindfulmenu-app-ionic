@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoadingController, Toast, ToastController } from 'ionic-angular';
+import { Alert, AlertController, LoadingController, Toast, ToastController } from 'ionic-angular';
 import { Loading } from 'ionic-angular/components/loading/loading';
 
 @Injectable()
@@ -7,9 +7,11 @@ export class ViewUtil {
 
     private loader: Loading;
     private toast: Toast;
+    private alert: Alert;
 
     constructor(private toastCtrl: ToastController,
-                private loadingCtrl: LoadingController) {
+                private loadingCtrl: LoadingController,
+                private alertCtrl: AlertController) {
     }
 
     showToast(text: string = 'Please wait ...', dismissOnPageChange: boolean = true, forceShow: boolean = true): void {
@@ -50,5 +52,32 @@ export class ViewUtil {
             this.loader.dismiss();
             this.loader = null;
         }
+    }
+
+    showConfirmation(title: string = 'Please confirm', text: string = 'Are you sure?') {
+      return new Promise((resolve, reject) => {
+        this.alert = this.alertCtrl.create({
+          title: title,
+          message: text,
+          buttons: [
+            {
+              text: 'Cancel',
+              handler: () => {
+                this.alert = null;
+                reject();
+              }
+            },
+            {
+              text: 'OK',
+              handler: () => {
+                this.alert = null;
+                resolve();
+              }
+            }
+          ]
+        });
+
+        this.alert.present();
+      });
     }
 }

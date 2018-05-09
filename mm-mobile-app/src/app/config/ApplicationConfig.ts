@@ -7,10 +7,13 @@ export class ApplicationConfig {
 
     public applicationOwner: string = 'OurMindfulMenu';
     public applicationName: string = 'OurMindfulMenu';
-    public version: string = '0.0.2 (2018-04-26)';
+    public version: string = '0.0.3 (2018-05-09)';
+
     public production: boolean;
     public firebase: FirebaseConfig;
     public websiteUrl: string;
+    public contactEmail: string;
+
     public environment: string;
 
     // --
@@ -31,7 +34,8 @@ export class ApplicationConfig {
             storageBucket: 'mindful-menu.appspot.com',
             messagingSenderId: '415539829999'
           },
-          websiteUrl: 'https://www.ourmindfulmenu.com/'
+          websiteUrl: 'https://www.ourmindfulmenu.com/',
+          contactEmail: 'ourmindfulmenu@gmail.com'
 
         },
         DEVELOP: {
@@ -44,7 +48,8 @@ export class ApplicationConfig {
             storageBucket: 'mindful-menu.appspot.com',
             messagingSenderId: '415539829999'
           },
-          websiteUrl: 'https://www.ourmindfulmenu.com/'
+          websiteUrl: 'https://www.ourmindfulmenu.com/',
+          contactEmail: 'ourmindfulmenu@gmail.com'
         }
     };
 
@@ -57,6 +62,7 @@ export class ApplicationConfig {
           this.production = this.environmentConfigs[environmentName].production;
           this.firebase = this.environmentConfigs[environmentName].firebase;
           this.websiteUrl = this.environmentConfigs[environmentName].websiteUrl;
+          this.contactEmail = this.environmentConfigs[environmentName].contactEmail;
 
           this.environment = environmentName;
         }

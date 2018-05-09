@@ -54,6 +54,26 @@ export class AuthService {
     });
   }
 
+  public changePassword(username: string, currentPassword: string, newPassword: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const credential = firebase.auth.EmailAuthProvider.credential(username, currentPassword);
+
+      this.firebaseManager.auth.currentUser.reauthenticateWithCredential(credential)
+        .then((result) => {
+          this.firebaseManager.auth.currentUser.updatePassword(newPassword)
+            .then((result) => {
+              resolve(result);
+            })
+            .catch( (error) => {
+              reject(error);
+            });
+        })
+        .catch( (error) => {
+          reject(error);
+        });
+    });
+  }
+
   // I've created FirebaseCredentialsDTO to extract the most important data (the rest of the object is just gibberish properties and functions named a,b,c, etc.)
   // firebase.User complains about accessing/copying some metadata (they're marked as readonly (?))
   // note: FirebaseCredentialsDTO isn't really used anywhere, Firebase SDK maintains its own firebase.User in the background - we just store a simplified copy for reference

@@ -3,7 +3,22 @@
 <ion-content class="with-top-doodad" padding>
   <h1 text-center>More</h1>
 
-  <h3 class="user" text-center margin-top margin-bottom>{{ currentUser.firstName + ' ' + currentUser.lastName }}</h3>
+  <ion-list inset>
+    <button ion-item (click)="showAccount()">
+      <p>Account</p>
+      <ion-icon name="ios-arrow-forward" item-end></ion-icon>
+    </button>
+    <button ion-item (click)="showAbout()">
+      <p>About Mindful Menu</p>
+      <ion-icon name="ios-arrow-forward" item-end></ion-icon>
+    </button>
+    <button ion-item (click)="showContact()">
+      <p>Contact</p>
+      <ion-icon name="ios-arrow-forward" item-end></ion-icon>
+    </button>
+    <button ion-item (click)="logout()">
+      <p class="logout">Logout</p>
+    </button>
+  </ion-list>
 
-  <button ion-button block margin-top type="button" (click)="logout()">Logout</button>
 </ion-content>

@@ -58,4 +58,18 @@ export class AuthModel {
       })
   }
 
+  public changePassword(username: string, currentPassword: string, newPassword: string): Promise<any> {
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.authService.changePassword(username, currentPassword, newPassword)
+      .then((result: any) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return result;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return Promise.reject(error);
+      })
+  }
+
 }
