@@ -48,11 +48,11 @@ body {
       color: color($colors, primary) !important;
     }
 
-    &.with-top-doodad .scroll-content {
+    &.with-top-doodad > .scroll-content {
       padding-top: 64px !important;
     }
 
-    &.with-top-doodad.with-header .scroll-content {
+    &.with-top-doodad.with-header > .scroll-content {
       padding-top: 16px !important;
     }
   }
@@ -78,7 +78,7 @@ ion-header {
   }
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4, h5, h6 {
   font-family: 'Brusher' !important;
 }
 
@@ -94,10 +94,27 @@ h3 {
   font-size: 28px !important;
 }
 
+h4 {
+  font-size: 22px !important;
+}
+
+h5 {
+  font-size: 18px !important;
+}
+
 .error {
   color: red !important;
   margin-top: 7px;
   margin-left: 7px;
+}
+
+.ion-md-custom-arrow-back {
+  background-image: url('../asset/ic_circle_arrow@2x.png');
+  background-size: 30px auto;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  transform: rotate(180deg);
 }
 
 .top-doodad {
@@ -140,11 +157,11 @@ ion-app.platform-ios {
   }
 
   .content {
-    &.with-top-doodad .scroll-content {
+    &.with-top-doodad > .scroll-content {
       padding-top: 90px !important;
     }
 
-    &.with-top-doodad.with-header .scroll-content {
+    &.with-top-doodad.with-header > .scroll-content {
       padding-top: 16px !important;
     }
   }

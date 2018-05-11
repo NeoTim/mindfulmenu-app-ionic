@@ -3,8 +3,73 @@
 <ion-content class="with-top-doodad" padding>
   <h1 text-center>Menus</h1>
 
-  <div *ngIf="weeklyMenu" style="border-radius: 10px; border: 2px solid black; width: 100%; height: 200px; text-align: center; padding: 10px">
-    <h3 style="font-family: 'Trocchi' !important;">Weekly Menu</h3>
-    <h3 style="font-family: 'Trocchi' !important;">{{ weeklyMenu.startDate | date:'dd MMMM' }} - {{ weeklyMenu.endDate | date:'dd MMMM' }} </h3>
+  <div class="currentWeeklyMenu" *ngIf="currentWeeklyMenu" (click)="showWeeklyMenu(currentWeeklyMenu)">
+    <div class="background" [style.background-image]="('url(' + currentWeeklyMenu.imageUrl + ')') | sanitizeStyle"></div>
+    <div class="content">
+      <h5>Weekly Menu</h5>
+      <h3>{{ currentWeeklyMenu.startDate | date:'dd MMMM' }} - {{ currentWeeklyMenu.endDate | date:'dd MMMM' }}</h3>
+      <div class="bubble">NEW</div>
+    </div>
   </div>
+
+  <div class="currentWeeklyMenu" *ngIf="!currentWeeklyMenu">
+    <div class="content">
+      <h5>No menu for this week yet</h5>
+    </div>
+  </div>
+
+  <div class="favorites">
+    <h3>Favorite recipes</h3>
+    <ng-container *ngIf="favoriteMeals && (favoriteMeals.length > 0)">
+      <ion-scroll scrollX="true">
+        <div class="meal scroll-item" *ngFor="let meal of favoriteMeals" (click)="showMeal(meal)">
+          <div class="background" [style.background-image]="('url(' + meal.imageUrl + ')') | sanitizeStyle"></div>
+          <div class="favorite" (click)="toggleFavorite(meal, false); $event.stopPropagation();"></div>
+          <div class="content">
+            <h5>{{ meal.name }}</h5>
+          </div>
+        </div>
+      </ion-scroll>
+    </ng-container>
+    <ng-container *ngIf="!favoriteMeals || (favoriteMeals.length == 0)">
+      <p>No favorite recipes yet.</p>
+    </ng-container>
+  </div>
+
+  <div class="previousWeeklyMenus">
+    <h3>Previous weeks</h3>
+    <ng-container *ngIf="previousWeeklyMenus && (previousWeeklyMenus.length > 0)">
+      <ion-scroll scrollX="true">
+        <div class="weeklyMenu scroll-item" *ngFor="let previousWeeklyMenu of previousWeeklyMenus" (click)="showWeeklyMenu(previousWeeklyMenu)">
+          <div class="background" [style.background-image]="('url(' + previousWeeklyMenu.imageUrl + ')') | sanitizeStyle"></div>
+          <div class="content">
+            <h6>Weekly Menu</h6>
+            <h5>{{ previousWeeklyMenu.startDate | date:'dd MMM' }} - {{ previousWeeklyMenu.endDate | date:'dd MMM' }}</h5>
+          </div>
+        </div>
+      </ion-scroll>
+    </ng-container>
+    <ng-container *ngIf="!previousWeeklyMenus || (previousWeeklyMenus.length == 0)">
+      <p>No previous weekly menus available.</p>
+    </ng-container>
+  </div>
+
+  <div class="upcomingWeeklyMenus" *ngIf="currentUser.isAdmin">
+    <h3>Upcoming weeks (admin only)</h3>
+    <ng-container *ngIf="upcomingWeeklyMenus && (upcomingWeeklyMenus.length > 0)">
+      <ion-scroll scrollX="true">
+        <div class="weeklyMenu scroll-item" *ngFor="let upcomingWeeklyMenu of upcomingWeeklyMenus"  (click)="showWeeklyMenu(upcomingWeeklyMenu)">
+          <div class="background" [style.background-image]="('url(' + upcomingWeeklyMenu.imageUrl + ')') | sanitizeStyle"></div>
+          <div class="content">
+            <h6>Weekly Menu</h6>
+            <h5>{{ upcomingWeeklyMenu.startDate | date:'dd MMM' }} - {{ upcomingWeeklyMenu.endDate | date:'dd MMM' }}</h5>
+          </div>
+        </div>
+      </ion-scroll>
+    </ng-container>
+    <ng-container *ngIf="!upcomingWeeklyMenus || (upcomingWeeklyMenus.length == 0)">
+      <p>No upcoming weekly menus available.</p>
+    </ng-container>
+  </div>
+
 </ion-content>

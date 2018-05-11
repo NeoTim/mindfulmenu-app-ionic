@@ -1,0 +1,176 @@
+weekly-menu {
+
+  h1 {
+    margin-top: 0px !important;
+  }
+
+  h3 {
+    margin-bottom: 0px !important;
+  }
+
+  .meal {
+    width: 100%;
+    height: 360px;
+    border-radius: 7px;
+    margin-top: 30px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+
+    &:last-child {
+      margin-bottom: 50px;
+    }
+
+    .background {
+      width: 100%;
+      height: 180px;
+      background-size: cover;
+      border-bottom: 1px solid color($colors, secondary-dark) !important;
+    }
+
+    .favorite {
+      background-size: contain;
+      background-repeat: no-repeat;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      z-index: 1;
+
+      &.on {
+        background-image: url('../asset/ic_heart_full@2x.png');
+      }
+
+      &.off {
+        background-image: url('../asset/ic_heart_empty@2x.png');
+      }
+    }
+
+    .plan {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      height: 25px;
+      font-size: 12px;
+      border-radius: 15px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      padding-left: 6px;
+      padding-right: 10px;
+      color: color($colors, light) !important;
+      overflow: hidden;
+      display: flex;
+
+      &::before {
+        content: ' ';
+        background-color: color($colors, dark) !important;
+        opacity: 0.6;
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        z-index: 0;
+      }
+
+      div {
+        position: relative;
+      }
+
+      .remove {
+        background-image: url('../asset/ic_remove@2x.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        top: -1px;
+        margin-right: 3px;
+      }
+
+      .add {
+        background-image: url('../asset/ic_remove@2x.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        transform: rotate(45deg);
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        top: -2px;
+        margin-right: 3px;
+      }
+    }
+
+    .content {
+      color: color($colors, secondary-dark) !important;
+      height: 180px;
+
+      .name {
+        text-align: center;
+        padding: 10px;
+        height: 90px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        h4 {
+          font-family: 'Trocchi' !important;
+          margin-top: 0px !important;
+          margin-bottom: 0px !important;
+        }
+      }
+
+      .h-divider {
+        background-color: color($colors, primary) !important;
+        height: 1px;
+        opacity: 0.5;
+        width: 90%;
+        margin: 0 auto;
+      }
+
+      .v-divider {
+        background-color: color($colors, primary) !important;
+        height: 80%;
+        width: 1px;
+        opacity: 0.5;
+        margin: 0 auto;
+      }
+
+      .details {
+        height: 89px;
+
+        ion-grid {
+          height: 100%;
+        }
+
+        ion-row {
+          height: 100%;
+        }
+
+        ion-col {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        p {
+          margin-top: 0px !important;
+          margin-bottom: 0px !important;
+        }
+
+        h4 {
+          font-family: 'Trocchi' !important;
+          margin-top: 0px !important;
+          margin-bottom: 0px !important;
+        }
+      }
+    }
+  }
+
+}

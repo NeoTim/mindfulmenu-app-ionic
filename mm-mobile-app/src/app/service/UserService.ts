@@ -38,6 +38,17 @@ export class UserService {
     });
   }
 
+  public updateUserFavoriteMealIds(userId: string, favoriteMealIds: string[]): Promise<UserDTO> {
+    return new Promise((resolve, reject) => {
+      this.firestoreManager.firestore.collection('users').doc(userId).update( { 'favoriteMealIds': favoriteMealIds })
+        .then(() => {
+            resolve(this.getUser(userId));
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
 
 
 }

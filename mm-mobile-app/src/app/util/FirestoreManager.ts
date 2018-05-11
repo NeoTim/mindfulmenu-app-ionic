@@ -55,8 +55,11 @@ export class FirestoreManager {
 
   public getByIds(idArray: string[], collection: firebase.firestore.CollectionReference): Promise<firebase.firestore.DocumentSnapshot[]> {
     return new Promise((resolve, reject) => {
-        if ((idArray === null) || (idArray.length === 0)) {
+        if (idArray === null) {
           reject(null);
+        }
+        else if (idArray.length === 0) {
+          resolve([]);
         }
         else {
           let successCount: number = 0;
@@ -84,10 +87,10 @@ export class FirestoreManager {
                 else if ((successCount + errorCount) === totalCount) {
                   resolve(items);
                 }
-              })
+              });
           }
         }
-    })
+    });
   }
 
 }

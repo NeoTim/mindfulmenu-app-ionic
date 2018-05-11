@@ -6,6 +6,10 @@ account {
     .item-label {
       font-weight: bold;
       font-size: 20px;
+      color: color($colors, secondary-dark) !important;
+    }
+
+    .item-value {
     }
   }
 

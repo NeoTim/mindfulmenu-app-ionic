@@ -7,6 +7,7 @@ import { MealDTO } from "../../../../data/dto/menu/MealDTO";
 import { UserDTO } from "../../../../data/dto/user/UserDTO";
 import { UserModel } from "../../../../model/UserModel";
 import * as _ from "lodash";
+import { WeeklyMenuComponent } from "./weeklyMenu/WeeklyMenuComponent";
 
 @Component({
   selector: 'menus',
@@ -14,8 +15,9 @@ import * as _ from "lodash";
 })
 export class MenusComponent {
 
-  weeklyMenu: WeeklyMenuDTO;
+  currentWeeklyMenu: WeeklyMenuDTO;
   previousWeeklyMenus: WeeklyMenuDTO[];
+  upcomingWeeklyMenus: WeeklyMenuDTO[];
 
   favoriteMeals: MealDTO[];
 
@@ -35,31 +37,85 @@ export class MenusComponent {
     this.init();
   }
 
+  ionViewDidEnter() {
+    this.currentUser = this.userModel.currentUser;
+    this.getFavoriteMeals();
+  }
+
   init() {
+    this.getCurrentWeeklyMenu();
+    this.getPreviousWeeklyMenus();
+
+    if (this.currentUser.isAdmin) {
+      this.getUpcomingWeeklyMenus();
+    }
+  }
+
+  getCurrentWeeklyMenu() {
     this.weeklyMenuModel.getCurrentWeeklyMenu()
       .then((weeklyMenu: WeeklyMenuDTO) => {
-        this.weeklyMenu = weeklyMenu;
+        this.currentWeeklyMenu = weeklyMenu;
       })
       .catch((error) => {});
+  }
 
-    this.previousWeeklyMenus = [];
+  getPreviousWeeklyMenus() {
+    let previousWeeklyMenus: WeeklyMenuDTO[] = [];
 
     for (let i = -1; i > (-1 - MenusComponent.WEEK_RANGE); i--) {
       this.weeklyMenuModel.getWeeklyMenuInRelationToCurrent(i)
         .then((weeklyMenu: WeeklyMenuDTO) => {
-          this.previousWeeklyMenus.push(weeklyMenu);
+          previousWeeklyMenus.push(weeklyMenu);
 
-          if (this.previousWeeklyMenus.length === MenusComponent.WEEK_RANGE) {
-            this.previousWeeklyMenus = _.orderBy(_.compact(this.previousWeeklyMenus), ['weekNumber'], ['desc']);
+          if (previousWeeklyMenus.length === MenusComponent.WEEK_RANGE) {
+            this.previousWeeklyMenus = _.orderBy(_.compact(previousWeeklyMenus), ['weekNumber'], ['desc']);
           }
         })
         .catch((error) => {});
     }
+  }
 
+  getUpcomingWeeklyMenus() {
+    let upcomingWeeklyMenus: WeeklyMenuDTO[] = [];
+
+    for (let i = 1; i < (1 + MenusComponent.WEEK_RANGE); i++) {
+      this.weeklyMenuModel.getWeeklyMenuInRelationToCurrent(i)
+        .then((weeklyMenu: WeeklyMenuDTO) => {
+          upcomingWeeklyMenus.push(weeklyMenu);
+
+          if (upcomingWeeklyMenus.length === MenusComponent.WEEK_RANGE) {
+            this.upcomingWeeklyMenus = _.orderBy(_.compact(upcomingWeeklyMenus), ['weekNumber'], ['asc']);
+          }
+        })
+        .catch((error) => {
+        });
+    }
+  }
+
+  getFavoriteMeals() {
     this.mealModel.getMeals(this.currentUser.favoriteMealIds)
       .then((meals: MealDTO[]) => {
         this.favoriteMeals = meals;
       })
       .catch((error) => {});
   }
+
+  showWeeklyMenu(weeklyMenu: WeeklyMenuDTO) {
+    this.navCtrl.push(WeeklyMenuComponent, { weeklyMenuId: weeklyMenu.id },{ animation: 'ios-transition'} )
+  }
+
+  showMeal(meal: MealDTO) {
+    console.log(meal);
+  }
+
+  toggleFavorite(meal: MealDTO, isFavorite: boolean) {
+    this.userModel.toggleFavoriteMeal(meal.id, isFavorite)
+      .then((user: UserDTO) => {
+        this.currentUser = user;
+        this.getFavoriteMeals();
+      })
+      .catch((error) => {});
+  }
+
 }
+

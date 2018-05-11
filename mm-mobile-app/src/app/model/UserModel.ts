@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 import { Event } from '../common/Event';
 import { UserDTO } from "../data/dto/user/UserDTO";
 import { UserService } from "../service/UserService";
+import * as _ from "lodash";
 
 @Injectable()
 export class UserModel {
@@ -44,6 +45,33 @@ export class UserModel {
     return this.userService.getUserByUID(userUID)
       .then((user: UserDTO) => {
         this.events.publish(Event.SYSTEM.LOADING, false);
+        return user;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
+  }
+
+  public toggleFavoriteMeal(mealId: string, isFavorite: boolean): Promise<UserDTO> {
+    let favoriteMealIds: string[] = _.cloneDeep(this.currentUser.favoriteMealIds);
+
+    if (isFavorite) {
+      favoriteMealIds.push(mealId);
+    }
+    else {
+      _.remove(favoriteMealIds, (id: string) => {
+        return (id === mealId);
+      });
+    }
+
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.userService.updateUserFavoriteMealIds(this.currentUser.id, favoriteMealIds)
+      .then((user: UserDTO) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        this.currentUser = user;
         return user;
       })
       .catch((error) => {

@@ -34,6 +34,8 @@ import { InternalUrlBrowserComponent } from "./component/ui/internalUrlBrowser/I
 import { AboutComponent } from "./component/view/main/more/about/AboutComponent";
 import { AccountComponent } from "./component/view/main/more/account/AccountComponent";
 import { AccountChangePasswordComponent } from "./component/view/main/more/account/AccountChangePasswordComponent";
+import { SanitizeStylePipe } from "./util/pipe/SanitizeStylePipe";
+import { WeeklyMenuComponent } from "./component/view/main/menus/weeklyMenu/WeeklyMenuComponent";
 
 @NgModule({
   declarations: [
@@ -43,11 +45,13 @@ import { AccountChangePasswordComponent } from "./component/view/main/more/accou
     AuthLoginComponent,
     AuthOfflineComponent,
     MainComponent,
-    MenusComponent,
+    MenusComponent, WeeklyMenuComponent,
     MoreComponent, AboutComponent, AccountComponent, AccountChangePasswordComponent,
     MyPlanComponent,
     // component/ui
-    InternalUrlBrowserComponent
+    InternalUrlBrowserComponent,
+    // util/pipe
+    SanitizeStylePipe
   ],
   entryComponents: [
     // main entry point
@@ -56,7 +60,7 @@ import { AccountChangePasswordComponent } from "./component/view/main/more/accou
     AuthLoginComponent,
     AuthOfflineComponent,
     MainComponent,
-    MenusComponent,
+    MenusComponent, WeeklyMenuComponent,
     MoreComponent, AboutComponent, AccountComponent, AccountChangePasswordComponent,
     MyPlanComponent,
     // component/ui
@@ -68,9 +72,9 @@ import { AccountChangePasswordComponent } from "./component/view/main/more/accou
     CustomFormsModule,
     IonicModule.forRoot(ApplicationComponent, {
       mode: 'md',
-      tabsHideOnSubPages: true,
-      backButtonText: 'Back',
-      backButtonIcon: 'ios-arrow-back',
+      tabsHideOnSubPages: false,
+      backButtonText: '',
+      backButtonIcon: 'custom-arrow-back',
       pageTransition: 'md-transition'
     }),
     IonicStorageModule.forRoot(),
