@@ -28,11 +28,13 @@ export class MealCreatePopupComponent implements OnInit {
   private mealForm: NgForm;
 
   constructor(public activeModal: NgbActiveModal,
-              public mealModel: MealModel) {
+    public mealModel: MealModel) {
+
+    this.mealWithIngredients.ingredients = [];
   }
 
   ngOnInit() {
-      
+
   }
 
   close() {
@@ -49,7 +51,13 @@ export class MealCreatePopupComponent implements OnInit {
     if (this.mealForm.form.valid) {
       const dto: MealDTO = Meal.toDTO(this.mealWithIngredients);
 
-      this.activeModal.close();
+      this.mealModel.createMeal(dto)
+        .then((updatedMeal: MealDTO) => {
+          this.activeModal.close(updatedMeal);
+        })
+        .catch((error) => {
+          //
+        });
     }
   }
 

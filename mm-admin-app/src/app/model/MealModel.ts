@@ -79,6 +79,21 @@ export class MealModel {
       });
   }
 
+  public updateMeal(meal: MealDTO): Promise<MealDTO> {
+    this.eventsService.broadcast(Event.SYSTEM.LOADING, true);
+
+    return this.mealService.updateMeal(meal)
+      .then((newMeal: MealDTO) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        return newMeal;
+      })
+      .catch((error) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        this.eventsService.broadcast(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      });
+  }
+
   public deleteMeal(mealId: string): Promise<void> {
     this.eventsService.broadcast(Event.SYSTEM.LOADING, true);
 

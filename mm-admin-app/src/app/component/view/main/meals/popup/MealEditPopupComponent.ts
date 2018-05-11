@@ -12,6 +12,8 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { NgForm, NgModel } from '@angular/forms';
 import * as _ from 'lodash';
 import { Meal } from '../../../../../data/local/menu/Meal';
+import { IngredientModel } from '../../../../../model/IngredientModel';
+import { IngredientDTO } from '../../../../../data/dto/menu/IngredientDTO';
 
 @Component({
   selector: 'meal-edit-popup',
@@ -28,10 +30,19 @@ export class MealEditPopupComponent implements OnInit {
   private mealForm: NgForm;
 
   constructor(public activeModal: NgbActiveModal,
-              public mealModel: MealModel) {
+              public mealModel: MealModel,
+              public ingredientModel: IngredientModel) {
   }
 
   ngOnInit() {
+    this.ingredientModel.getIngredients(this.meal.ingredientIds)
+        .then((ingredients: IngredientDTO[]) => {
+          const mealWithIngredients: Meal = Meal.fromDTO(this.meal);
+          mealWithIngredients.ingredients = ingredients;
+
+          this.mealWithIngredients = mealWithIngredients;
+        })
+        .catch((error) => {});
       
   }
 
@@ -49,7 +60,13 @@ export class MealEditPopupComponent implements OnInit {
     if (this.mealForm.form.valid) {
       const dto: MealDTO = Meal.toDTO(this.mealWithIngredients);
 
-      this.activeModal.close();
+      this.mealModel.updateMeal(dto)
+        .then((updatedMeal: MealDTO) => {
+          this.activeModal.close(updatedMeal);
+        })
+        .catch((error) => {
+          //
+        });
     }
   }
 

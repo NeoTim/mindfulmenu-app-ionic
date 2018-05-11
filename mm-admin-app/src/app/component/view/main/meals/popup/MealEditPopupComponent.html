@@ -1,4 +1,4 @@
-<div *ngIf="meal">
+<div *ngIf="mealWithIngredients">
   <div class="modal-header">
     <h4 class="modal-title">Edit Meal</h4>
     <button type="button" class="close" (click)="dismiss()">
@@ -11,10 +11,9 @@
         <label>Meal name</label>
         <input type="text" class="form-control" id="name" name="name"
                [ngClass]="{'is-invalid': mealForm.submitted && name.invalid, 'is-valid': mealForm.submitted && name.valid }"
-               #name="ngModel" [(ngModel)]="meal.name" required url>
+               #name="ngModel" [(ngModel)]="mealWithIngredients.name" required>
         <div class="invalid-feedback" *ngIf="mealForm.submitted && name.invalid">
           <div *ngIf="name.errors?.required">This cannot be empty.</div>
-          <div *ngIf="name.errors?.url">This needs to be a valid URL.</div>
         </div>
       </div>
     </form>

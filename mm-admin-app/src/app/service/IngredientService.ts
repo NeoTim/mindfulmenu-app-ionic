@@ -26,7 +26,7 @@ export class IngredientService {
 
   public getIngredients(ingredientIds: string[]): Promise<IngredientDTO[]> {
     return new Promise((resolve, reject) => {
-      this.firestoreManager.getByIds(ingredientIds, this.firestoreManager.firestore.collection('meals'))
+      this.firestoreManager.getByIds(ingredientIds, this.firestoreManager.firestore.collection('ingredients'))
         .then((documentSnapshots: firebase.firestore.DocumentSnapshot[]) => {
           let result: object[] = this.firestoreManager.documentArrayToObjectArray(documentSnapshots);
           let data: IngredientDTO[] = plainToClass(IngredientDTO, result as object[]);

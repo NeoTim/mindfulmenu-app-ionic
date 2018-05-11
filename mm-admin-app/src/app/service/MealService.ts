@@ -66,6 +66,18 @@ export class MealService {
     });
   }
 
+  public updateMeal(meal: MealDTO): Promise<MealDTO> {
+    return new Promise((resolve, reject) => {
+      this.firestoreManager.firestore.collection('meals').doc(meal.id).update(classToPlain(meal))
+        .then(() => {
+          resolve(this.getMeal(meal.id));
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
   public deleteMeal(mealId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.firestoreManager.firestore.collection('meals').doc(mealId).delete()
