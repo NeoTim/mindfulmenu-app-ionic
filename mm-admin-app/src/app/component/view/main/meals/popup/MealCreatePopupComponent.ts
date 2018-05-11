@@ -31,6 +31,8 @@ export class MealCreatePopupComponent implements OnInit {
     public mealModel: MealModel) {
 
     this.mealWithIngredients.ingredients = [];
+    this.mealWithIngredients.cookInstructions = [];
+    this.mealWithIngredients.prepInstructions = [];
   }
 
   ngOnInit() {

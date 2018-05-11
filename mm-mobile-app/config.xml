@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ourmindfulmenu.app" version="0.0.1" ios-CFBundleVersion="20180507" android-versionCode="20180507" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="20180511" id="com.ourmindfulmenu.app" ios-CFBundleVersion="20180511" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>MindfulMenu</name>
     <description>Mobile app for viewing meals and managing meal plan.</description>
     <author email="ourmindfulmenu@gmail.com" href="https://www.ourmindfulmenu.com/">Mindful Menu Team</author>

@@ -56,7 +56,7 @@ export class MealService {
 
   public createMeal(meal: MealDTO): Promise<MealDTO> {
     return new Promise((resolve, reject) => {
-      this.firestoreManager.firestore.collection('meals').add(classToPlain(meal))
+      this.firestoreManager.firestore.collection('meals').add(_.pickBy(classToPlain(meal), _.identity))
         .then((documentReference: firebase.firestore.DocumentReference) => {
           resolve(this.getMeal(documentReference.id));
         })
@@ -68,7 +68,7 @@ export class MealService {
 
   public updateMeal(meal: MealDTO): Promise<MealDTO> {
     return new Promise((resolve, reject) => {
-      this.firestoreManager.firestore.collection('meals').doc(meal.id).update(classToPlain(meal))
+      this.firestoreManager.firestore.collection('meals').doc(meal.id).update(_.pickBy(classToPlain(meal), _.identity))
         .then(() => {
           resolve(this.getMeal(meal.id));
         })
