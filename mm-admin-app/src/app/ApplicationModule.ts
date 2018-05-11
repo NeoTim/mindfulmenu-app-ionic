@@ -35,16 +35,19 @@ import { MealsComponent } from './component/view/main/meals/MealsComponent';
 import { WeeklyMenuEditPopupComponent } from './component/view/main/weeklyMenus/popup/WeeklyMenuEditPopupComponent';
 import { NgBootstrapDateAdapter } from './util/NgBootstrapDateAdapter';
 import { WeeklyMenuCreatePopupComponent } from './component/view/main/weeklyMenus/popup/WeeklyMenuCreatePopupComponent';
-
+import { MealEditPopupComponent } from './component/view/main/meals/popup/MealEditPopupComponent';
+import { MealCreatePopupComponent } from './component/view/main/meals/popup/MealCreatePopupComponent';
 @NgModule({
   declarations: [
     MainLayoutComponent, PreliminaryLayoutComponent, AbstractStateComponent,
     ErrorNotFoundComponent,
     HomeComponent, WeeklyMenusComponent, MealsComponent,
-    WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent
+    WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent,
+    MealEditPopupComponent, MealCreatePopupComponent
   ],
   entryComponents: [
-    WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent
+    WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent, 
+    MealEditPopupComponent, MealCreatePopupComponent
   ],
   imports: [
     BrowserModule,

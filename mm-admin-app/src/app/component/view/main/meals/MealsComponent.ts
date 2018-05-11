@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MealDTO } from '../../../../data/dto/menu/MealDTO';
 import { MealModel } from '../../../../model/MealModel';
 import { ToastrService } from 'ngx-toastr';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MealEditPopupComponent } from './popup/MealEditPopupComponent';
+import { MealCreatePopupComponent } from './popup/MealCreatePopupComponent';
 @Component({
   selector: 'meals',
   templateUrl: 'MealsComponent.html',
@@ -10,13 +12,11 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class MealsComponent implements OnInit {
 
-  newMeal: MealDTO = new MealDTO();
   meals: MealDTO[];
 
   constructor(public toastrService: ToastrService,
-              public mealModel: MealModel) {
-
-    this.newMeal = new MealDTO();
+              public mealModel: MealModel,
+              public modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -32,12 +32,32 @@ export class MealsComponent implements OnInit {
   }
 
   addMeal() {
-    this.mealModel.createMeal(this.newMeal)
-      .then((newMeal: MealDTO) => {
-        this.toastrService.success('Meal added!', 'Success');
-        this.newMeal = new MealDTO();
+    const modalRef = this.modalService.open(MealCreatePopupComponent, { size: 'lg', centered: true });
+
+    modalRef.result
+      .then((closeResult: any) => {
+        if (closeResult instanceof MealDTO) {
+          this.getAllMeals();
+        }
       })
-      .catch((error) => {});
+      .catch((dismissReason: any) => {
+
+      });
+  }
+
+  editMeal(meal: MealDTO) {
+    const modalRef = this.modalService.open(MealEditPopupComponent, { size: 'lg', centered: true });
+    modalRef.componentInstance.meal = meal;
+
+    modalRef.result
+      .then((closeResult: any) => {
+        if (closeResult instanceof MealDTO) {
+          this.getAllMeals();
+        }
+      })
+      .catch((dismissReason: any) => {
+
+      });
   }
 
   deleteMeal(meal: MealDTO) {

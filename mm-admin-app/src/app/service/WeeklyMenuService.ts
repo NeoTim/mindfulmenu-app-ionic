@@ -3,6 +3,7 @@ import { classToPlain, plainToClass } from 'class-transformer';
 import { WeeklyMenuDTO } from '../data/dto/menu/WeeklyMenuDTO';
 import * as firebase from 'firebase';
 import { FirestoreManager } from '../util/FirestoreManager';
+import * as _ from 'lodash';
 
 @Injectable()
 export class WeeklyMenuService {
@@ -44,6 +45,7 @@ export class WeeklyMenuService {
         .then((querySnapshot: firebase.firestore.QuerySnapshot) => {
           let result: object = this.firestoreManager.queryToObjectArray(querySnapshot);
           let data: WeeklyMenuDTO[] = plainToClass(WeeklyMenuDTO, result as object[]);
+          data = _.sortBy(data, o => o.weekNumber).reverse();
           resolve(data);
         })
         .catch((error) => {

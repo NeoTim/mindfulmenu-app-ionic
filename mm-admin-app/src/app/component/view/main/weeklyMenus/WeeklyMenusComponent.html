@@ -7,22 +7,37 @@
       <button type="button" class="btn btn-primary float-right" (click)="addWeeklyMenu()">Add Weekly Menu</button>
     </div>
   </div>
+  <hr>
   <div class="row">
     <div class="col-sm-12">
-        <div class="list-group">
-            <a *ngFor="let weeklyMenu of weeklyMenus" class="list-group-item list-group-item-action flex-column align-items-start" (click)="editWeeklyMenu(weeklyMenu)">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Week of: {{ weeklyMenu.startDate | date }}</h5>
-                <small>Week #: {{ weeklyMenu.weekNumber }}</small>
+      <div class="list-group">
+        <a *ngFor="let weeklyMenu of weeklyMenus" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="row">
+            <div class="col-sm-3">
+              <img [src]="weeklyMenu.imageUrl">
+            </div>
+            <div class="col-sm-9">
+              <div>
+                <h5 class="mb-1">
+                  {{ weeklyMenu.startDate | date: 'MMM d' }} to {{ weeklyMenu.endDate | date }}
+                  <div class="float-right">
+                    <button type="button" class="btn btn-primary btn-sm" (click)="editWeeklyMenu(weeklyMenu)">
+                      <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="deleteWeeklyMenu(weeklyMenu); $event.stopImmediatePropagation()">
+                      <span class="glyphicon glyphicon-remove-circle"></span>
+                    </button>
+                  </div>
+                </h5>
               </div>
-              <small>Published: {{ weeklyMenu.publishDate | date }} | Week Start: {{ weeklyMenu.startDate | date }} | Week End: {{ weeklyMenu.endDate | date }} </small>
-              <div class="float-right">
-                <button type="button" class="btn btn-danger btn-sm" (click)="deleteWeeklyMenu(weeklyMenu); $event.stopImmediatePropagation()">
-                  <span class="glyphicon glyphicon-remove-circle"></span>
-                </button>
+
+              <div>
+                <small>Week #: {{ weeklyMenu.weekNumber }} | Published: {{ weeklyMenu.publishDate | date }} | {{ weeklyMenu.mealIds.length }} of 7 meals set</small>
               </div>
-            </a>
-        </div>
+            </div>
+          </div>
+        </a>
+      </div>
     </div>
   </div>
 </div>

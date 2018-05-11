@@ -33,7 +33,7 @@ export class WeeklyMenusComponent implements OnInit {
   }
 
   addWeeklyMenu() {
-    const modalRef = this.modalService.open(WeeklyMenuCreatePopupComponent, { centered: true });
+    const modalRef = this.modalService.open(WeeklyMenuCreatePopupComponent, { size: 'lg', centered: true });
 
     modalRef.result
       .then((closeResult: any) => {
@@ -47,7 +47,7 @@ export class WeeklyMenusComponent implements OnInit {
   }
 
   editWeeklyMenu(weeklyMenu: WeeklyMenuDTO) {
-    const modalRef = this.modalService.open(WeeklyMenuEditPopupComponent, { centered: true });
+    const modalRef = this.modalService.open(WeeklyMenuEditPopupComponent, { size: 'lg', centered: true });
     modalRef.componentInstance.weeklyMenu = weeklyMenu;
 
     modalRef.result
