@@ -7,7 +7,7 @@
     <div class="background" [style.background-image]="('url(' + currentWeeklyMenu.imageUrl + ')') | sanitizeStyle"></div>
     <div class="content">
       <h5>Weekly Menu</h5>
-      <h3>{{ currentWeeklyMenu.startDate | date:'dd MMMM' }} - {{ currentWeeklyMenu.endDate | date:'dd MMMM' }}</h3>
+      <h3>{{ currentWeeklyMenu.startDate | date:'dd MMM' }} - {{ currentWeeklyMenu.endDate | date:'dd MMM' }}</h3>
       <div class="bubble">NEW</div>
     </div>
   </div>
@@ -32,7 +32,7 @@
       </ion-scroll>
     </ng-container>
     <ng-container *ngIf="!favoriteMeals || (favoriteMeals.length == 0)">
-      <p>No favorite recipes yet.</p>
+      <p text-center>No favorite recipes yet.</p>
     </ng-container>
   </div>
 
@@ -50,7 +50,7 @@
       </ion-scroll>
     </ng-container>
     <ng-container *ngIf="!previousWeeklyMenus || (previousWeeklyMenus.length == 0)">
-      <p>No previous weekly menus available.</p>
+      <p text-center>No previous weekly menus available.</p>
     </ng-container>
   </div>
 
@@ -68,7 +68,7 @@
       </ion-scroll>
     </ng-container>
     <ng-container *ngIf="!upcomingWeeklyMenus || (upcomingWeeklyMenus.length == 0)">
-      <p>No upcoming weekly menus available.</p>
+      <p text-center>No upcoming weekly menus available.</p>
     </ng-container>
   </div>
 

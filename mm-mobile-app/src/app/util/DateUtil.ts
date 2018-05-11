@@ -1,4 +1,6 @@
 import firebase from "firebase";
+import * as moment from 'moment';
+import { Moment } from "moment";
 import { TransformationType } from "class-transformer/TransformOperationExecutor";
 
 export class DateUtil {
@@ -17,6 +19,21 @@ export class DateUtil {
     }
     else if (transformationType === TransformationType.PLAIN_TO_CLASS) {
       return DateUtil.firebaseTimestampToDate(value);
+    }
+  }
+
+  /* not exactly "current" */
+  public static getFirstDayOfCurrentWeek(): Moment {
+    const now: Moment = moment();
+
+    // Thursday 4pm or later
+    if (((now.day() == 4) && (moment().hour() >= 16)) || (now.day() > 4)) {
+      const firstDayOfNextWeek: Moment = moment().add(1, 'week').startOf('isoWeek');
+      return firstDayOfNextWeek;
+    }
+    else {
+      const firstDayOfCurrentWeek: Moment = moment().startOf('isoWeek');
+      return firstDayOfCurrentWeek;
     }
   }
 

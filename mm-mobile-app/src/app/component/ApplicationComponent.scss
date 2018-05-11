@@ -128,6 +128,10 @@ h5 {
   pointer-events: none;
 }
 
+button[ion-button].button {
+  border-radius: 30px !important;
+}
+
 .close-button {
   position: absolute;
   right: 20px;

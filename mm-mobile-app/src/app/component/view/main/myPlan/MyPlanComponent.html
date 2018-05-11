@@ -1,5 +1,90 @@
 <div class="top-doodad"></div>
 
-<ion-content class="with-top-doodad" padding>
-  <h1 text-center>My Plan</h1>
+<ion-header>
+  <ion-navbar></ion-navbar>
+</ion-header>
+
+<ion-content class="with-top-doodad with-header" padding>
+  <ng-container *ngIf="weeklyPlan">
+    <ion-grid class="control">
+      <ion-row>
+        <ion-col col-1>
+          <div class="arrow-back" [class.disabled]="currentWeekRelation <= -WEEK_RANGE" (click)="getPreviousWeeklyPlan()"></div>
+        </ion-col>
+        <ion-col col-10>
+          <h3 text-center>My Plan</h3>
+          <h1 text-center>{{ weeklyPlan.startDate | date:'dd MMM' }} - {{ weeklyPlan.endDate | date:'dd MMM' }}</h1>
+        </ion-col>
+        <ion-col col-1>
+          <div class="arrow-forward" [class.disabled]="currentWeekRelation >= 0" (click)="getNextWeeklyPlan()"></div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ng-container *ngIf="!weeklyPlan.id">
+      <p text-center>You don't have a weekly plan for that week.</p>
+    </ng-container>
+
+    <ng-container *ngIf="weeklyPlan.id && (currentWeekRelation == 0) && ((!weeklyPlan.meals) || (weeklyPlan.meals && (weeklyPlan.meals.length == 0)))">
+      <p text-center>You don't have any meals added to this plan.</p>
+      <button ion-button block type="button" (click)="addCurrentWeekMenuMeals()">Add meals from current's week menu</button>
+    </ng-container>
+
+    <ng-container *ngIf="weeklyPlan.id && (currentWeekRelation < 0) && ((!weeklyPlan.meals) || (weeklyPlan.meals && (weeklyPlan.meals.length == 0)))">
+      <p text-center>You don't have any meals added to this plan.</p>
+    </ng-container>
+
+    <ng-container *ngIf="weeklyPlan.meals && (weeklyPlan.meals.length > 0)">
+      <ion-grid class="lists">
+        <ion-row>
+          <ion-col col-6>
+            <button ion-button block type="button" (click)="showPrepList()">
+              <span class="prep-list-icon"></span>
+              <span>Prep list</span>
+            </button>
+          </ion-col>
+          <ion-col col-6>
+            <button ion-button block type="button" (click)="showShoppingList()">
+              <span class="shopping-list-icon"></span>
+              <span>Shopping list</span>
+            </button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <div class="meal" *ngFor="let meal of weeklyPlan.meals" (click)="showMeal(meal)">
+        <div class="background" [style.background-image]="('url(' + meal.imageUrl + ')') | sanitizeStyle"></div>
+        <!--
+        <div class="plan" (click)="addToPlan(meal); $event.stopPropagation();">
+          <div class="remove"></div>
+          <div>Remove from My Plan</div>
+        </div>
+        -->
+        <div class="favorite" [ngClass]="{ 'on': favoriteMealsMap[meal.id], 'off': !favoriteMealsMap[meal.id] }" (click)="toggleFavorite(meal, !favoriteMealsMap[meal.id]); $event.stopPropagation();"></div>
+        <div class="content">
+          <div class="name">
+            <h4>{{ meal.name }}</h4>
+          </div>
+          <div class="h-divider"></div>
+          <div class="details">
+            <ion-grid>
+              <ion-row>
+                <ion-col push-1 col-4>
+                  <p>Prep. time</p>
+                  <h4>{{ meal.prepTime }} min</h4>
+                </ion-col>
+                <ion-col push-1 col-2>
+                  <div class="v-divider"></div>
+                </ion-col>
+                <ion-col push-1 col-4>
+                  <p>Cook time</p>
+                  <h4>{{ meal.cookTime }} min</h4>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
 </ion-content>
