@@ -36,6 +36,8 @@ import { AccountComponent } from "./component/view/main/more/account/AccountComp
 import { AccountChangePasswordComponent } from "./component/view/main/more/account/AccountChangePasswordComponent";
 import { SanitizeStylePipe } from "./util/pipe/SanitizeStylePipe";
 import { WeeklyMenuComponent } from "./component/view/main/menus/weeklyMenu/WeeklyMenuComponent";
+import { WeeklyPlanModel } from "./model/WeeklyPlanModel";
+import { WeeklyPlanService } from "./service/WeeklyPlanService";
 
 @NgModule({
   declarations: [
@@ -90,6 +92,7 @@ import { WeeklyMenuComponent } from "./component/view/main/menus/weeklyMenu/Week
     IngredientModel, IngredientService,
     MealModel, MealService,
     WeeklyMenuModel, WeeklyMenuService,
+    WeeklyPlanModel, WeeklyPlanService,
     UserModel, UserService,
     PlatformUtil,
     ViewUtil,
@@ -107,6 +110,7 @@ import { WeeklyMenuComponent } from "./component/view/main/menus/weeklyMenu/Week
                    IngredientModel: IngredientModel,
                    MealModel: MealModel,
                    WeeklyMenuModel: WeeklyMenuModel,
+                   WeeklyPlanModel: WeeklyPlanModel,
                    UserModel: UserModel
       ) => () => {},
       deps: [
@@ -116,6 +120,7 @@ import { WeeklyMenuComponent } from "./component/view/main/menus/weeklyMenu/Week
         IngredientModel,
         MealModel,
         WeeklyMenuModel,
+        WeeklyPlanModel,
         UserModel
       ]
     }
