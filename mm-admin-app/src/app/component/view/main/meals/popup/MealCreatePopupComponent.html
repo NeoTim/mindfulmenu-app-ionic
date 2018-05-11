@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <h4 class="modal-title">Create Meal</h4>
+  <button type="button" class="close" (click)="dismiss()">
+    <span>&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form #mealForm="ngForm" novalidate>
+    <div class="form-group">
+      <label>Meal name</label>
+      <input type="text" class="form-control" id="name" name="name" [ngClass]="{'is-invalid': mealForm.submitted && name.invalid, 'is-valid': mealForm.submitted && name.valid }"
+        #name="ngModel" [(ngModel)]="mealWithIngredients.name" required url>
+      <div class="invalid-feedback" *ngIf="mealForm.submitted && name.invalid">
+        <div *ngIf="name.errors?.required">This cannot be empty.</div>
+        <div *ngIf="name.errors?.url">This needs to be a valid URL.</div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="close()">Cancel</button>
+  <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+</div>

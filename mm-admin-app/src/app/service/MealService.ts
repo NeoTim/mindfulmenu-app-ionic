@@ -3,6 +3,7 @@ import { classToPlain, plainToClass } from 'class-transformer';
 import * as firebase from 'firebase';
 import { MealDTO } from '../data/dto/menu/MealDTO';
 import { FirestoreManager } from '../util/FirestoreManager';
+import * as _ from 'lodash';
 
 @Injectable()
 export class MealService {
@@ -44,6 +45,7 @@ export class MealService {
         .then((querySnapshot: firebase.firestore.QuerySnapshot) => {
           let result: object = this.firestoreManager.queryToObjectArray(querySnapshot);
           let data: MealDTO[] = plainToClass(MealDTO, result as object[]);
+          data = _.sortBy(data, o => o.name);
           resolve(data);
         })
         .catch((error) => {
