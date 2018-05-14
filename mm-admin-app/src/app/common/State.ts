@@ -7,6 +7,9 @@ export class State {
   };
 
   public static readonly PRELIMINARY = {
+    AUTH: {
+      LOGIN:        'preliminary.auth.login'
+    },
     ERROR: {
       ERROR:        'preliminary.error',
       NOT_FOUND:    'preliminary.error.notFound',
