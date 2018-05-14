@@ -2,6 +2,7 @@ import { MealDTO } from '../../dto/menu/MealDTO';
 import { IngredientDTO } from "../../dto/menu/IngredientDTO";
 import { WeeklyPlanDTO } from "../../dto/menu/WeeklyPlanDTO";
 import * as moment from 'moment';
+import * as _ from 'lodash';
 
 export class WeeklyPlan {
 
@@ -54,11 +55,10 @@ export class WeeklyPlan {
       }
     }
 
-    if (weeklyPlan.meals) {
-      if (weeklyPlan.meals.length === 0) {
-        dto.mealIds = [];
-      }
-      else {
+    if (weeklyPlan.meals && _.isArray(weeklyPlan.meals)) {
+      dto.mealIds = [];
+
+      if (weeklyPlan.meals.length > 0) {
         for (let meal of weeklyPlan.meals) {
           if (meal && meal.id) {
             dto.mealIds.push(meal.id);
@@ -67,11 +67,10 @@ export class WeeklyPlan {
       }
     }
 
-    if (weeklyPlan.customIngredients) {
-      if (weeklyPlan.customIngredients.length === 0) {
-        dto.customIngredientIds = [];
-      }
-      else {
+    if (weeklyPlan.customIngredients && _.isArray(weeklyPlan.customIngredients)) {
+      dto.customIngredientIds = [];
+
+      if (weeklyPlan.customIngredients.length > 0) {
         for (let customIngredient of weeklyPlan.customIngredients) {
           if (customIngredient && customIngredient.id) {
             dto.customIngredientIds.push(customIngredient.id);

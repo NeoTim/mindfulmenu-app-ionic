@@ -53,11 +53,10 @@ export class Meal {
       }
     }
 
-    if (meal.ingredients) {
-      if (meal.ingredients.length === 0) {
-        dto.ingredientIds = [];
-      }
-      else {
+    if (meal.ingredients && _.isArray(meal.ingredients)) {
+      dto.ingredientIds = [];
+
+      if (meal.ingredients.length > 0) {
         for (let ingredient of meal.ingredients) {
           if (ingredient && ingredient.id) {
             dto.ingredientIds.push(ingredient.id);
