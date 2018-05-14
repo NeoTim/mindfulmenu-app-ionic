@@ -46,6 +46,11 @@ export class MealEditPopupComponent implements OnInit {
       
   }
 
+  // This is used for trackByFn in ngFor, to keep focus on element when typing.
+  identify(index, item){
+    return index; 
+  }
+
   close() {
     this.activeModal.close();
   }
@@ -68,6 +73,28 @@ export class MealEditPopupComponent implements OnInit {
           //
         });
     }
+  }
+
+  addCookInstruction() {
+    if(this.mealWithIngredients.cookInstructions == null){
+      this.mealWithIngredients.cookInstructions = [];
+    }
+    this.mealWithIngredients.cookInstructions.push("Add new instruction...");
+  }
+
+  removeCookInstruction() {
+    this.mealWithIngredients.cookInstructions.pop();
+  }
+
+  addPrepInstruction() {
+    if(this.mealWithIngredients.prepInstructions == null){
+      this.mealWithIngredients.prepInstructions = [];
+    }
+    this.mealWithIngredients.prepInstructions.push("Add new instruction...");
+  }
+
+  removePrepInstruction() {
+    this.mealWithIngredients.prepInstructions.pop();
   }
 
   onNumberBlur(model: NgModel) {

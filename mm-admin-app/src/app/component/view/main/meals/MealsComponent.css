@@ -1,3 +1,11 @@
 img {
     width: 100%;
 }
+
+.card {
+    margin-top: -1px;
+}
+
+ul.nav-tabs li.nav-item {
+    z-index: 1t;
+}
