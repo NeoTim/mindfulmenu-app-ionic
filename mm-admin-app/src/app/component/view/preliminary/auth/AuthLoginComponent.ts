@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { State } from '../../../../common/State';
 
 @Component({
-    selector: 'preliminary-auth-login',
+    selector: 'auth-login',
     templateUrl: 'AuthLoginComponent.html',
     styleUrls: ['AuthLoginComponent.scss']
 })

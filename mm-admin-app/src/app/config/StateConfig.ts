@@ -19,9 +19,10 @@ export const StateConfig: Ng2StateDeclaration[] = [
   { abstract: true, name: Layout.PRELIMINARY, component: PreliminaryLayoutComponent },
 
   { url: '^/error', abstract: true, name: State.PRELIMINARY.ERROR.ERROR, component: AbstractStateComponent },
-  { url: '/not-found', name: State.PRELIMINARY.ERROR.NOT_FOUND, component: ErrorNotFoundComponent },
+    { url: '/not-found', name: State.PRELIMINARY.ERROR.NOT_FOUND, component: ErrorNotFoundComponent },
 
-  { url: '^/login', name: State.PRELIMINARY.AUTH.LOGIN, component: AuthLoginComponent },
+  { abstract: true, name: State.PRELIMINARY.AUTH.AUTH, component: AbstractStateComponent },
+    { url: '/login', name: State.PRELIMINARY.AUTH.LOGIN, component: AuthLoginComponent },
 
   { url: '^/home', name: State.MAIN.HOME, component: HomeComponent },
   { url: '^/weekly-menus', name: State.MAIN.WEEKLY_MENUS, component: WeeklyMenusComponent },
