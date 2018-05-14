@@ -37,9 +37,11 @@ import { NgBootstrapDateAdapter } from './util/NgBootstrapDateAdapter';
 import { WeeklyMenuCreatePopupComponent } from './component/view/main/weeklyMenus/popup/WeeklyMenuCreatePopupComponent';
 import { MealEditPopupComponent } from './component/view/main/meals/popup/MealEditPopupComponent';
 import { MealCreatePopupComponent } from './component/view/main/meals/popup/MealCreatePopupComponent';
+import { AuthLoginComponent } from './component/view/preliminary/auth/AuthLoginComponent';
+
 @NgModule({
   declarations: [
-    MainLayoutComponent, PreliminaryLayoutComponent, AbstractStateComponent,
+    MainLayoutComponent, AuthLoginComponent, PreliminaryLayoutComponent, AbstractStateComponent,
     ErrorNotFoundComponent,
     HomeComponent, WeeklyMenusComponent, MealsComponent,
     WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent,
