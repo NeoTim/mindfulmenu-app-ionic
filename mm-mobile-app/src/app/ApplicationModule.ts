@@ -38,6 +38,8 @@ import { SanitizeStylePipe } from "./util/pipe/SanitizeStylePipe";
 import { WeeklyMenuComponent } from "./component/view/main/menus/weeklyMenu/WeeklyMenuComponent";
 import { WeeklyPlanModel } from "./model/WeeklyPlanModel";
 import { WeeklyPlanService } from "./service/WeeklyPlanService";
+import { PrepListComponent } from "./component/view/main/myPlan/prepList/PrepListComponent";
+import { FavoriteListComponent } from "./component/view/main/menus/favorite/FavoriteListComponent";
 
 @NgModule({
   declarations: [
@@ -47,9 +49,9 @@ import { WeeklyPlanService } from "./service/WeeklyPlanService";
     AuthLoginComponent,
     AuthOfflineComponent,
     MainComponent,
-    MenusComponent, WeeklyMenuComponent,
+    MenusComponent, WeeklyMenuComponent, FavoriteListComponent,
+    MyPlanComponent, PrepListComponent,
     MoreComponent, AboutComponent, AccountComponent, AccountChangePasswordComponent,
-    MyPlanComponent,
     // component/ui
     InternalUrlBrowserComponent,
     // util/pipe
@@ -62,9 +64,9 @@ import { WeeklyPlanService } from "./service/WeeklyPlanService";
     AuthLoginComponent,
     AuthOfflineComponent,
     MainComponent,
-    MenusComponent, WeeklyMenuComponent,
+    MenusComponent, WeeklyMenuComponent, FavoriteListComponent,
+    MyPlanComponent, PrepListComponent,
     MoreComponent, AboutComponent, AccountComponent, AccountChangePasswordComponent,
-    MyPlanComponent,
     // component/ui
     InternalUrlBrowserComponent
   ],

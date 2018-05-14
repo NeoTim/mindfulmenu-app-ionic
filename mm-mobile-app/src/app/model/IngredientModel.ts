@@ -49,19 +49,4 @@ export class IngredientModel {
       })
   }
 
-  public getAllIngredients(): Promise<IngredientDTO[]> {
-    this.events.publish(Event.SYSTEM.LOADING, true);
-
-    return this.ingredientService.getAllIngredients()
-      .then((ingredients: IngredientDTO[]) => {
-        this.events.publish(Event.SYSTEM.LOADING, false);
-        return ingredients;
-      })
-      .catch((error) => {
-        this.events.publish(Event.SYSTEM.LOADING, false);
-        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
-        return Promise.reject(error);
-      })
-  }
-
 }

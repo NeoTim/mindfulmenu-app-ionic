@@ -22,11 +22,10 @@ export class DateUtil {
     }
   }
 
-  /* not exactly "current" */
+  /* "current" week for the app ends on Thursday 4pm - after that, the actual next week is considered "current" */
   public static getFirstDayOfCurrentWeek(): Moment {
     const now: Moment = moment();
 
-    // Thursday 4pm or later
     if (((now.day() == 4) && (moment().hour() >= 16)) || (now.day() > 4)) {
       const firstDayOfNextWeek: Moment = moment().add(1, 'week').startOf('isoWeek');
       return firstDayOfNextWeek;

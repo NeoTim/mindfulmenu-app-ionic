@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { ModalController, NavController } from 'ionic-angular';
 import { MealModel } from "../../../../model/MealModel";
 import { UserModel } from "../../../../model/UserModel";
 import { UserDTO } from "../../../../data/dto/user/UserDTO";
@@ -12,6 +12,9 @@ import { DateUtil } from "../../../../util/DateUtil";
 import * as _ from "lodash";
 import { WeeklyMenuDTO } from "../../../../data/dto/menu/WeeklyMenuDTO";
 import { WeeklyMenuModel } from "../../../../model/WeeklyMenuModel";
+import { IngredientModel } from "../../../../model/IngredientModel";
+import { IngredientDTO } from "../../../../data/dto/menu/IngredientDTO";
+import { PrepListComponent } from "./prepList/PrepListComponent";
 
 @Component({
   selector: 'my-plan',
@@ -27,11 +30,13 @@ export class MyPlanComponent {
   public currentUser: UserDTO;
 
   public static readonly WEEK_RANGE: number = 6;
-  public WEEK_RANGE: number = MyPlanComponent.WEEK_RANGE;
+  public WEEK_RANGE: number = MyPlanComponent.WEEK_RANGE; /* exposed separately, just for template usage */
 
   constructor(public navCtrl: NavController,
+              public modalCtrl: ModalController,
               public weeklyMenuModel: WeeklyMenuModel,
               public weeklyPlanModel: WeeklyPlanModel,
+              public ingredientModel: IngredientModel,
               public mealModel: MealModel,
               public userModel: UserModel) {
 
@@ -39,14 +44,16 @@ export class MyPlanComponent {
   }
 
   ionViewDidLoad() {
+  }
+
+  ionViewDidEnter() {
+    this.currentUser = this.userModel.currentUser;
     this.init();
   }
 
   init() {
     this.getWeeklyPlan(this.currentWeekRelation);
   }
-
-  // todo: I need to map custom ingredients too, to not lose data when converting to dto
 
   getWeeklyPlan(weekRelation: number) {
     if (weekRelation === 0) {
@@ -78,25 +85,50 @@ export class MyPlanComponent {
   }
 
   private process(weeklyPlan: WeeklyPlanDTO) {
+    let weeklyPlanWithMeals: WeeklyPlan = WeeklyPlan.fromDTO(weeklyPlan);
+
+    let mealsLoaded: boolean = false;
+    let ingredientsLoaded: boolean = false;
+
+    this.calculateFavoriteMealsMap(weeklyPlan.mealIds, this.currentUser.favoriteMealIds);
+
     this.mealModel.getMeals(weeklyPlan.mealIds)
       .then((meals: MealDTO[]) => {
-        let weeklyPlanWithMeals: WeeklyPlan = WeeklyPlan.fromDTO(weeklyPlan);
         weeklyPlanWithMeals.meals = meals;
 
-        let favoriteMealsMap: { [key: string]: boolean } = {};
+        mealsLoaded = true;
 
-        _.forEach(weeklyPlanWithMeals.meals, (meal: MealDTO) => {
-          favoriteMealsMap[meal.id] = false;
-        });
-
-        _.forEach(this.currentUser.favoriteMealIds, (id: string) => {
-          favoriteMealsMap[id] = true;
-        });
-
-        this.favoriteMealsMap = favoriteMealsMap;
-        this.weeklyPlan = weeklyPlanWithMeals;
+        if (mealsLoaded && ingredientsLoaded) {
+          this.weeklyPlan = weeklyPlanWithMeals;
+        }
       })
       .catch((error) => {});
+
+    this.ingredientModel.getIngredients(weeklyPlan.customIngredientIds)
+      .then((ingredients: IngredientDTO[]) => {
+        weeklyPlanWithMeals.customIngredients = ingredients;
+
+        ingredientsLoaded = true;
+
+        if (mealsLoaded && ingredientsLoaded) {
+          this.weeklyPlan = weeklyPlanWithMeals;
+        }
+      })
+      .catch((error) => {});
+  }
+
+  calculateFavoriteMealsMap(mealIds: string[], favoriteMealIds: string[]) {
+    let favoriteMealsMap: { [key: string]: boolean } = {};
+
+    _.forEach(mealIds, (mealId: string) => {
+      favoriteMealsMap[mealId] = false;
+    });
+
+    _.forEach(favoriteMealIds, (favoriteMealId: string) => {
+      favoriteMealsMap[favoriteMealId] = true;
+    });
+
+    this.favoriteMealsMap = favoriteMealsMap;
   }
 
   getPreviousWeeklyPlan() {
@@ -125,7 +157,7 @@ export class MyPlanComponent {
   addCurrentWeekMenuMeals() {
     this.weeklyMenuModel.getCurrentWeeklyMenu()
       .then((weeklyMenu: WeeklyMenuDTO) => {
-        this.weeklyPlanModel.setMeals(this.weeklyPlan.id, weeklyMenu.mealIds)
+        this.weeklyPlanModel.setMealsForWeeklyPlan(WeeklyPlan.toDTO(this.weeklyPlan), weeklyMenu.mealIds)
           .then((weeklyPlan: WeeklyPlanDTO) => {
             this.process(weeklyPlan);
           })
@@ -135,10 +167,26 @@ export class MyPlanComponent {
   }
 
   removeFromPlan(meal: MealDTO) {
-    console.log('remove');
+    this.weeklyPlanModel.removeMealFromWeeklyPlan(WeeklyPlan.toDTO(this.weeklyPlan), meal.id)
+      .then((weeklyPlan: WeeklyPlanDTO) => {
+        this.process(weeklyPlan);
+      })
+      .catch((error) => {});
   }
 
   showMeal(meal: MealDTO) {
     console.log(meal);
+  }
+
+  showPrepList() {
+    let modal = this.modalCtrl.create(PrepListComponent, { weeklyPlanId: this.weeklyPlan.id });
+    modal.onDidDismiss(data => {
+      //
+    });
+    modal.present();
+  }
+
+  showShoppingList() {
+
   }
 }

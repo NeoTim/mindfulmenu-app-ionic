@@ -5,17 +5,15 @@
 </ion-header>
 
 <ion-content class="with-top-doodad with-header" padding>
-  <h3 text-center>Weekly Menu</h3>
+  <h1 text-center>Favorite Recipes</h1>
 
-  <ng-container *ngIf="weeklyMenu && inCurrentPlanMealsMap && favoriteMealsMap">
-    <h1 text-center>{{ weeklyMenu.startDate | date:'dd MMM' }} - {{ weeklyMenu.endDate | date:'dd MMM' }}</h1>
-
-    <ng-container *ngIf="!weeklyMenu.meals || (weeklyMenu.meals && (weeklyMenu.meals.length == 0))">
-      <p text-center>This menu doesn't have any meals.</p>
+  <ng-container *ngIf="favoriteMeals && inCurrentPlanMealsMap">
+    <ng-container *ngIf="!favoriteMeals || (favoriteMeals && (favoriteMeals.length == 0))">
+      <p text-center>No favorite recipes yet.</p>
     </ng-container>
 
-    <ng-container *ngIf="weeklyMenu.meals && (weeklyMenu.meals.length > 0)">
-      <div class="meal" *ngFor="let meal of weeklyMenu.meals" (click)="showMeal(meal)">
+    <ng-container *ngIf="favoriteMeals && (favoriteMeals.length > 0)">
+      <div class="meal" *ngFor="let meal of favoriteMeals" (click)="showMeal(meal)">
         <div class="background" [style.background-image]="('url(' + meal.imageUrl + ')') | sanitizeStyle"></div>
         <div class="plan green" *ngIf="!inCurrentPlanMealsMap[meal.id]" (click)="addMealToCurrentWeeklyPlan(meal); $event.stopPropagation();">
           <div class="add"></div>
@@ -24,7 +22,7 @@
         <div class="plan no-icon" *ngIf="inCurrentPlanMealsMap[meal.id]" (click)="$event.stopPropagation();">
           <div>In My Plan</div>
         </div>
-        <div class="favorite" [ngClass]="{ 'on': favoriteMealsMap[meal.id], 'off': !favoriteMealsMap[meal.id] }" (click)="toggleFavorite(meal, !favoriteMealsMap[meal.id]); $event.stopPropagation();"></div>
+        <div class="favorite on" (click)="toggleFavorite(meal, false); $event.stopPropagation();"></div>
         <div class="content">
           <div class="name">
             <h4>{{ meal.name }}</h4>

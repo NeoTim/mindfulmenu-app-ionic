@@ -6,7 +6,7 @@ import { Moment } from "moment";
 import { WeeklyPlanService } from "../service/WeeklyPlanService";
 import { WeeklyPlanDTO } from "../data/dto/menu/WeeklyPlanDTO";
 import { DateUtil } from "../util/DateUtil";
-import { UserDTO } from "../data/dto/user/UserDTO";
+import * as _ from "lodash";
 
 @Injectable()
 export class WeeklyPlanModel {
@@ -27,6 +27,7 @@ export class WeeklyPlanModel {
       const firstDayOfCurrentWeek: Moment = DateUtil.getFirstDayOfCurrentWeek();
       const currentWeekNumber: number = Number(firstDayOfCurrentWeek.format('YYYYMMDD'));
 
+      /* always create a new plan for current week, if there isn't one yet */
       this.getWeeklyPlanByUserIdAndWeekNumber(userId, currentWeekNumber)
         .then((weeklyPlan: WeeklyPlanDTO) => {
           if (weeklyPlan == null) {
@@ -101,10 +102,50 @@ export class WeeklyPlanModel {
       })
   }
 
-  public setMeals(weeklyPlanId: string, mealIds: string[]): Promise<WeeklyPlanDTO> {
+  public setMealsForWeeklyPlan(weeklyPlan: WeeklyPlanDTO, mealIds: string[]): Promise<WeeklyPlanDTO> {
     this.events.publish(Event.SYSTEM.LOADING, true);
 
-    return this.weeklyPlanService.updateWeeklyPlanMealIds(weeklyPlanId, mealIds)
+    return this.weeklyPlanService.updateWeeklyPlanMealIds(weeklyPlan.id, mealIds)
+      .then((weeklyPlan: WeeklyPlanDTO) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return weeklyPlan;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
+  }
+
+  public addMealToWeeklyPlan(weeklyPlan: WeeklyPlanDTO, mealId: string): Promise<WeeklyPlanDTO> {
+    let mealIds: string[] = _.cloneDeep(weeklyPlan.mealIds);
+
+    mealIds.push(mealId);
+
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.weeklyPlanService.updateWeeklyPlanMealIds(weeklyPlan.id, mealIds)
+      .then((weeklyPlan: WeeklyPlanDTO) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return weeklyPlan;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
+  }
+
+  public removeMealFromWeeklyPlan(weeklyPlan: WeeklyPlanDTO, mealId: string): Promise<WeeklyPlanDTO> {
+    let mealIds: string[] = _.cloneDeep(weeklyPlan.mealIds);
+
+    _.remove(mealIds, (id: string) => {
+      return (id === mealId);
+    });
+
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.weeklyPlanService.updateWeeklyPlanMealIds(weeklyPlan.id, mealIds)
       .then((weeklyPlan: WeeklyPlanDTO) => {
         this.events.publish(Event.SYSTEM.LOADING, false);
         return weeklyPlan;

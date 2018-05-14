@@ -2,12 +2,11 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { WeeklyMenuModel } from "../../../../model/WeeklyMenuModel";
 import { WeeklyMenuDTO } from "../../../../data/dto/menu/WeeklyMenuDTO";
-import { MealModel } from "../../../../model/MealModel";
-import { MealDTO } from "../../../../data/dto/menu/MealDTO";
 import { UserDTO } from "../../../../data/dto/user/UserDTO";
 import { UserModel } from "../../../../model/UserModel";
 import * as _ from "lodash";
 import { WeeklyMenuComponent } from "./weeklyMenu/WeeklyMenuComponent";
+import { FavoriteListComponent } from "./favorite/FavoriteListComponent";
 
 @Component({
   selector: 'menus',
@@ -19,15 +18,12 @@ export class MenusComponent {
   previousWeeklyMenus: WeeklyMenuDTO[];
   upcomingWeeklyMenus: WeeklyMenuDTO[];
 
-  favoriteMeals: MealDTO[];
-
   public currentUser: UserDTO;
 
   public static readonly WEEK_RANGE: number = 6;
 
   constructor(public navCtrl: NavController,
               public weeklyMenuModel: WeeklyMenuModel,
-              public mealModel: MealModel,
               public userModel: UserModel) {
 
     this.currentUser = userModel.currentUser;
@@ -35,11 +31,6 @@ export class MenusComponent {
 
   ionViewDidLoad() {
     this.init();
-  }
-
-  ionViewDidEnter() {
-    this.currentUser = this.userModel.currentUser;
-    this.getFavoriteMeals();
   }
 
   init() {
@@ -92,30 +83,14 @@ export class MenusComponent {
     }
   }
 
-  getFavoriteMeals() {
-    this.mealModel.getMeals(this.currentUser.favoriteMealIds)
-      .then((meals: MealDTO[]) => {
-        this.favoriteMeals = meals;
-      })
-      .catch((error) => {});
-  }
-
   showWeeklyMenu(weeklyMenu: WeeklyMenuDTO) {
     this.navCtrl.push(WeeklyMenuComponent, { weeklyMenuId: weeklyMenu.id },{ animation: 'ios-transition'} )
   }
 
-  showMeal(meal: MealDTO) {
-    console.log(meal);
+  showFavoriteList() {
+    this.navCtrl.push(FavoriteListComponent, {},{ animation: 'ios-transition'} )
   }
 
-  toggleFavorite(meal: MealDTO, isFavorite: boolean) {
-    this.userModel.toggleFavoriteMeal(meal.id, isFavorite)
-      .then((user: UserDTO) => {
-        this.currentUser = user;
-        this.getFavoriteMeals();
-      })
-      .catch((error) => {});
-  }
 
 }
 

@@ -1,10 +1,6 @@
 <div class="top-doodad"></div>
 
-<ion-header>
-  <ion-navbar></ion-navbar>
-</ion-header>
-
-<ion-content class="with-top-doodad with-header" padding>
+<ion-content class="with-top-doodad" padding>
   <ng-container *ngIf="weeklyPlan">
     <ion-grid class="control">
       <ion-row>
@@ -27,7 +23,8 @@
 
     <ng-container *ngIf="weeklyPlan.id && (currentWeekRelation == 0) && ((!weeklyPlan.meals) || (weeklyPlan.meals && (weeklyPlan.meals.length == 0)))">
       <p text-center>You don't have any meals added to this plan.</p>
-      <button ion-button block type="button" (click)="addCurrentWeekMenuMeals()">Add meals from current's week menu</button>
+      <p text-center>You can add all meals from current's week menu.</p>
+      <button ion-button block type="button" (click)="addCurrentWeekMenuMeals()">Add all current meals</button>
     </ng-container>
 
     <ng-container *ngIf="weeklyPlan.id && (currentWeekRelation < 0) && ((!weeklyPlan.meals) || (weeklyPlan.meals && (weeklyPlan.meals.length == 0)))">
@@ -54,12 +51,10 @@
 
       <div class="meal" *ngFor="let meal of weeklyPlan.meals" (click)="showMeal(meal)">
         <div class="background" [style.background-image]="('url(' + meal.imageUrl + ')') | sanitizeStyle"></div>
-        <!--
-        <div class="plan" (click)="addToPlan(meal); $event.stopPropagation();">
+        <div class="plan red" (click)="removeFromPlan(meal); $event.stopPropagation();">
           <div class="remove"></div>
-          <div>Remove from My Plan</div>
+          <div>Remove from Plan</div>
         </div>
-        -->
         <div class="favorite" [ngClass]="{ 'on': favoriteMealsMap[meal.id], 'off': !favoriteMealsMap[meal.id] }" (click)="toggleFavorite(meal, !favoriteMealsMap[meal.id]); $event.stopPropagation();"></div>
         <div class="content">
           <div class="name">

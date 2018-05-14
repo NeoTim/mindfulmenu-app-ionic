@@ -128,6 +128,11 @@ my-plan {
       color: color($colors, light) !important;
       overflow: hidden;
       display: flex;
+      cursor: default;
+
+      &.no-icon {
+        padding-left: 10px;
+      }
 
       &::before {
         content: ' ';
@@ -140,6 +145,22 @@ my-plan {
         left: 0px;
         top: 0px;
         z-index: 0;
+      }
+
+      &.red {
+        cursor: pointer;
+
+        &::before {
+          background-color: color($colors, danger) !important;
+        }
+      }
+
+      &.green {
+        cursor: pointer;
+
+        &::before {
+          background-color: color($colors, success) !important;
+        }
       }
 
       div {

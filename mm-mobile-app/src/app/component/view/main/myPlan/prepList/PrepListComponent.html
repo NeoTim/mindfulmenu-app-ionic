@@ -1,0 +1,26 @@
+<div class="top-doodad"></div>
+
+<div class="close-button with-top-doodad" (click)="close()"></div>
+
+<ion-content class="with-top-doodad" padding>
+  <h1 text-center>Prep List</h1>
+  <p text-center>Things that you can prepare in advance.</p>
+
+  <ng-container *ngIf="weeklyPlan">
+    <div class="h-divider big"></div>
+
+    <div class="meal" *ngFor="let meal of weeklyPlan.meals">
+      <h4>{{ meal.name }}</h4>
+      <ng-container *ngIf="!meal.prepInstructions || (meal.prepInstructions && (meal.prepInstructions.length == 0))">
+        <p>No prep instructions specified.</p>
+      </ng-container>
+      <ng-container *ngIf="meal.prepInstructions && (meal.prepInstructions.length > 0)">
+        <div *ngFor="let prepInstruction of meal.prepInstructions; let last = last;">
+          <p>&mdash; {{ prepInstruction }}</p>
+          <div class="h-divider" *ngIf="!last"></div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+</ion-content>

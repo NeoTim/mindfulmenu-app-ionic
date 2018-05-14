@@ -18,24 +18,6 @@
     </div>
   </div>
 
-  <div class="favorites">
-    <h3>Favorite recipes</h3>
-    <ng-container *ngIf="favoriteMeals && (favoriteMeals.length > 0)">
-      <ion-scroll scrollX="true">
-        <div class="meal scroll-item" *ngFor="let meal of favoriteMeals" (click)="showMeal(meal)">
-          <div class="background" [style.background-image]="('url(' + meal.imageUrl + ')') | sanitizeStyle"></div>
-          <div class="favorite" (click)="toggleFavorite(meal, false); $event.stopPropagation();"></div>
-          <div class="content">
-            <h5>{{ meal.name }}</h5>
-          </div>
-        </div>
-      </ion-scroll>
-    </ng-container>
-    <ng-container *ngIf="!favoriteMeals || (favoriteMeals.length == 0)">
-      <p text-center>No favorite recipes yet.</p>
-    </ng-container>
-  </div>
-
   <div class="previousWeeklyMenus">
     <h3>Previous weeks</h3>
     <ng-container *ngIf="previousWeeklyMenus && (previousWeeklyMenus.length > 0)">
@@ -70,6 +52,13 @@
     <ng-container *ngIf="!upcomingWeeklyMenus || (upcomingWeeklyMenus.length == 0)">
       <p text-center>No upcoming weekly menus available.</p>
     </ng-container>
+  </div>
+
+  <div class="favorite">
+    <button ion-button block type="button" (click)="showFavoriteList()">
+      <span class="favorite-list-icon"></span>
+      <span>Favorite Recipes</span>
+    </button>
   </div>
 
 </ion-content>

@@ -142,6 +142,10 @@ button[ion-button].button {
   background-size: 45px auto;
   background-repeat: no-repeat;
   z-index: 9999;
+
+  &.with-top-doodad {
+    top: 40px;
+  }
 }
 
 
