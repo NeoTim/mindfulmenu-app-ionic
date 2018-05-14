@@ -45,11 +45,10 @@ export class WeeklyMenu {
       }
     }
 
-    if (weeklyMenu.meals) {
-      if (weeklyMenu.meals.length === 0) {
-        dto.mealIds = [];
-      }
-      else {
+    if (weeklyMenu.meals && _.isArray(weeklyMenu.meals)) {
+      dto.mealIds = [];
+
+      if (weeklyMenu.meals.length > 0) {
         for (let meal of weeklyMenu.meals) {
           if (meal && meal.id) {
             dto.mealIds.push(meal.id);
