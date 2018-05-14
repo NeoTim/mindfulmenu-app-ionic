@@ -31,16 +31,13 @@ export class Meal {
   public static fromDTO(dto: MealDTO): Meal {
     let meal = new Meal();
 
-    meal.id = dto.id;
-    meal.name = dto.name;
-    meal.imageUrl = dto.imageUrl;
-    meal.prepTime = dto.prepTime;
-    meal.cookTime = dto.cookTime;
-    meal.sourceName = dto.sourceName;
-    meal.sourceUrl = dto.sourceUrl;
-    meal.tip = dto.tip;
-    meal.cookInstructions = _.cloneDeep(dto.cookInstructions);
-    meal.prepInstructions = _.cloneDeep(dto.prepInstructions);
+    const copiedProperties: string[] = ['id', 'name', 'imageUrl', 'prepTime', 'cookTime', 'sourceName', 'sourceUrl', 'tip', 'cookInstructions', 'prepInstructions'];
+
+    for (let copiedProperty of copiedProperties) {
+      if (_.has(dto, copiedProperty)) {
+        meal[copiedProperty] = _.cloneDeep(dto[copiedProperty]);
+      }
+    }
 
     return meal;
   }
@@ -48,23 +45,23 @@ export class Meal {
   public static toDTO(meal: Meal): MealDTO {
     let dto = new MealDTO();
 
-    dto.id = meal.id;
-    dto.name = meal.name;
-    dto.imageUrl = meal.imageUrl;
-    dto.prepTime = meal.prepTime;
-    dto.cookTime = meal.cookTime;
-    dto.sourceName = meal.sourceName;
-    dto.sourceUrl = meal.sourceUrl;
-    dto.tip = meal.tip;
-    dto.cookInstructions = _.cloneDeep(meal.cookInstructions);
-    dto.prepInstructions = _.cloneDeep(meal.prepInstructions);
+    const copiedProperties: string[] = ['id', 'name', 'imageUrl', 'prepTime', 'cookTime', 'sourceName', 'sourceUrl', 'tip', 'cookInstructions', 'prepInstructions'];
 
-    if (meal.ingredients && (meal.ingredients.length > 0)) {
-      dto.ingredientIds = [];
+    for (let copiedProperty of copiedProperties) {
+      if (_.has(meal, copiedProperty)) {
+        dto[copiedProperty] = _.cloneDeep(meal[copiedProperty]);
+      }
+    }
 
-      for (let ingredient of meal.ingredients) {
-        if (ingredient && ingredient.id) {
-          dto.ingredientIds.push(ingredient.id);
+    if (meal.ingredients) {
+      if (meal.ingredients.length === 0) {
+        dto.ingredientIds = [];
+      }
+      else {
+        for (let ingredient of meal.ingredients) {
+          if (ingredient && ingredient.id) {
+            dto.ingredientIds.push(ingredient.id);
+          }
         }
       }
     }

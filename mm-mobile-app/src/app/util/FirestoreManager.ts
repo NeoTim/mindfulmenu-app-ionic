@@ -1,8 +1,8 @@
-import * as _ from "lodash";
-import firebase from "firebase";
+import * as _ from 'lodash';
+import * as firebase from 'firebase';
 import 'firebase/firestore';
-import { FirebaseManager } from "./FirebaseManager";
-import { Injectable } from "@angular/core";
+import { FirebaseManager } from './FirebaseManager';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class FirestoreManager {
@@ -53,43 +53,47 @@ export class FirestoreManager {
     return obj;
   }
 
+  public stripUndefined(obj: any): any {
+    return _.omitBy(obj, _.isUndefined);
+  }
+
   public getByIds(idArray: string[], collection: firebase.firestore.CollectionReference): Promise<firebase.firestore.DocumentSnapshot[]> {
     return new Promise((resolve, reject) => {
-        if (idArray === null) {
-          reject(null);
+      if (idArray === null) {
+        reject(null);
+      }
+      else if (idArray.length === 0) {
+        resolve([]);
+      }
+      else {
+        let successCount: number = 0;
+        let errorCount: number = 0;
+        let totalCount: number = idArray.length;
+
+        let items: firebase.firestore.DocumentSnapshot[] = [];
+
+        for (let id of idArray) {
+          collection.doc(id).get()
+            .then((documentSnapshot: firebase.firestore.DocumentSnapshot) => {
+              items.push(documentSnapshot);
+              successCount++;
+
+              if ((successCount + errorCount) === totalCount) {
+                resolve(items);
+              }
+            })
+            .catch((error) => {
+              errorCount++;
+
+              if (errorCount === totalCount) {
+                reject(error);
+              }
+              else if ((successCount + errorCount) === totalCount) {
+                resolve(items);
+              }
+            });
         }
-        else if (idArray.length === 0) {
-          resolve([]);
-        }
-        else {
-          let successCount: number = 0;
-          let errorCount: number = 0;
-          let totalCount: number = idArray.length;
-
-          let items: firebase.firestore.DocumentSnapshot[] = [];
-
-          for (let id of idArray) {
-            collection.doc(id).get()
-              .then((documentSnapshot: firebase.firestore.DocumentSnapshot) => {
-                items.push(documentSnapshot);
-                successCount++;
-
-                if ((successCount + errorCount) === totalCount) {
-                  resolve(items);
-                }
-              })
-              .catch((error) => {
-                errorCount++;
-
-                if (errorCount === totalCount) {
-                  reject(error);
-                }
-                else if ((successCount + errorCount) === totalCount) {
-                  resolve(items);
-                }
-              });
-          }
-        }
+      }
     });
   }
 

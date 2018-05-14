@@ -1,5 +1,6 @@
 import { MealDTO } from '../../dto/menu/MealDTO';
 import { WeeklyMenuDTO } from '../../dto/menu/WeeklyMenuDTO';
+import * as _ from 'lodash';
 
 export class WeeklyMenu {
 
@@ -22,18 +23,13 @@ export class WeeklyMenu {
   public static fromDTO(dto: WeeklyMenuDTO): WeeklyMenu {
     let weeklyMenu = new WeeklyMenu();
 
-    weeklyMenu.id = dto.id;
-    weeklyMenu.weekNumber = dto.weekNumber;
-    if (dto.startDate) {
-      weeklyMenu.startDate = new Date(dto.startDate.getTime());
+    const copiedProperties: string[] = ['id', 'weekNumber', 'startDate', 'endDate', 'publishDate', 'imageUrl'];
+
+    for (let copiedProperty of copiedProperties) {
+      if (_.has(dto, copiedProperty)) {
+        weeklyMenu[copiedProperty] = _.cloneDeep(dto[copiedProperty]);
+      }
     }
-    if (dto.endDate) {
-      weeklyMenu.endDate = new Date(dto.endDate.getTime());
-    }
-    if (dto.publishDate) {
-      weeklyMenu.publishDate = new Date(dto.publishDate.getTime());
-    }
-    weeklyMenu.imageUrl = dto.imageUrl;
 
     return weeklyMenu;
   }
@@ -41,25 +37,23 @@ export class WeeklyMenu {
   public static toDTO(weeklyMenu: WeeklyMenu): WeeklyMenuDTO {
     let dto = new WeeklyMenuDTO();
 
-    dto.id = weeklyMenu.id;
-    dto.weekNumber = weeklyMenu.weekNumber;
-    if (weeklyMenu.startDate) {
-      dto.startDate = new Date(weeklyMenu.startDate.getTime());
-    }
-    if (weeklyMenu.endDate) {
-      dto.endDate = new Date(weeklyMenu.endDate.getTime());
-    }
-    if (weeklyMenu.publishDate) {
-      dto.publishDate = new Date(weeklyMenu.publishDate.getTime());
-    }
-    dto.imageUrl = weeklyMenu.imageUrl;
+    const copiedProperties: string[] = ['id', 'weekNumber', 'startDate', 'endDate', 'publishDate', 'imageUrl'];
 
-    if (weeklyMenu.meals && (weeklyMenu.meals.length > 0)) {
-      dto.mealIds = [];
+    for (let copiedProperty of copiedProperties) {
+      if (_.has(weeklyMenu, copiedProperty)) {
+        dto[copiedProperty] = _.cloneDeep(weeklyMenu[copiedProperty]);
+      }
+    }
 
-      for (let meal of weeklyMenu.meals) {
-        if (meal && meal.id) {
-          dto.mealIds.push(meal.id);
+    if (weeklyMenu.meals) {
+      if (weeklyMenu.meals.length === 0) {
+        dto.mealIds = [];
+      }
+      else {
+        for (let meal of weeklyMenu.meals) {
+          if (meal && meal.id) {
+            dto.mealIds.push(meal.id);
+          }
         }
       }
     }

@@ -53,6 +53,10 @@ export class FirestoreManager {
     return obj;
   }
 
+  public stripUndefined(obj: any): any {
+    return _.omitBy(obj, _.isUndefined);
+  }
+
   public getByIds(idArray: string[], collection: firebase.firestore.CollectionReference): Promise<firebase.firestore.DocumentSnapshot[]> {
     return new Promise((resolve, reject) => {
         if (idArray === null) {

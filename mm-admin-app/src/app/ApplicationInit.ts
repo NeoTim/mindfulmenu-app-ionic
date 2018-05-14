@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ApplicationModel } from './model/ApplicationModel';
 import { HtmlUtil } from './util/HtmlUtil';
 import { ApplicationState } from './data/local/ApplicationState';
+import { ApplicationConfig } from './config/ApplicationConfig';
 
 @Injectable()
 export class ApplicationInit {
@@ -83,6 +84,10 @@ export class ApplicationInit {
       }
 
       this.toastrService.error(errorText, 'General error!');
+
+      if (!ApplicationConfig.production) {
+        console.log(error);
+      }
     });
 
   }

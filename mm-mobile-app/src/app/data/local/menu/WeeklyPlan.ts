@@ -32,10 +32,13 @@ export class WeeklyPlan {
   public static fromDTO(dto: WeeklyPlanDTO): WeeklyPlan {
     let weeklyPlan = new WeeklyPlan();
 
-    weeklyPlan.id = dto.id;
-    weeklyPlan.userId = dto.userId;
-    weeklyPlan.weekNumber = dto.weekNumber;
-    weeklyPlan.checkedIngredientIds = dto.checkedIngredientIds;
+    const copiedProperties: string[] = ['id', 'userId', 'weekNumber', 'checkedIngredientIds'];
+
+    for (let copiedProperty of copiedProperties) {
+      if (_.has(dto, copiedProperty)) {
+        weeklyPlan[copiedProperty] = _.cloneDeep(dto[copiedProperty]);
+      }
+    }
 
     return weeklyPlan;
   }
@@ -43,27 +46,36 @@ export class WeeklyPlan {
   public static toDTO(weeklyPlan: WeeklyPlan): WeeklyPlanDTO {
     let dto = new WeeklyPlanDTO();
 
-    dto.id = weeklyPlan.id;
-    dto.userId = weeklyPlan.userId;
-    dto.weekNumber = weeklyPlan.weekNumber;
-    dto.checkedIngredientIds = weeklyPlan.checkedIngredientIds;
+    const copiedProperties: string[] = ['id', 'userId', 'weekNumber', 'checkedIngredientIds'];
 
-    if (weeklyPlan.meals && (weeklyPlan.meals.length > 0)) {
-      dto.mealIds = [];
+    for (let copiedProperty of copiedProperties) {
+      if (_.has(weeklyPlan, copiedProperty)) {
+        dto[copiedProperty] = _.cloneDeep(weeklyPlan[copiedProperty]);
+      }
+    }
 
-      for (let meal of weeklyPlan.meals) {
-        if (meal && meal.id) {
-          dto.mealIds.push(meal.id);
+    if (weeklyPlan.meals) {
+      if (weeklyPlan.meals.length === 0) {
+        dto.mealIds = [];
+      }
+      else {
+        for (let meal of weeklyPlan.meals) {
+          if (meal && meal.id) {
+            dto.mealIds.push(meal.id);
+          }
         }
       }
     }
 
-    if (weeklyPlan.customIngredients && (weeklyPlan.customIngredients.length > 0)) {
-      dto.customIngredientIds = [];
-
-      for (let ingredient of weeklyPlan.customIngredients) {
-        if (ingredient && ingredient.id) {
-          dto.customIngredientIds.push(ingredient.id);
+    if (weeklyPlan.customIngredients) {
+      if (weeklyPlan.customIngredients.length === 0) {
+        dto.customIngredientIds = [];
+      }
+      else {
+        for (let customIngredient of weeklyPlan.customIngredients) {
+          if (customIngredient && customIngredient.id) {
+            dto.customIngredientIds.push(customIngredient.id);
+          }
         }
       }
     }

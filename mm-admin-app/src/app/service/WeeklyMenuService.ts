@@ -67,7 +67,6 @@ export class WeeklyMenuService {
   }
 
   public updateWeeklyMenu(weeklyMenu: WeeklyMenuDTO): Promise<WeeklyMenuDTO> {
-    var menuPlain = classToPlain(weeklyMenu);
     return new Promise((resolve, reject) => {
       this.firestoreManager.firestore.collection('weeklyMenus').doc(weeklyMenu.id).update(classToPlain(weeklyMenu))
         .then(() => {
