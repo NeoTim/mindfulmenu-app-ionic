@@ -167,6 +167,7 @@ input {
   background-image: url(../asset/ic_circle_close@3x.png);
   background-size: 45px auto;
   background-repeat: no-repeat;
+  cursor: pointer;
   z-index: 9999;
 
   &.with-top-doodad {
