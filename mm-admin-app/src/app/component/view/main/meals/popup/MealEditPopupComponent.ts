@@ -22,33 +22,35 @@ import { IngredientDTO } from '../../../../../data/dto/menu/IngredientDTO';
 })
 export class MealEditPopupComponent implements OnInit {
 
-  meal: MealDTO;
+  meal: MealDTO; // This is the original object from DB, before editing
 
-  mealWithIngredients: Meal;
+  mealWithIngredients: Meal; // This is the object being edited. It is reconciled against 'meal' on save.
+
+  removedIngredientIds: string[];
 
   @ViewChild('mealForm')
   private mealForm: NgForm;
 
   constructor(public activeModal: NgbActiveModal,
-              public mealModel: MealModel,
-              public ingredientModel: IngredientModel) {
+    public mealModel: MealModel,
+    public ingredientModel: IngredientModel) {
   }
 
   ngOnInit() {
     this.ingredientModel.getIngredients(this.meal.ingredientIds)
-        .then((ingredients: IngredientDTO[]) => {
-          const mealWithIngredients: Meal = Meal.fromDTO(this.meal);
-          mealWithIngredients.ingredients = ingredients;
+      .then((ingredients: IngredientDTO[]) => {
+        const mealWithIngredients: Meal = Meal.fromDTO(this.meal);
+        mealWithIngredients.ingredients = ingredients;
 
-          this.mealWithIngredients = mealWithIngredients;
-        })
-        .catch((error) => {});
-      
+        this.mealWithIngredients = mealWithIngredients;
+      })
+      .catch((error) => { });
+
   }
 
   // This is used for trackByFn in ngFor, to keep focus on element when typing.
-  identify(index, item){
-    return index; 
+  identify(index, item) {
+    return index;
   }
 
   close() {
@@ -63,20 +65,59 @@ export class MealEditPopupComponent implements OnInit {
     this.mealForm.onSubmit(null);
 
     if (this.mealForm.form.valid) {
-      const dto: MealDTO = Meal.toDTO(this.mealWithIngredients);
+      var p = Promise.resolve(); // Start with a resolved promise, so saves and updates happen synchonously
 
-      this.mealModel.updateMeal(dto)
-        .then((updatedMeal: MealDTO) => {
-          this.activeModal.close(updatedMeal);
-        })
-        .catch((error) => {
-          //
+      // Create ingredients that don't have IDs, and update those that do
+      this.mealWithIngredients.ingredients.forEach(((ingredient, index) => {
+        p = p.then(() => new Promise<void>(resolve => {
+          if (ingredient.id == null) {
+            return this.ingredientModel.createIngredient(ingredient)
+              .then((newIngredient: IngredientDTO) => {
+                ingredient = newIngredient;
+              })
+              .catch((error) => { })
+          } else {
+            return this.ingredientModel.updateIngredient(ingredient)
+              .then((newIngredient: IngredientDTO) => { })
+              .catch((error) => { })
+          }
+        }))
+      }))
+
+      p = p.then(() => new Promise<void>(resolve => {
+        // Async delete the ingredients that have been removed
+        this.removedIngredientIds.forEach(id => {
+          this.ingredientModel.deleteIngredient(id)
+            .then(() => { })
+            .catch(() => { })
         });
+
+        // Now, ready to save the new meal
+        const dto: MealDTO = Meal.toDTO(this.mealWithIngredients);
+
+        return this.mealModel.updateMeal(dto)
+          .then((updatedMeal: MealDTO) => {
+            this.activeModal.close(updatedMeal);
+          })
+          .catch((error) => { });
+      }))
+    }
+  }
+
+  addIngredient() {
+    var ingredient = new IngredientDTO();
+    this.mealWithIngredients.ingredients.push(ingredient);
+  }
+
+  removeIngredient() {
+    var id = this.mealWithIngredients.ingredients.pop().id;
+    if (id == null) {
+      this.removedIngredientIds.push(id);
     }
   }
 
   addCookInstruction() {
-    if(this.mealWithIngredients.cookInstructions == null){
+    if (this.mealWithIngredients.cookInstructions == null) {
       this.mealWithIngredients.cookInstructions = [];
     }
     this.mealWithIngredients.cookInstructions.push("Add new instruction...");
@@ -87,7 +128,7 @@ export class MealEditPopupComponent implements OnInit {
   }
 
   addPrepInstruction() {
-    if(this.mealWithIngredients.prepInstructions == null){
+    if (this.mealWithIngredients.prepInstructions == null) {
       this.mealWithIngredients.prepInstructions = [];
     }
     this.mealWithIngredients.prepInstructions.push("Add new instruction...");

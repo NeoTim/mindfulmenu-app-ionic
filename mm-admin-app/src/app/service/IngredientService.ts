@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { plainToClass } from 'class-transformer';
+import { classToPlain, plainToClass } from 'class-transformer';
 import { FirestoreManager } from '../util/FirestoreManager';
 import * as firebase from 'firebase';
 import { IngredientDTO } from '../data/dto/menu/IngredientDTO';
@@ -52,5 +52,40 @@ export class IngredientService {
     });
   }
 
+  public createIngredient(ingredient: IngredientDTO): Promise<IngredientDTO> {
+    return new Promise((resolve, reject) => {
+      this.firestoreManager.firestore.collection('ingredients').add(classToPlain(ingredient))
+        .then((documentReference: firebase.firestore.DocumentReference) => {
+          resolve(this.getIngredient(documentReference.id));
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  public updateIngredient(ingredient: IngredientDTO): Promise<IngredientDTO> {
+    return new Promise((resolve, reject) => {
+      this.firestoreManager.firestore.collection('ingredients').doc(ingredient.id).update(classToPlain(ingredient))
+        .then(() => {
+          resolve(this.getIngredient(ingredient.id));
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  public deleteIngredient(ingredientId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.firestoreManager.firestore.collection('ingredients').doc(ingredientId).delete()
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
 
 }
