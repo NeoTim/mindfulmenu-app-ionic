@@ -9,10 +9,10 @@ import { WeeklyPlanModel } from "../../../../../model/WeeklyPlanModel";
 import * as _ from "lodash";
 
 @Component({
-  selector: 'favorite-list',
-  templateUrl: 'FavoriteListComponent.html'
+  selector: 'favorites',
+  templateUrl: 'FavoritesComponent.html'
 })
-export class FavoriteListComponent {
+export class FavoritesComponent {
 
   @ViewChild(Navbar)
   navbar: Navbar;

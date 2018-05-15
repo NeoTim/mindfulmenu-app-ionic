@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <div class="currentWeeklyMenu" *ngIf="!currentWeeklyMenu">
+  <div class="currentWeeklyMenu" *ngIf="!currentWeeklyMenu && currentWeeklyMenuLoaded">
     <div class="content">
       <h5>No menu for this week yet</h5>
     </div>
@@ -31,7 +31,7 @@
         </div>
       </ion-scroll>
     </ng-container>
-    <ng-container *ngIf="!previousWeeklyMenus || (previousWeeklyMenus.length == 0)">
+    <ng-container *ngIf="(!previousWeeklyMenus || (previousWeeklyMenus.length == 0)) && previousWeeklyMenusLoaded">
       <p text-center>No previous weekly menus available.</p>
     </ng-container>
   </div>
@@ -49,7 +49,7 @@
         </div>
       </ion-scroll>
     </ng-container>
-    <ng-container *ngIf="!upcomingWeeklyMenus || (upcomingWeeklyMenus.length == 0)">
+    <ng-container *ngIf="(!upcomingWeeklyMenus || (upcomingWeeklyMenus.length == 0)) && upcomingWeeklyMenusLoaded">
       <p text-center>No upcoming weekly menus available.</p>
     </ng-container>
   </div>

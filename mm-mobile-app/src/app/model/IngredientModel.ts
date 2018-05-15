@@ -49,4 +49,34 @@ export class IngredientModel {
       })
   }
 
+  public createIngredient(ingredient: IngredientDTO): Promise<IngredientDTO> {
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.ingredientService.createIngredient(ingredient)
+      .then((ingredient: IngredientDTO) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return ingredient;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
+  }
+
+  public deleteIngredient(ingredientId: string): Promise<void> {
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.ingredientService.deleteIngredient(ingredientId)
+      .then(() => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      });
+  }
+
 }

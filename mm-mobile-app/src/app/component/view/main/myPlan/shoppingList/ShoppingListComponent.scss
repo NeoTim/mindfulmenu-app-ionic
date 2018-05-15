@@ -1,0 +1,98 @@
+shopping-list {
+
+  .h-divider {
+    background-color: color($colors, primary) !important;
+    height: 1px;
+    opacity: 0.5;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    &.big {
+      height: 2px;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+  }
+
+  .slCategory {
+    margin-bottom: 60px;
+
+    h4 {
+      font-family: 'Trocchi' !important;
+      margin-bottom: 20px;
+    }
+
+    .slItem {
+
+      .item {
+        padding-left: 0px !important;
+
+        &.clickable {
+          cursor: pointer;
+        }
+
+        .add {
+          margin-left: 4px;
+          margin-right: 20px;
+
+          .addIcon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            background-image: url(../asset/ic_circle_plus@3x.png);
+            background-size: 24px auto;
+            background-repeat: no-repeat;
+          }
+        }
+
+        .remove {
+          z-index: 1000;
+
+          .removeIcon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            background-image: url(../asset/ic_circle_x@3x.png);
+            background-size: 24px auto;
+            background-repeat: no-repeat;
+          }
+
+        }
+
+        .item-inner {
+          border: 0px none !important;
+        }
+
+        .checkbox {
+          margin-right: 20px !important;
+        }
+
+        &.item-checkbox-checked ion-label {
+          text-decoration: line-through;
+
+          .itemName {
+            color: color($colors, gray) !important;
+          }
+
+          .itemAmount {
+            color: color($colors, gray) !important;
+          }
+        }
+
+        ion-label {
+          white-space: normal !important;
+          text-overflow: unset !important;
+
+          .itemName {
+          }
+
+          .itemAmount {
+            color: color($colors, dark) !important;
+          }
+        }
+      }
+    }
+  }
+
+}

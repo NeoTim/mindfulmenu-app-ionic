@@ -15,6 +15,7 @@ import { UserDTO } from "../data/dto/user/UserDTO";
 import { UserModel } from "../model/UserModel";
 import { ApplicationConfig } from "../config/ApplicationConfig";
 import dedent from "dedent";
+import { ApplicationModel } from "../model/ApplicationModel";
 
 @Component({
   templateUrl: 'ApplicationComponent.html'
@@ -37,6 +38,7 @@ export class ApplicationComponent implements OnInit {
               public platformUtil: PlatformUtil,
               public viewUtil: ViewUtil,
               public config: ApplicationConfig,
+              public applicationModel: ApplicationModel,
               public networkModel: NetworkModel,
               public authModel: AuthModel,
               public userModel: UserModel) {
@@ -148,8 +150,10 @@ export class ApplicationComponent implements OnInit {
 
         setTimeout(() => {
           if ((this.loaderRequestCount > 0) && !this.loaderVisible) {
-            this.loaderVisible = true;
-            this.viewUtil.showLoader();
+            if (!this.applicationModel.suppressLoading) {
+              this.loaderVisible = true;
+              this.viewUtil.showLoader();
+            }
           }
         }, this.loaderDebounceTime);
       }

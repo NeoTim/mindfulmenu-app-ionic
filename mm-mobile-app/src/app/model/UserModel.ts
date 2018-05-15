@@ -66,19 +66,25 @@ export class UserModel {
       });
     }
 
-    this.events.publish(Event.SYSTEM.LOADING, true);
+    // if there was no mealId in currentUser.favoriteMealIds and nothing was actually removed, don't make the call
+    if (_.isEqual(favoriteMealIds, this.currentUser.favoriteMealIds)) {
+      return Promise.resolve(this.currentUser);
+    }
+    else {
+      this.events.publish(Event.SYSTEM.LOADING, true);
 
-    return this.userService.updateUserFavoriteMealIds(this.currentUser.id, favoriteMealIds)
-      .then((user: UserDTO) => {
-        this.events.publish(Event.SYSTEM.LOADING, false);
-        this.currentUser = user;
-        return user;
-      })
-      .catch((error) => {
-        this.events.publish(Event.SYSTEM.LOADING, false);
-        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
-        return Promise.reject(error);
-      })
+      return this.userService.updateUserFavoriteMealIds(this.currentUser.id, favoriteMealIds)
+        .then((user: UserDTO) => {
+          this.events.publish(Event.SYSTEM.LOADING, false);
+          this.currentUser = user;
+          return user;
+        })
+        .catch((error) => {
+          this.events.publish(Event.SYSTEM.LOADING, false);
+          this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+          return Promise.reject(error);
+        })
+    }
   }
 
 }

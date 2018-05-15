@@ -62,5 +62,29 @@ export class WeeklyPlanService {
     });
   }
 
+  public updateWeeklyPlanCustomIngredientIds(weeklyPlanId: string, customIngredientIds: string[]): Promise<WeeklyPlanDTO> {
+    return new Promise((resolve, reject) => {
+      this.firestoreManager.firestore.collection('weeklyPlans').doc(weeklyPlanId).update( { 'customIngredientIds': customIngredientIds })
+        .then(() => {
+          resolve(this.getWeeklyPlan(weeklyPlanId));
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  public updateWeeklyPlanCheckedIngredientIds(weeklyPlanId: string, checkedIngredientIds: string[]): Promise<WeeklyPlanDTO> {
+    return new Promise((resolve, reject) => {
+      this.firestoreManager.firestore.collection('weeklyPlans').doc(weeklyPlanId).update( { 'checkedIngredientIds': checkedIngredientIds })
+        .then(() => {
+          resolve(this.getWeeklyPlan(weeklyPlanId));
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
 }
 

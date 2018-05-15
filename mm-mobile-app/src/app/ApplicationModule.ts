@@ -39,7 +39,9 @@ import { WeeklyMenuComponent } from "./component/view/main/menus/weeklyMenu/Week
 import { WeeklyPlanModel } from "./model/WeeklyPlanModel";
 import { WeeklyPlanService } from "./service/WeeklyPlanService";
 import { PrepListComponent } from "./component/view/main/myPlan/prepList/PrepListComponent";
-import { FavoriteListComponent } from "./component/view/main/menus/favorite/FavoriteListComponent";
+import { FavoritesComponent } from "./component/view/main/menus/favorites/FavoritesComponent";
+import { ShoppingListComponent } from "./component/view/main/myPlan/shoppingList/ShoppingListComponent";
+import { ApplicationModel } from "./model/ApplicationModel";
 
 @NgModule({
   declarations: [
@@ -49,8 +51,8 @@ import { FavoriteListComponent } from "./component/view/main/menus/favorite/Favo
     AuthLoginComponent,
     AuthOfflineComponent,
     MainComponent,
-    MenusComponent, WeeklyMenuComponent, FavoriteListComponent,
-    MyPlanComponent, PrepListComponent,
+    MenusComponent, WeeklyMenuComponent, FavoritesComponent,
+    MyPlanComponent, PrepListComponent, ShoppingListComponent,
     MoreComponent, AboutComponent, AccountComponent, AccountChangePasswordComponent,
     // component/ui
     InternalUrlBrowserComponent,
@@ -64,8 +66,8 @@ import { FavoriteListComponent } from "./component/view/main/menus/favorite/Favo
     AuthLoginComponent,
     AuthOfflineComponent,
     MainComponent,
-    MenusComponent, WeeklyMenuComponent, FavoriteListComponent,
-    MyPlanComponent, PrepListComponent,
+    MenusComponent, WeeklyMenuComponent, FavoritesComponent,
+    MyPlanComponent, PrepListComponent, ShoppingListComponent,
     MoreComponent, AboutComponent, AccountComponent, AccountChangePasswordComponent,
     // component/ui
     InternalUrlBrowserComponent
@@ -89,6 +91,7 @@ import { FavoriteListComponent } from "./component/view/main/menus/favorite/Favo
     Network,
     ApplicationConfig,
     FirebaseManager, FirestoreManager,
+    ApplicationModel,
     NetworkModel,
     AuthModel, AuthService,
     IngredientModel, IngredientService,
@@ -107,6 +110,7 @@ import { FavoriteListComponent } from "./component/view/main/menus/favorite/Favo
       multi: true,
       useFactory: (
                    FirebaseManager: FirebaseManager,
+                   ApplicationModel: ApplicationModel,
                    AuthModel: AuthModel,
                    NetworkModel: NetworkModel,
                    IngredientModel: IngredientModel,
@@ -117,6 +121,7 @@ import { FavoriteListComponent } from "./component/view/main/menus/favorite/Favo
       ) => () => {},
       deps: [
         FirebaseManager,
+        ApplicationModel,
         AuthModel,
         NetworkModel,
         IngredientModel,

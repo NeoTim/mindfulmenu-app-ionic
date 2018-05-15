@@ -15,6 +15,7 @@ import { WeeklyMenuModel } from "../../../../model/WeeklyMenuModel";
 import { IngredientModel } from "../../../../model/IngredientModel";
 import { IngredientDTO } from "../../../../data/dto/menu/IngredientDTO";
 import { PrepListComponent } from "./prepList/PrepListComponent";
+import { ShoppingListComponent } from "./shoppingList/ShoppingListComponent";
 
 @Component({
   selector: 'my-plan',
@@ -133,6 +134,7 @@ export class MyPlanComponent {
 
   getPreviousWeeklyPlan() {
     if (this.currentWeekRelation > -MyPlanComponent.WEEK_RANGE) {
+      this.weeklyPlan = null;
       this.currentWeekRelation--;
       this.getWeeklyPlan(this.currentWeekRelation);
     }
@@ -140,6 +142,7 @@ export class MyPlanComponent {
 
   getNextWeeklyPlan() {
     if (this.currentWeekRelation < 0) {
+      this.weeklyPlan = null;
       this.currentWeekRelation++;
       this.getWeeklyPlan(this.currentWeekRelation);
     }
@@ -187,6 +190,10 @@ export class MyPlanComponent {
   }
 
   showShoppingList() {
-
+    let modal = this.modalCtrl.create(ShoppingListComponent, { weeklyPlanId: this.weeklyPlan.id });
+    modal.onDidDismiss(data => {
+      //
+    });
+    modal.present();
   }
 }

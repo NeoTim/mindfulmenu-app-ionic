@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { plainToClass } from 'class-transformer';
+import { classToPlain, plainToClass } from 'class-transformer';
 import { FirestoreManager } from "../util/FirestoreManager";
 import firebase from "firebase";
 import { IngredientDTO } from "../data/dto/menu/IngredientDTO";
@@ -31,6 +31,30 @@ export class IngredientService {
           let result: object[] = this.firestoreManager.documentArrayToObjectArray(documentSnapshots);
           let data: IngredientDTO[] = plainToClass(IngredientDTO, result as object[]);
           resolve(data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  public createIngredient(ingredient: IngredientDTO): Promise<IngredientDTO> {
+    return new Promise((resolve, reject) => {
+      this.firestoreManager.firestore.collection('ingredients').add(classToPlain(ingredient))
+        .then((documentReference: firebase.firestore.DocumentReference) => {
+          resolve(this.getIngredient(documentReference.id));
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  public deleteIngredient(ingredientId: string): Promise<IngredientDTO> {
+    return new Promise((resolve, reject) => {
+      this.firestoreManager.firestore.collection('ingredients').doc(ingredientId).delete()
+        .then(() => {
+          resolve();
         })
         .catch((error) => {
           reject(error);
