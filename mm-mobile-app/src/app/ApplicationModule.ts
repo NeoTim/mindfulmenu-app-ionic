@@ -77,8 +77,10 @@ import { ApplicationModel } from "./model/ApplicationModel";
     FormsModule,
     CustomFormsModule,
     IonicModule.forRoot(ApplicationComponent, {
-      mode: 'md',
+      mode: 'md',   /* remove this if you want native per-os experience */
+      iconMode: 'md',
       tabsHideOnSubPages: false,
+      tabsHighlight: true,
       backButtonText: '',
       backButtonIcon: 'custom-arrow-back',
       pageTransition: 'md-transition'

@@ -101,6 +101,7 @@ ion-checkbox {
 
 button[ion-button].button {
   border-radius: 30px !important;
+  text-transform: uppercase !important;
 }
 
 
@@ -175,7 +176,7 @@ input {
   }
 }
 
-// --
+// -- iOS specific
 
 ion-app.platform-ios {
   .top-doodad {
@@ -207,5 +208,15 @@ ion-app.platform-ios {
       min-height: 116px !important;
     }
   }
+}
 
+button.item-ios:not([detail-none]) {
+  .item-inner {
+    background: none !important;
+    padding-right: 0px !important;
+  }
+}
+
+.button-ios {
+  font-size: 1.4rem !important;
 }
