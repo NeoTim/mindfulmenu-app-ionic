@@ -26,7 +26,7 @@ export class MealEditPopupComponent implements OnInit {
 
   mealWithIngredients: Meal; // This is the object being edited. It is reconciled against 'meal' on save.
 
-  removedIngredientIds: string[];
+  removedIngredientIds: string[] = [];
 
   @ViewChild('mealForm')
   private mealForm: NgForm;
@@ -68,27 +68,30 @@ export class MealEditPopupComponent implements OnInit {
       var p = Promise.resolve(); // Start with a resolved promise, so saves and updates happen synchonously
 
       // Create ingredients that don't have IDs, and update those that do
-      this.mealWithIngredients.ingredients.forEach(((ingredient, index) => {
-        p = p.then(() => new Promise<void>(resolve => {
+      this.mealWithIngredients.ingredients.forEach((ingredient, index) => {
+        p = p.then((res) => {
           if (ingredient.id == null) {
             return this.ingredientModel.createIngredient(ingredient)
               .then((newIngredient: IngredientDTO) => {
-                ingredient = newIngredient;
+                console.log("Ingredient created.");
+                this.mealWithIngredients.ingredients.push(newIngredient);
               })
               .catch((error) => { })
           } else {
             return this.ingredientModel.updateIngredient(ingredient)
-              .then((newIngredient: IngredientDTO) => { })
+              .then((newIngredient: IngredientDTO) => { 
+                console.log("Ingredient updated.");
+              })
               .catch((error) => { })
           }
-        }))
-      }))
+        })
+      })
 
-      p = p.then(() => new Promise<void>(resolve => {
+      p = p.then((res) => {
         // Async delete the ingredients that have been removed
         this.removedIngredientIds.forEach(id => {
           this.ingredientModel.deleteIngredient(id)
-            .then(() => { })
+            .then(() => { return; })
             .catch(() => { })
         });
 
@@ -100,18 +103,19 @@ export class MealEditPopupComponent implements OnInit {
             this.activeModal.close(updatedMeal);
           })
           .catch((error) => { });
-      }))
+      })
     }
   }
 
   addIngredient() {
     var ingredient = new IngredientDTO();
+    ingredient.mealId = this.meal.id;
     this.mealWithIngredients.ingredients.push(ingredient);
   }
 
   removeIngredient() {
     var id = this.mealWithIngredients.ingredients.pop().id;
-    if (id == null) {
+    if (id != null) {
       this.removedIngredientIds.push(id);
     }
   }
