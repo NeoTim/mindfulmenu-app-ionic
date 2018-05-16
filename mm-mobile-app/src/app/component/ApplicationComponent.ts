@@ -142,6 +142,10 @@ export class ApplicationComponent implements OnInit {
       }
 
       this.viewUtil.showToast(errorText, false, false);
+
+      if (!this.config.production) {
+        console.log(error);
+      }
     });
 
     this.events.subscribe(Event.SYSTEM.LOADING, (status) => {
