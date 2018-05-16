@@ -44,6 +44,20 @@
                   <ng-template ngbTabContent></ng-template>
                 </ngb-tab>
 
+                <ngb-tab title="Ingredients ({{ meal.ingredientIds?.length }})">
+                  <ng-template ngbTabContent>
+                    <div class=" card">
+                      <div class="card-body">
+                        <h5 class="card-title">Ingredients</h5>
+                        <div class="card-text">
+                          <p>Unfortunately, we can't show ingredients here, yet.</p>
+                          <p>Select "Edit" for this meal, to view the ingredients.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+
                 <ngb-tab title="Cooking Instructions ({{ meal.cookInstructions?.length }})">
                   <ng-template ngbTabContent>
                     <div class=" card">
