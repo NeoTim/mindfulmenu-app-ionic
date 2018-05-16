@@ -113,8 +113,9 @@ export class MealEditPopupComponent implements OnInit {
     this.mealWithIngredients.ingredients.push(ingredient);
   }
 
-  removeIngredient() {
-    var id = this.mealWithIngredients.ingredients.pop().id;
+  removeIngredient(index: number) {
+    var id = this.mealWithIngredients.ingredients[index].id;
+    this.mealWithIngredients.ingredients.splice(index, 1)
     if (id != null) {
       this.removedIngredientIds.push(id);
     }
@@ -148,5 +149,9 @@ export class MealEditPopupComponent implements OnInit {
     if (model.viewModel === null) {
       model.control.setValue(null);
     }
+  }
+
+  getFormControl(name: string) {
+    return this.mealForm.form.controls[name];
   }
 }

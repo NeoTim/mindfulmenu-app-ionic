@@ -14,7 +14,7 @@ export class AuthLoginComponent implements OnInit {
   @ViewChild('loginForm')
   private loginForm: NgForm;
 
-  private loginCredentials = {
+  public loginCredentials = {
     email: null,
     password: null
   };
