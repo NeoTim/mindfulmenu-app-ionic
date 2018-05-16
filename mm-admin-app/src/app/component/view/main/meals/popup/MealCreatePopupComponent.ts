@@ -26,6 +26,8 @@ export class MealCreatePopupComponent implements OnInit {
 
   mealWithIngredients: Meal = new Meal();
 
+  isSaving: boolean = false;
+
   @ViewChild('mealForm')
   private mealForm: NgForm;
 
@@ -59,6 +61,7 @@ export class MealCreatePopupComponent implements OnInit {
     this.mealForm.onSubmit(null);
 
     if (this.mealForm.form.valid) {
+      this.isSaving = true;
       var p = Promise.resolve(); // Start with a resolved promise, so saves and updates happen synchonously
 
       // Create ingredients that don't have IDs, and update those that do
@@ -72,7 +75,7 @@ export class MealCreatePopupComponent implements OnInit {
               .catch((error) => { })
           } else {
             return this.ingredientModel.updateIngredient(ingredient)
-              .then((newIngredient: IngredientDTO) => {})
+              .then((newIngredient: IngredientDTO) => { })
               .catch((error) => { })
           }
         })
@@ -89,14 +92,16 @@ export class MealCreatePopupComponent implements OnInit {
           })
           .catch((error) => { });
       })
-          
+
       // Finally, go back and set the mealId for the new ingredients
-      this.mealWithIngredients.ingredients.filter((ingredient) => {ingredient.id != null}).forEach((ingredient) => {
-        p = p.then((res) => {
-          ingredient.mealId = this.mealWithIngredients.id;
-          return this.ingredientModel.updateIngredient(ingredient)
-              .then((newIngredient: IngredientDTO) => {})
+      p = p.then((res) => {
+        this.mealWithIngredients.ingredients.forEach((ingredient) => {
+          if (ingredient.id != null) {
+            ingredient.mealId = this.mealWithIngredients.id;
+            this.ingredientModel.updateIngredient(ingredient)
+              .then((newIngredient: IngredientDTO) => { })
               .catch((error) => { })
+          }
         })
       })
 

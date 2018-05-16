@@ -74,7 +74,7 @@
       </div>
     </div>
 
-    <ngb-tabset>
+    <ngb-tabset *ngIf="!isSaving">
       <ngb-tab title="Ingredients">
         <ng-template ngbTabContent>
           <div class="mt-3">

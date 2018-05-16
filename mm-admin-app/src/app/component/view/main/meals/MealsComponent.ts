@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MealEditPopupComponent } from './popup/MealEditPopupComponent';
 import { MealCreatePopupComponent } from './popup/MealCreatePopupComponent';
+import { IngredientModel } from '../../../../model/IngredientModel';
 @Component({
   selector: 'meals',
   templateUrl: 'MealsComponent.html',
@@ -15,12 +16,13 @@ export class MealsComponent implements OnInit {
   meals: MealDTO[];
 
   constructor(public toastrService: ToastrService,
-              public mealModel: MealModel,
-              public modalService: NgbModal) {
+    public mealModel: MealModel,
+    public modalService: NgbModal,
+    public ingredientModel: IngredientModel) {
   }
 
   ngOnInit() {
-      this.getAllMeals();
+    this.getAllMeals();
   }
 
   getAllMeals() {
@@ -28,7 +30,7 @@ export class MealsComponent implements OnInit {
       .then((meals: MealDTO[]) => {
         this.meals = meals;
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   addMeal() {
@@ -61,11 +63,17 @@ export class MealsComponent implements OnInit {
   }
 
   deleteMeal(meal: MealDTO) {
+    meal.ingredientIds.forEach((id) => {
+      this.ingredientModel.deleteIngredient(id)
+        .then(() => { })
+        .catch(() => { })
+    })
+
     this.mealModel.deleteMeal(meal.id)
       .then(() => {
         this.toastrService.success('Meal removed!', 'Success');
         this.getAllMeals();
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 }

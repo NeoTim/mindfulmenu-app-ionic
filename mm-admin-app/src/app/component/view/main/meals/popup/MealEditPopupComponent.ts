@@ -28,6 +28,8 @@ export class MealEditPopupComponent implements OnInit {
 
   removedIngredientIds: string[] = [];
 
+  isSaving: boolean = false;
+
   @ViewChild('mealForm')
   private mealForm: NgForm;
 
@@ -65,6 +67,7 @@ export class MealEditPopupComponent implements OnInit {
     this.mealForm.onSubmit(null);
 
     if (this.mealForm.form.valid) {
+      this.isSaving = true;
       var p = Promise.resolve(); // Start with a resolved promise, so saves and updates happen synchonously
 
       // Create ingredients that don't have IDs, and update those that do
@@ -73,14 +76,12 @@ export class MealEditPopupComponent implements OnInit {
           if (ingredient.id == null) {
             return this.ingredientModel.createIngredient(ingredient)
               .then((newIngredient: IngredientDTO) => {
-                console.log("Ingredient created.");
                 this.mealWithIngredients.ingredients.push(newIngredient);
               })
               .catch((error) => { })
           } else {
             return this.ingredientModel.updateIngredient(ingredient)
               .then((newIngredient: IngredientDTO) => { 
-                console.log("Ingredient updated.");
               })
               .catch((error) => { })
           }
@@ -91,7 +92,7 @@ export class MealEditPopupComponent implements OnInit {
         // Async delete the ingredients that have been removed
         this.removedIngredientIds.forEach(id => {
           this.ingredientModel.deleteIngredient(id)
-            .then(() => { return; })
+            .then(() => { })
             .catch(() => { })
         });
 
