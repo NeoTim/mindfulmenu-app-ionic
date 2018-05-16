@@ -5,133 +5,202 @@
   </button>
 </div>
 <div class="modal-body">
-    <form #mealForm="ngForm" novalidate>
+  <form #mealForm="ngForm" novalidate>
 
-        <div class="form-row">
-          <div class="form-group col-sm-6">
-            <label>Meal name</label>
-            <input type="text" class="form-control" id="name" name="name" [ngClass]="{'is-invalid': mealForm.submitted && name.invalid, 'is-valid': mealForm.submitted && name.valid }"
-              #name="ngModel" [(ngModel)]="mealWithIngredients.name" required>
-            <div class="invalid-feedback" *ngIf="mealForm.submitted && name.invalid">
-              <div *ngIf="name.errors?.required">This cannot be empty.</div>
-            </div>
-          </div>
-  
-          <div class="form-group col-sm-6">
-            <label>Image URL</label>
-            <input type="text" class="form-control" id="imageUrl" name="imageUrl" [ngClass]="{'is-invalid': mealForm.submitted && imageUrl.invalid, 'is-valid': mealForm.submitted && imageUrl.valid }"
-              #imageUrl="ngModel" [(ngModel)]="mealWithIngredients.imageUrl" required url>
-            <div class="invalid-feedback" *ngIf="mealForm.submitted && imageUrl.invalid">
-              <div *ngIf="imageUrl.errors?.required">This cannot be empty.</div>
-              <div *ngIf="imageUrl.errors?.url">This needs to be a valid URL.</div>
-            </div>
-          </div>
+    <div class="form-row">
+      <div class="form-group col-sm-6">
+        <label>Meal name
+          <span style="color:red;">*</span>
+        </label>
+        <input type="text" class="form-control" id="name" name="name" [ngClass]="{'is-invalid': mealForm.submitted && name.invalid, 'is-valid': mealForm.submitted && name.valid }"
+          #name="ngModel" [(ngModel)]="mealWithIngredients.name" required>
+        <div class="invalid-feedback" *ngIf="mealForm.submitted && name.invalid">
+          <div *ngIf="name.errors?.required">This cannot be empty.</div>
         </div>
-  
-        <div class="form-row">
-          <div class="form-group col-sm-6">
-            <label>Prep Time</label>
-            <input type="number" class="form-control" id="prepTime" name="prepTime" [ngClass]="{'is-invalid': mealForm.submitted && prepTime.invalid, 'is-valid': mealForm.submitted && prepTime.valid }"
-              (blur)="onNumberBlur(prepTime)" #prepTime="ngModel" [(ngModel)]="mealWithIngredients.prepTime" required>
-            <div class="invalid-feedback" *ngIf="mealForm.submitted && prepTime.invalid">
-              <div *ngIf="prepTime.errors?.required">This cannot be empty.</div>
-            </div>
-          </div>
-          <div class="form-group col-sm-6">
-            <label>Cook Time</label>
-            <input type="number" class="form-control" id="cookTime" name="cookTime" [ngClass]="{'is-invalid': mealForm.submitted && cookTime.invalid, 'is-valid': mealForm.submitted && cookTime.valid }"
-              (blur)="onNumberBlur(cookTime)" #cookTime="ngModel" [(ngModel)]="mealWithIngredients.cookTime" required>
-            <div class="invalid-feedback" *ngIf="mealForm.submitted && cookTime.invalid">
-              <div *ngIf="cookTime.errors?.required">This cannot be empty.</div>
-            </div>
-          </div>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label>Image URL
+          <span style="color:red;">*</span>
+        </label>
+        <input type="text" class="form-control" id="imageUrl" name="imageUrl" [ngClass]="{'is-invalid': mealForm.submitted && imageUrl.invalid, 'is-valid': mealForm.submitted && imageUrl.valid }"
+          #imageUrl="ngModel" [(ngModel)]="mealWithIngredients.imageUrl" required url>
+        <div class="invalid-feedback" *ngIf="mealForm.submitted && imageUrl.invalid">
+          <div *ngIf="imageUrl.errors?.required">This cannot be empty.</div>
+          <div *ngIf="imageUrl.errors?.url">This needs to be a valid URL.</div>
         </div>
-  
-        <div class="form-row">
-          <div class="form-group col-sm-6">
-            <label>Source name</label>
-            <input type="text" class="form-control" id="sourceName" name="sourceName" [ngClass]="{'is-invalid': mealForm.submitted && sourceName.invalid, 'is-valid': mealForm.submitted && sourceName.valid }"
-              #sourceName="ngModel" [(ngModel)]="mealWithIngredients.sourceName">
-            <div class="invalid-feedback" *ngIf="mealForm.submitted && sourceName.invalid">
-            </div>
-          </div>
-  
-          <div class="form-group col-sm-6">
-            <label>Source URL</label>
-            <input type="text" class="form-control" id="sourceUrl" name="sourceUrl" [ngClass]="{'is-invalid': mealForm.submitted && sourceUrl.invalid, 'is-valid': mealForm.submitted && sourceUrl.valid }"
-              #sourceUrl="ngModel" [(ngModel)]="mealWithIngredients.sourceUrl" url>
-            <div class="invalid-feedback" *ngIf="mealForm.submitted && sourceUrl.invalid">
-              <div *ngIf="sourceUrl.errors?.url">This needs to be a valid URL.</div>
-            </div>
-          </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-sm-6">
+        <label>Prep Time
+          <span style="color:red;">*</span>
+        </label>
+        <input type="number" class="form-control" id="prepTime" name="prepTime" [ngClass]="{'is-invalid': mealForm.submitted && prepTime.invalid, 'is-valid': mealForm.submitted && prepTime.valid }"
+          (blur)="onNumberBlur(prepTime)" #prepTime="ngModel" [(ngModel)]="mealWithIngredients.prepTime" required>
+        <div class="invalid-feedback" *ngIf="mealForm.submitted && prepTime.invalid">
+          <div *ngIf="prepTime.errors?.required">This cannot be empty.</div>
         </div>
-  
-        <ngb-tabset>
-          <ngb-tab title="Ingredients">
-            <ng-template ngbTabContent>
-              <div class="mt-3">
-  
-              </div>
-            </ng-template>
-          </ngb-tab>
-          <ngb-tab title="Cooking Instructions">
-            <ng-template ngbTabContent>
-              <div class="mt-3">
-                <h5>Cooking Instructions</h5>
-                <div class="form-group" *ngFor="let instruction of mealWithIngredients.cookInstructions; index as i; trackBy: identify" [attr.data-index]="i">
-                  <textarea class="form-control" rows="3" id="instruction{{i}}" name="instruction{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && instruction.invalid, 'is-valid': mealForm.submitted && instruction.valid }"
-                    #cookInstructions[i]="ngModel" [(ngModel)]="mealWithIngredients.cookInstructions[i]"></textarea>
-                  <div class="invalid-feedback" *ngIf="mealForm.submitted && tip.invalid">
-                  </div>
-                </div>
-                <div>
-                  <button type="button" class="btn btn-primary btn-sm" (click)="addCookInstruction()">
-                    <span class="glyphicon glyphicon-plus"></span> Add New Instruction
-                  </button>
-                  <button type="button" class="btn btn-danger btn-sm" (click)="removeCookInstruction()">
-                    <span class="glyphicon glyphicon-remove-circle"></span> Remove Last Instruction
-                  </button>
-                </div>
-              </div>
-            </ng-template>
-          </ngb-tab>
-          <ngb-tab title="Prep Instructions">
-            <ng-template ngbTabContent class="mt-5">
-              <div class="mt-3">
-                <h5>Prep Instructions</h5>
-                <div class="form-group" *ngFor="let instruction of mealWithIngredients.prepInstructions; index as i; trackBy: identify" [attr.data-index]="i">
-                  <textarea class="form-control" rows="3" id="instruction{{i}}" name="instruction{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && instruction.invalid, 'is-valid': mealForm.submitted && instruction.valid }"
-                    #prepInstructions[i]="ngModel" [(ngModel)]="mealWithIngredients.prepInstructions[i]"></textarea>
-                  <div class="invalid-feedback" *ngIf="mealForm.submitted && tip.invalid">
-                  </div>
-                </div>
-                <div>
-                    <button type="button" class="btn btn-primary btn-sm" (click)="addPrepInstruction()">
-                      <span class="glyphicon glyphicon-plus"></span> Add New Instruction
-                    </button>
-                    <button type="button" class="btn btn-danger btn-sm" (click)="removePrepInstruction()">
-                      <span class="glyphicon glyphicon-remove-circle"></span> Remove Last Instruction
-                    </button>
-                  </div>
-              </div>
-            </ng-template>
-          </ngb-tab>
-          <ngb-tab title="Tip">
-            <ng-template ngbTabContent class="mt-5">
-              <div class="mt-3">
-                <div class="form-group">
-                  <label>Tip</label>
-                  <textarea class="form-control" rows="3" id="tip" name="tip" [ngClass]="{'is-invalid': mealForm.submitted && tip.invalid, 'is-valid': mealForm.submitted && tip.valid }"
-                    #tip="ngModel" [(ngModel)]="mealWithIngredients.tip"></textarea>
-                  <div class="invalid-feedback" *ngIf="mealForm.submitted && tip.invalid">
-                  </div>
+      </div>
+      <div class="form-group col-sm-6">
+        <label>Cook Time
+          <span style="color:red;">*</span>
+        </label>
+        <input type="number" class="form-control" id="cookTime" name="cookTime" [ngClass]="{'is-invalid': mealForm.submitted && cookTime.invalid, 'is-valid': mealForm.submitted && cookTime.valid }"
+          (blur)="onNumberBlur(cookTime)" #cookTime="ngModel" [(ngModel)]="mealWithIngredients.cookTime" required>
+        <div class="invalid-feedback" *ngIf="mealForm.submitted && cookTime.invalid">
+          <div *ngIf="cookTime.errors?.required">This cannot be empty.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-sm-6">
+        <label>Source name</label>
+        <input type="text" class="form-control" id="sourceName" name="sourceName" [ngClass]="{'is-invalid': mealForm.submitted && sourceName.invalid, 'is-valid': mealForm.submitted && sourceName.valid }"
+          #sourceName="ngModel" [(ngModel)]="mealWithIngredients.sourceName">
+        <div class="invalid-feedback" *ngIf="mealForm.submitted && sourceName.invalid">
+        </div>
+      </div>
+
+      <div class="form-group col-sm-6">
+        <label>Source URL</label>
+        <input type="text" class="form-control" id="sourceUrl" name="sourceUrl" [ngClass]="{'is-invalid': mealForm.submitted && sourceUrl.invalid, 'is-valid': mealForm.submitted && sourceUrl.valid }"
+          #sourceUrl="ngModel" [(ngModel)]="mealWithIngredients.sourceUrl" url>
+        <div class="invalid-feedback" *ngIf="mealForm.submitted && sourceUrl.invalid">
+          <div *ngIf="sourceUrl.errors?.url">This needs to be a valid URL.</div>
+        </div>
+      </div>
+    </div>
+
+    <ngb-tabset>
+      <ngb-tab title="Ingredients">
+        <ng-template ngbTabContent>
+          <div class="mt-3">
+            <h5>Ingredients</h5>
+            <div class="form-row">
+              <label class="col-sm-2">Amount
+                <span style="color:red;">*</span>
+              </label>
+              <label class="col-sm 4">Item
+                <span style="color:red;">*</span>
+              </label>
+              <label class="col-sm-2">Category
+                <span style="color:red;">*</span>
+              </label>
+              <label class="col-sm-4">Note</label>
+            </div>
+            <div class="form-row" *ngFor="let ingredient of mealWithIngredients.ingredients; index as i; trackBy: identify;">
+              <div class="form-group col-sm-2">
+                <input type="text" class="form-control" id="amount{{i}}" name="amount{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && getFormControl('amount' + i).invalid, 'is-valid': mealForm.submitted && getFormControl('amount' + i).valid }"
+                  #amount="ngModel" [(ngModel)]="mealWithIngredients.ingredients[i].amount" required>
+                <div class="invalid-feedback" *ngIf="mealForm.submitted && getFormControl('amount' + i).invalid">
+                  <div *ngIf="getFormControl('amount' + i).errors?.required">This cannot be empty.</div>
                 </div>
               </div>
-            </ng-template>
-          </ngb-tab>
-        </ngb-tabset>
-  
-      </form>
+              <div class="form-group col-sm-4">
+                <input type="text" class="form-control" id="item{{i}}" name="item{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && getFormControl('item' + i).invalid, 'is-valid': mealForm.submitted && getFormControl('item' + i).valid }"
+                  #item="ngModel" [(ngModel)]="mealWithIngredients.ingredients[i].item" required>
+                <div class="invalid-feedback" *ngIf="mealForm.submitted && getFormControl('item' + i).invalid">
+                  <div *ngIf="getFormControl('item' + i).errors?.required">This cannot be empty.</div>
+                </div>
+              </div>
+              <div class="form-group col-sm-2">
+                <select class="form-control" id="category{{i}}" name="category{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && getFormControl('category' + i).invalid, 'is-valid': mealForm.submitted && getFormControl('category' + i).valid }"
+                  #category="ngModel" [(ngModel)]="mealWithIngredients.ingredients[i].category" required>
+                  <option selected>PRODUCE</option>
+                  <option>MEAT_SEAFOOD</option>
+                  <option>EGGS_DAIRY</option>
+                  <option>FROZEN</option>
+                  <option>BAKING_CONDIMENTS</option>
+                  <option>DRY_CANNED</option>
+                  <option>SPICES</option>
+                  <option>OTHER</option>
+                </select>
+                <div class="invalid-feedback" *ngIf="mealForm.submitted && getFormControl('category' + i).invalid">
+                  <div *ngIf="getFormControl('category' + i).errors?.required">This cannot be empty.</div>
+                </div>
+              </div>
+              <div class="form-group col-sm-3">
+                <input type="text" class="form-control" id="note{{i}}" name="note{{i}}" #note="ngModel" [(ngModel)]="mealWithIngredients.ingredients[i].note">
+              </div>
+              <div class="form-group col-sm-1">
+                <button type="button" class="btn btn-danger btn-sm" (click)="removeIngredient(i)">
+                  <span class="glyphicon glyphicon-remove-circle"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button type="button" class="btn btn-primary btn-sm" (click)="addIngredient()">
+              <span class="glyphicon glyphicon-plus"></span> Add Ingredient
+            </button>
+          </div>
+
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Cooking Instructions">
+        <ng-template ngbTabContent>
+          <div class="mt-3">
+            <h5>Cooking Instructions</h5>
+            <div class="form-group" *ngFor="let cookInstruction of mealWithIngredients.cookInstructions; index as i; trackBy: identify" [attr.data-index]="i">
+              <textarea class="form-control" rows="3" id="cookInstruction{{i}}" name="cookInstruction{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && getFormControl('cookInstruction' + i).invalid, 'is-valid': mealForm.submitted && getFormControl('cookInstruction' + i).valid }"
+                #cookInstructions[i]="ngModel" [(ngModel)]="mealWithIngredients.cookInstructions[i]" required></textarea>
+              <div class="invalid-feedback" *ngIf="mealForm.submitted && getFormControl('cookInstruction' + i).invalid">
+                <div *ngIf="getFormControl('cookInstruction' + i).errors?.required">This cannot be empty.</div>
+              </div>
+            </div>
+            <div>
+              <button type="button" class="btn btn-primary btn-sm" (click)="addCookInstruction()">
+                <span class="glyphicon glyphicon-plus"></span> Add New Instruction
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" (click)="removeCookInstruction()">
+                <span class="glyphicon glyphicon-remove-circle"></span> Remove Last Instruction
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Prep Instructions">
+        <ng-template ngbTabContent class="mt-5">
+          <div class="mt-3">
+            <h5>Prep Instructions</h5>
+            <div class="form-group" *ngFor="let prepInstruction of mealWithIngredients.prepInstructions; index as i; trackBy: identify" [attr.data-index]="i">
+              <textarea class="form-control" rows="3" id="prepInstruction{{i}}" name="prepInstruction{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && getFormControl('prepInstruction' + i).invalid, 'is-valid': mealForm.submitted && getFormControl('prepInstruction' + i).valid }"
+                #prepInstructions[i]="ngModel" [(ngModel)]="mealWithIngredients.prepInstructions[i]" required></textarea>
+              <div class="invalid-feedback" *ngIf="mealForm.submitted && getFormControl('prepInstruction' + i).invalid">
+                <div *ngIf="getFormControl('prepInstruction' + i).errors?.required">This cannot be empty.</div>
+              </div>
+            </div>
+            <div>
+              <button type="button" class="btn btn-primary btn-sm" (click)="addPrepInstruction()">
+                <span class="glyphicon glyphicon-plus"></span> Add New Instruction
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" (click)="removePrepInstruction()">
+                <span class="glyphicon glyphicon-remove-circle"></span> Remove Last Instruction
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Tip">
+        <ng-template ngbTabContent class="mt-5">
+          <div class="mt-3">
+            <div class="form-group">
+              <label>Tip</label>
+              <textarea class="form-control" rows="3" id="tip" name="tip" [ngClass]="{'is-invalid': mealForm.submitted && tip.invalid, 'is-valid': mealForm.submitted && tip.valid }"
+                #tip="ngModel" [(ngModel)]="mealWithIngredients.tip"></textarea>
+              <div class="invalid-feedback" *ngIf="mealForm.submitted && tip.invalid">
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+
+  </form>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-outline-dark" (click)="close()">Cancel</button>

@@ -148,12 +148,13 @@
           <ng-template ngbTabContent>
             <div class="mt-3">
               <h5>Cooking Instructions</h5>
-              <div class="form-group" *ngFor="let instruction of mealWithIngredients.cookInstructions; index as i; trackBy: identify" [attr.data-index]="i">
-                <textarea class="form-control" rows="3" id="instruction{{i}}" name="instruction{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && instruction.invalid, 'is-valid': mealForm.submitted && instruction.valid }"
-                  #cookInstructions[i]="ngModel" [(ngModel)]="mealWithIngredients.cookInstructions[i]"></textarea>
-                <div class="invalid-feedback" *ngIf="mealForm.submitted && tip.invalid">
+              <div class="form-group" *ngFor="let cookInstruction of mealWithIngredients.cookInstructions; index as i; trackBy: identify" [attr.data-index]="i">
+                  <textarea class="form-control" rows="3" id="cookInstruction{{i}}" name="cookInstruction{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && getFormControl('cookInstruction' + i).invalid, 'is-valid': mealForm.submitted && getFormControl('cookInstruction' + i).valid }"
+                    #cookInstructions[i]="ngModel" [(ngModel)]="mealWithIngredients.cookInstructions[i]" required></textarea>
+                  <div class="invalid-feedback" *ngIf="mealForm.submitted && getFormControl('cookInstruction' + i).invalid">
+                    <div *ngIf="getFormControl('cookInstruction' + i).errors?.required">This cannot be empty.</div>
+                  </div>
                 </div>
-              </div>
               <div>
                 <button type="button" class="btn btn-primary btn-sm" (click)="addCookInstruction()">
                   <span class="glyphicon glyphicon-plus"></span> Add New Instruction
@@ -169,12 +170,13 @@
           <ng-template ngbTabContent class="mt-5">
             <div class="mt-3">
               <h5>Prep Instructions</h5>
-              <div class="form-group" *ngFor="let instruction of mealWithIngredients.prepInstructions; index as i; trackBy: identify" [attr.data-index]="i">
-                <textarea class="form-control" rows="3" id="instruction{{i}}" name="instruction{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && instruction.invalid, 'is-valid': mealForm.submitted && instruction.valid }"
-                  #prepInstructions[i]="ngModel" [(ngModel)]="mealWithIngredients.prepInstructions[i]"></textarea>
-                <div class="invalid-feedback" *ngIf="mealForm.submitted && tip.invalid">
+              <div class="form-group" *ngFor="let prepInstruction of mealWithIngredients.prepInstructions; index as i; trackBy: identify" [attr.data-index]="i">
+                  <textarea class="form-control" rows="3" id="prepInstruction{{i}}" name="prepInstruction{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && getFormControl('prepInstruction' + i).invalid, 'is-valid': mealForm.submitted && getFormControl('prepInstruction' + i).valid }"
+                    #prepInstructions[i]="ngModel" [(ngModel)]="mealWithIngredients.prepInstructions[i]" required></textarea>
+                  <div class="invalid-feedback" *ngIf="mealForm.submitted && getFormControl('prepInstruction' + i).invalid">
+                    <div *ngIf="getFormControl('prepInstruction' + i).errors?.required">This cannot be empty.</div>
+                  </div>
                 </div>
-              </div>
               <div>
                 <button type="button" class="btn btn-primary btn-sm" (click)="addPrepInstruction()">
                   <span class="glyphicon glyphicon-plus"></span> Add New Instruction

@@ -4,6 +4,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { WeeklyMenuDTO } from '../../../../../data/dto/menu/WeeklyMenuDTO';
 import { MealModel } from '../../../../../model/MealModel';
 import { MealDTO } from '../../../../../data/dto/menu/MealDTO';
+import { IngredientModel } from '../../../../../model/IngredientModel';
+import { IngredientDTO } from '../../../../../data/dto/menu/IngredientDTO';
 import { WeeklyMenu } from '../../../../../data/local/menu/WeeklyMenu';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
@@ -28,7 +30,8 @@ export class MealCreatePopupComponent implements OnInit {
   private mealForm: NgForm;
 
   constructor(public activeModal: NgbActiveModal,
-    public mealModel: MealModel) {
+    public mealModel: MealModel,
+    public ingredientModel: IngredientModel) {
 
     this.mealWithIngredients.ingredients = [];
     this.mealWithIngredients.cookInstructions = [];
@@ -40,8 +43,8 @@ export class MealCreatePopupComponent implements OnInit {
   }
 
   // This is used for trackByFn in ngFor, to keep focus on element when typing.
-  identify(index, item){
-    return index; 
+  identify(index, item) {
+    return index;
   }
 
   close() {
@@ -56,20 +59,64 @@ export class MealCreatePopupComponent implements OnInit {
     this.mealForm.onSubmit(null);
 
     if (this.mealForm.form.valid) {
-      const dto: MealDTO = Meal.toDTO(this.mealWithIngredients);
+      var p = Promise.resolve(); // Start with a resolved promise, so saves and updates happen synchonously
 
-      this.mealModel.createMeal(dto)
-        .then((updatedMeal: MealDTO) => {
-          this.activeModal.close(updatedMeal);
+      // Create ingredients that don't have IDs, and update those that do
+      this.mealWithIngredients.ingredients.forEach((ingredient, index) => {
+        p = p.then((res) => {
+          if (ingredient.id == null) {
+            return this.ingredientModel.createIngredient(ingredient)
+              .then((newIngredient: IngredientDTO) => {
+                this.mealWithIngredients.ingredients.push(newIngredient);
+              })
+              .catch((error) => { })
+          } else {
+            return this.ingredientModel.updateIngredient(ingredient)
+              .then((newIngredient: IngredientDTO) => {})
+              .catch((error) => { })
+          }
         })
-        .catch((error) => {
-          //
-        });
+      })
+
+      // Now, ready to save the new meal
+      p = p.then((res) => {
+        const dto: MealDTO = Meal.toDTO(this.mealWithIngredients);
+
+        return this.mealModel.createMeal(dto)
+          .then((newMeal: MealDTO) => {
+            this.mealWithIngredients.id = newMeal.id;
+            this.meal = newMeal;
+          })
+          .catch((error) => { });
+      })
+          
+      // Finally, go back and set the mealId for the new ingredients
+      this.mealWithIngredients.ingredients.filter((ingredient) => {ingredient.id != null}).forEach((ingredient) => {
+        p = p.then((res) => {
+          ingredient.mealId = this.mealWithIngredients.id;
+          return this.ingredientModel.updateIngredient(ingredient)
+              .then((newIngredient: IngredientDTO) => {})
+              .catch((error) => { })
+        })
+      })
+
+      p = p.then((res) => {
+        this.activeModal.close(this.meal);
+      })
     }
   }
 
+  addIngredient() {
+    var ingredient = new IngredientDTO();
+    this.mealWithIngredients.ingredients.push(ingredient);
+  }
+
+  removeIngredient(index: number) {
+    this.mealWithIngredients.ingredients.splice(index, 1)
+  }
+
   addCookInstruction() {
-    if(this.mealWithIngredients.cookInstructions == null){
+    if (this.mealWithIngredients.cookInstructions == null) {
       this.mealWithIngredients.cookInstructions = [];
     }
     this.mealWithIngredients.cookInstructions.push("Add new instruction...");
@@ -80,7 +127,7 @@ export class MealCreatePopupComponent implements OnInit {
   }
 
   addPrepInstruction() {
-    if(this.mealWithIngredients.prepInstructions == null){
+    if (this.mealWithIngredients.prepInstructions == null) {
       this.mealWithIngredients.prepInstructions = [];
     }
     this.mealWithIngredients.prepInstructions.push("Add new instruction...");
@@ -96,5 +143,9 @@ export class MealCreatePopupComponent implements OnInit {
     if (model.viewModel === null) {
       model.control.setValue(null);
     }
+  }
+
+  getFormControl(name: string) {
+    return this.mealForm.form.controls[name];
   }
 }
