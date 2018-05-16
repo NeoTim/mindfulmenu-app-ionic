@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { ActionSheetController, NavController } from 'ionic-angular';
 import { AuthModel } from "../../../../model/AuthModel";
 import { UserDTO } from "../../../../data/dto/user/UserDTO";
 import { UserModel } from "../../../../model/UserModel";
@@ -18,6 +18,7 @@ export class MoreComponent {
 
   constructor(public navCtrl: NavController,
               public viewUtil: ViewUtil,
+              public actionSheetCtrl: ActionSheetController,
               public config: ApplicationConfig,
               public authModel: AuthModel,
               public userModel: UserModel) {
@@ -38,7 +39,8 @@ export class MoreComponent {
   }
 
   logout() {
-    this.viewUtil.showConfirmation('Please confirm', 'Are you sure you want to log out?')
+    // popup version
+    this.viewUtil.showConfirmation('Please confirm', 'Do you want to log out now?')
       .then(() => {
         this.authModel.logout()
           .then((result) => {})
@@ -47,6 +49,38 @@ export class MoreComponent {
       .catch(() => {
 
       });
+
+    // actionsheet version
+    /*
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Do you want to log out now?',
+      buttons: [
+        {
+          text: 'Log out',
+          role: 'destructive',
+          handler: () => {
+            actionSheet.dismiss();
+            actionSheet = null;
+
+            this.authModel.logout()
+              .then((result) => {})
+              .catch((error) => {});
+
+            return false;
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            actionSheet = null;
+          }
+        }
+      ]
+    });
+
+    actionSheet.present();
+    */
   }
 
 }

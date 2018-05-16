@@ -1,0 +1,55 @@
+<div class="top-doodad"></div>
+
+<div class="close-button with-top-doodad" (click)="close()"></div>
+
+<ion-content class="with-top-doodad" padding>
+  <h1 text-center>Shopping List</h1>
+
+  <ng-container *ngIf="shoppingList">
+    <p text-center>Checked {{ shoppingList.totalChecked + ' / ' + shoppingList.total }}</p>
+    <div *ngIf="shoppingList.hasEmptyCategories">
+      <button ion-button block type="button" (click)="toggleEmptyCategories()">
+        <span *ngIf="showEmptyCategories">Hide empty categories</span>
+        <span *ngIf="!showEmptyCategories">Show empty categories</span>
+      </button>
+    </div>
+    <div class="h-divider big"></div>
+
+    <ng-container *ngFor="let category of shoppingList.categories">
+      <div class="slCategory" *ngIf="showEmptyCategories || (!showEmptyCategories && !category.isEmpty)">
+        <h4 [ngSwitch]="category.name">
+          <ng-container *ngSwitchCase="IngredientCategory.PRODUCE">Produce</ng-container>
+          <ng-container *ngSwitchCase="IngredientCategory.MEAT_SEAFOOD">Meat & Seafood</ng-container>
+          <ng-container *ngSwitchCase="IngredientCategory.EGGS_DAIRY">Eggs & Dairy</ng-container>
+          <ng-container *ngSwitchCase="IngredientCategory.FROZEN">Frozen</ng-container>
+          <ng-container *ngSwitchCase="IngredientCategory.BAKING_CONDIMENTS">Baking & Condiments</ng-container>
+          <ng-container *ngSwitchCase="IngredientCategory.DRY_CANNED">Dry & Canned</ng-container>
+          <ng-container *ngSwitchCase="IngredientCategory.SPICES">Spices</ng-container>
+          <ng-container *ngSwitchCase="IngredientCategory.OTHER">Other</ng-container>
+        </h4>
+        <div class="slItem" *ngFor="let item of category.items">
+          <ion-item>
+            <ion-label>
+              <span class="itemName">{{ item.ingredient.item }}</span>
+              <span class="itemAmount" *ngIf="item.ingredient.amount">({{ item.ingredient.amount }})</span>
+            </ion-label>
+            <ion-checkbox [(ngModel)]="item.checked" (ngModelChange)="onShoppingListItemChecked(item, $event)"></ion-checkbox>
+            <div class="remove" *ngIf="item.ingredient.isCustomItem" item-end (click)="removeItemFromCategory(item, category); $event.preventDefault();">
+              <div class="removeIcon"></div>
+            </div>
+          </ion-item>
+          <div class="h-divider"></div>
+        </div>
+        <div class="slItem">
+          <ion-item class="clickable" (click)="addItemToCategory(category)">
+            <div class="add" item-start>
+              <div class="addIcon"></div>
+            </div>
+            <ion-label>Add new item</ion-label>
+          </ion-item>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+</ion-content>

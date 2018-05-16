@@ -14,12 +14,19 @@ export class FirestoreManager {
   }
 
   public queryToObjectArray(querySnapshot: firebase.firestore.QuerySnapshot): object[] {
-    return _.map(querySnapshot.docs, (queryDocumentSnapshot: firebase.firestore.QueryDocumentSnapshot) => {
+    let result: object[] = _.map(querySnapshot.docs, (queryDocumentSnapshot: firebase.firestore.QueryDocumentSnapshot) => {
       let obj: object = queryDocumentSnapshot.data();
-      obj['id'] = queryDocumentSnapshot.id;
 
-      return obj;
+      if (!_.isNil(obj)) {
+        obj['id'] = queryDocumentSnapshot.id;
+        return obj;
+      }
+      else {
+        return null;
+      }
     });
+
+    return _.without(result, null);
   }
 
   // for queries from which you expect only one unique result (array with single object)
@@ -28,7 +35,12 @@ export class FirestoreManager {
 
     if (result) {
       if (result.length === 1) {
-        return result[0];
+        if (!_.isNil(result[0])) {
+          return result[0];
+        }
+        else {
+          return null;
+        }
       }
       else {
         // if there's more than one or none at all, then it's unexpected result
@@ -41,16 +53,23 @@ export class FirestoreManager {
   }
 
   public documentArrayToObjectArray(documentSnapshots: firebase.firestore.DocumentSnapshot[]): object[] {
-    return _.map(documentSnapshots, (documentSnapshot: firebase.firestore.DocumentSnapshot) => {
+    let result: object[] = _.map(documentSnapshots, (documentSnapshot: firebase.firestore.DocumentSnapshot) => {
       return this.documentToObject(documentSnapshot);
     });
+
+    return _.without(result, null);
   }
 
   public documentToObject(documentSnapshot: firebase.firestore.DocumentSnapshot): object {
     let obj: object = documentSnapshot.data();
-    obj['id'] = documentSnapshot.id;
 
-    return obj;
+    if (!_.isNil(obj)) {
+      obj['id'] = documentSnapshot.id;
+      return obj;
+    }
+    else {
+      return null;
+    }
   }
 
   public stripUndefined(obj: any): any {

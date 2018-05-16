@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Navbar, NavController, NavParams } from 'ionic-angular';
+import { ModalController, Navbar, NavController, NavParams } from 'ionic-angular';
 import { WeeklyMenuModel } from "../../../../../model/WeeklyMenuModel";
 import { WeeklyMenuDTO } from "../../../../../data/dto/menu/WeeklyMenuDTO";
 import { MealModel } from "../../../../../model/MealModel";
@@ -10,6 +10,8 @@ import { WeeklyMenu } from "../../../../../data/local/menu/WeeklyMenu";
 import * as _ from "lodash";
 import { WeeklyPlanModel } from "../../../../../model/WeeklyPlanModel";
 import { WeeklyPlanDTO } from "../../../../../data/dto/menu/WeeklyPlanDTO";
+import { MealComponent } from "../../meal/MealComponent";
+import { ApplicationModel } from "../../../../../model/ApplicationModel";
 
 @Component({
   selector: 'weekly-menu',
@@ -32,7 +34,9 @@ export class WeeklyMenuComponent {
   inCurrentPlanMealsMap: { [key: string]: boolean };
 
   constructor(public navCtrl: NavController,
+              public modalCtrl: ModalController,
               public navParams: NavParams,
+              public applicationModel: ApplicationModel,
               public weeklyMenuModel: WeeklyMenuModel,
               public weeklyPlanModel: WeeklyPlanModel,
               public mealModel: MealModel,
@@ -55,8 +59,49 @@ export class WeeklyMenuComponent {
     this.getCurrentWeeklyPlan();
   }
 
-  getWeeklyMenuWithMeals() {
-     this.weeklyMenuModel.getWeeklyMenu(this.weeklyMenuId)
+  silentReload() {
+    this.currentUser = this.userModel.currentUser;
+
+    this.applicationModel.suppressLoading = true;
+
+    let getWeeklyMenuWithMealsFinished: boolean = false;
+    let getCurrentWeeklyPlanFinished: boolean = false;
+
+    this.getWeeklyMenuWithMeals()
+      .then(() => {
+        getWeeklyMenuWithMealsFinished = true;
+
+        if (getWeeklyMenuWithMealsFinished && getCurrentWeeklyPlanFinished) {
+          this.applicationModel.suppressLoading = false;
+        }
+      })
+      .catch(() => {
+        getWeeklyMenuWithMealsFinished = true;
+
+        if (getWeeklyMenuWithMealsFinished && getCurrentWeeklyPlanFinished) {
+          this.applicationModel.suppressLoading = false;
+        }
+      });
+
+    this.getCurrentWeeklyPlan()
+      .then(() => {
+        getCurrentWeeklyPlanFinished = true;
+
+        if (getWeeklyMenuWithMealsFinished && getCurrentWeeklyPlanFinished) {
+          this.applicationModel.suppressLoading = false;
+        }
+      })
+      .catch(() => {
+        getCurrentWeeklyPlanFinished = true;
+
+        if (getWeeklyMenuWithMealsFinished && getCurrentWeeklyPlanFinished) {
+          this.applicationModel.suppressLoading = false;
+        }
+      });
+  }
+
+  getWeeklyMenuWithMeals(): Promise<WeeklyMenu> {
+     return this.weeklyMenuModel.getWeeklyMenu(this.weeklyMenuId)
       .then((weeklyMenu: WeeklyMenuDTO) => {
         this.weeklyMenuDto = weeklyMenu;
 
@@ -66,28 +111,38 @@ export class WeeklyMenuComponent {
           this.calculateInCurrentPlanMealsMap(this.weeklyMenuDto.mealIds, this.weeklyPlanDto.mealIds);
         }
 
-        this.mealModel.getMeals(weeklyMenu.mealIds)
+        return this.mealModel.getMeals(weeklyMenu.mealIds)
           .then((meals: MealDTO[]) => {
             let weeklyMenuWithMeals: WeeklyMenu = WeeklyMenu.fromDTO(weeklyMenu);
             weeklyMenuWithMeals.meals = meals;
 
             this.weeklyMenu = weeklyMenuWithMeals;
+
+            return this.weeklyMenu;
           })
-          .catch((error) => {});
+          .catch((error) => {
+            return Promise.reject(error);
+          });
       })
-      .catch((error) => {});
+      .catch((error) => {
+        return Promise.reject(error);
+      });
   }
 
-  getCurrentWeeklyPlan() {
-    this.weeklyPlanModel.getCurrentWeeklyPlan(this.currentUser.id)
+  getCurrentWeeklyPlan(): Promise<WeeklyPlanDTO> {
+    return this.weeklyPlanModel.getCurrentWeeklyPlan(this.currentUser.id)
       .then((weeklyPlan: WeeklyPlanDTO) => {
         this.weeklyPlanDto = weeklyPlan;
 
         if (this.weeklyMenuDto && this.weeklyPlanDto) {
           this.calculateInCurrentPlanMealsMap(this.weeklyMenuDto.mealIds, this.weeklyPlanDto.mealIds);
         }
+
+        return this.weeklyPlanDto;
       })
-      .catch((error) => {});
+      .catch((error) => {
+        return Promise.reject(error);
+      });
   }
 
   calculateFavoriteMealsMap(mealIds: string[], favoriteMealIds: string[]) {
@@ -132,15 +187,17 @@ export class WeeklyMenuComponent {
       .then((weeklyPlan: WeeklyPlanDTO) => {
         this.weeklyPlanDto = weeklyPlan;
 
-        if (this.weeklyMenuDto && this.weeklyPlanDto) {
-          this.calculateInCurrentPlanMealsMap(this.weeklyMenuDto.mealIds, this.weeklyPlanDto.mealIds);
-        }
+        this.calculateInCurrentPlanMealsMap(this.weeklyMenuDto.mealIds, this.weeklyPlanDto.mealIds);
       })
       .catch((error) => {});
   }
 
   showMeal(meal: MealDTO) {
-    console.log(meal);
+    let modal = this.modalCtrl.create(MealComponent, { mealId: meal.id });
+    modal.onDidDismiss(data => {
+      this.silentReload();
+    });
+    modal.present();
   }
 
 }

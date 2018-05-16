@@ -78,6 +78,33 @@ ion-header {
   }
 }
 
+ion-checkbox {
+  .checkbox-icon {
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 50% !important;
+    border-color: #d1d9e9 !important;
+    background-color: #d1d9e9 !important;
+  }
+
+  .checkbox-checked {
+    .checkbox-inner {
+      border-color: #56637a !important;
+      left: 6px !important;
+      top: 2px !important;
+      width: 7px !important;
+      height: 13px !important;
+    }
+  }
+}
+
+
+button[ion-button].button {
+  border-radius: 30px !important;
+  text-transform: uppercase !important;
+}
+
+
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Brusher' !important;
 }
@@ -100,6 +127,10 @@ h4 {
 
 h5 {
   font-size: 18px !important;
+}
+
+input {
+  font-family: 'Trocchi' !important;
 }
 
 .error {
@@ -128,10 +159,6 @@ h5 {
   pointer-events: none;
 }
 
-button[ion-button].button {
-  border-radius: 30px !important;
-}
-
 .close-button {
   position: absolute;
   right: 20px;
@@ -141,13 +168,19 @@ button[ion-button].button {
   background-image: url(../asset/ic_circle_close@3x.png);
   background-size: 45px auto;
   background-repeat: no-repeat;
+  cursor: pointer;
   z-index: 9999;
+
+  &.white {
+    background-image: url(../asset/ic_circle_close_white@3x.png);
+  }
 
   &.with-top-doodad {
     top: 40px;
   }
 }
 
+// -- iOS specific
 
 ion-app.platform-ios {
   .top-doodad {
@@ -179,5 +212,15 @@ ion-app.platform-ios {
       min-height: 116px !important;
     }
   }
+}
 
+button.item-ios:not([detail-none]) {
+  .item-inner {
+    background: none !important;
+    padding-right: 0px !important;
+  }
+}
+
+.button-ios {
+  font-size: 1.4rem !important;
 }

@@ -13,9 +13,7 @@ export class IngredientDTO extends IdentifiableDTO {
 
   isCustomItem: boolean;
 
-  amount: number;
-
-  unit: string;
+  amount: string;
 
   item: string;
 

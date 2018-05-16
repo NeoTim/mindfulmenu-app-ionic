@@ -17,7 +17,8 @@
     "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
-    "ionic:serve": "ionic-app-scripts serve"
+    "ionic:serve": "ionic-app-scripts serve",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@angular/animations": "5.2.9",
@@ -57,12 +58,14 @@
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.16",
     "ng4-validators": "^5.1.0",
+    "reveal.js": "^3.6.0",
     "rxjs": "5.5.8",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.9",
+    "patch-package": "^5.1.1",
     "typescript": "~2.6.2"
   },
   "cordova": {

@@ -39,7 +39,12 @@ import { WeeklyMenuComponent } from "./component/view/main/menus/weeklyMenu/Week
 import { WeeklyPlanModel } from "./model/WeeklyPlanModel";
 import { WeeklyPlanService } from "./service/WeeklyPlanService";
 import { PrepListComponent } from "./component/view/main/myPlan/prepList/PrepListComponent";
-import { FavoriteListComponent } from "./component/view/main/menus/favorite/FavoriteListComponent";
+import { FavoritesComponent } from "./component/view/main/menus/favorites/FavoritesComponent";
+import { ShoppingListComponent } from "./component/view/main/myPlan/shoppingList/ShoppingListComponent";
+import { ApplicationModel } from "./model/ApplicationModel";
+import { MealComponent } from "./component/view/main/meal/MealComponent";
+import { Nl2BrPipe } from "./util/pipe/Nl2BrPipe";
+import { SanitizeHtmlPipe } from "./util/pipe/SanitizeHtmlPipe";
 
 @NgModule({
   declarations: [
@@ -49,13 +54,14 @@ import { FavoriteListComponent } from "./component/view/main/menus/favorite/Favo
     AuthLoginComponent,
     AuthOfflineComponent,
     MainComponent,
-    MenusComponent, WeeklyMenuComponent, FavoriteListComponent,
-    MyPlanComponent, PrepListComponent,
+    MenusComponent, WeeklyMenuComponent, FavoritesComponent,
+    MealComponent,
+    MyPlanComponent, PrepListComponent, ShoppingListComponent,
     MoreComponent, AboutComponent, AccountComponent, AccountChangePasswordComponent,
     // component/ui
     InternalUrlBrowserComponent,
     // util/pipe
-    SanitizeStylePipe
+    Nl2BrPipe, SanitizeHtmlPipe, SanitizeStylePipe
   ],
   entryComponents: [
     // main entry point
@@ -64,8 +70,9 @@ import { FavoriteListComponent } from "./component/view/main/menus/favorite/Favo
     AuthLoginComponent,
     AuthOfflineComponent,
     MainComponent,
-    MenusComponent, WeeklyMenuComponent, FavoriteListComponent,
-    MyPlanComponent, PrepListComponent,
+    MenusComponent, WeeklyMenuComponent, FavoritesComponent,
+    MealComponent,
+    MyPlanComponent, PrepListComponent, ShoppingListComponent,
     MoreComponent, AboutComponent, AccountComponent, AccountChangePasswordComponent,
     // component/ui
     InternalUrlBrowserComponent
@@ -75,8 +82,10 @@ import { FavoriteListComponent } from "./component/view/main/menus/favorite/Favo
     FormsModule,
     CustomFormsModule,
     IonicModule.forRoot(ApplicationComponent, {
-      mode: 'md',
+      mode: 'md',   /* remove this if you want native per-os experience */
+      iconMode: 'md',
       tabsHideOnSubPages: false,
+      tabsHighlight: true,
       backButtonText: '',
       backButtonIcon: 'custom-arrow-back',
       pageTransition: 'md-transition'
@@ -89,6 +98,7 @@ import { FavoriteListComponent } from "./component/view/main/menus/favorite/Favo
     Network,
     ApplicationConfig,
     FirebaseManager, FirestoreManager,
+    ApplicationModel,
     NetworkModel,
     AuthModel, AuthService,
     IngredientModel, IngredientService,
@@ -107,6 +117,7 @@ import { FavoriteListComponent } from "./component/view/main/menus/favorite/Favo
       multi: true,
       useFactory: (
                    FirebaseManager: FirebaseManager,
+                   ApplicationModel: ApplicationModel,
                    AuthModel: AuthModel,
                    NetworkModel: NetworkModel,
                    IngredientModel: IngredientModel,
@@ -117,6 +128,7 @@ import { FavoriteListComponent } from "./component/view/main/menus/favorite/Favo
       ) => () => {},
       deps: [
         FirebaseManager,
+        ApplicationModel,
         AuthModel,
         NetworkModel,
         IngredientModel,

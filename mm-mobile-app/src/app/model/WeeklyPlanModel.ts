@@ -157,4 +157,76 @@ export class WeeklyPlanModel {
       })
   }
 
+  public addCustomIngredientToWeeklyPlan(weeklyPlan: WeeklyPlanDTO, ingredientId: string): Promise<WeeklyPlanDTO> {
+    let customIngredientIds: string[] = _.cloneDeep(weeklyPlan.customIngredientIds);
+
+    customIngredientIds.push(ingredientId);
+
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.weeklyPlanService.updateWeeklyPlanCustomIngredientIds(weeklyPlan.id, customIngredientIds)
+      .then((weeklyPlan: WeeklyPlanDTO) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return weeklyPlan;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
+  }
+
+  public removeCustomIngredientFromWeeklyPlan(weeklyPlan: WeeklyPlanDTO, ingredientId: string): Promise<WeeklyPlanDTO> {
+    let customIngredientIds: string[] = _.cloneDeep(weeklyPlan.customIngredientIds);
+
+    _.remove(customIngredientIds, (id: string) => {
+      return (id === ingredientId);
+    });
+
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.weeklyPlanService.updateWeeklyPlanCustomIngredientIds(weeklyPlan.id, customIngredientIds)
+      .then((weeklyPlan: WeeklyPlanDTO) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return weeklyPlan;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
+  }
+
+  public toggleIngredientCheck(weeklyPlan: WeeklyPlanDTO, ingredientId: string, checked: boolean): Promise<WeeklyPlanDTO> {
+    let checkedIngredientIds: string[] = _.cloneDeep(weeklyPlan.checkedIngredientIds);
+
+    if (checked) {
+      checkedIngredientIds.push(ingredientId);
+    }
+    else {
+      _.remove(checkedIngredientIds, (id: string) => {
+        return (id === ingredientId);
+      });
+    }
+
+    // if there was no ingredientId in weeklyPlan.checkedIngredientIds and nothing was actually removed, don't make the call
+    if (_.isEqual(checkedIngredientIds, weeklyPlan.checkedIngredientIds)) {
+      return Promise.resolve(weeklyPlan);
+    }
+    else {
+      this.events.publish(Event.SYSTEM.LOADING, true);
+
+      return this.weeklyPlanService.updateWeeklyPlanCheckedIngredientIds(weeklyPlan.id, checkedIngredientIds)
+        .then((weeklyPlan: WeeklyPlanDTO) => {
+          this.events.publish(Event.SYSTEM.LOADING, false);
+          return weeklyPlan;
+        })
+        .catch((error) => {
+          this.events.publish(Event.SYSTEM.LOADING, false);
+          this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+          return Promise.reject(error);
+        })
+    }
+  }
+
 }

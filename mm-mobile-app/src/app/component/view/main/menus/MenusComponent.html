@@ -3,22 +3,25 @@
 <ion-content class="with-top-doodad" padding>
   <h1 text-center>Menus</h1>
 
-  <div class="currentWeeklyMenu" *ngIf="currentWeeklyMenu" (click)="showWeeklyMenu(currentWeeklyMenu)">
-    <div class="background" [style.background-image]="('url(' + currentWeeklyMenu.imageUrl + ')') | sanitizeStyle"></div>
-    <div class="content">
-      <h5>Weekly Menu</h5>
-      <h3>{{ currentWeeklyMenu.startDate | date:'dd MMM' }} - {{ currentWeeklyMenu.endDate | date:'dd MMM' }}</h3>
-      <div class="bubble">NEW</div>
+  <ng-container *ngIf="currentWeeklyMenu">
+    <div class="currentWeeklyMenu" (click)="showWeeklyMenu(currentWeeklyMenu)">
+      <div class="background" [style.background-image]="('url(' + currentWeeklyMenu.imageUrl + ')') | sanitizeStyle"></div>
+      <div class="content">
+        <h5>Weekly Menu</h5>
+        <h3>{{ currentWeeklyMenu.startDate | date:'dd MMM' }} - {{ currentWeeklyMenu.endDate | date:'dd MMM' }}</h3>
+        <div class="bubble">NEW</div>
+      </div>
     </div>
-  </div>
-
-  <div class="currentWeeklyMenu" *ngIf="!currentWeeklyMenu">
-    <div class="content">
-      <h5>No menu for this week yet</h5>
+  </ng-container>
+  <ng-container *ngIf="!currentWeeklyMenu">
+    <div class="currentWeeklyMenu empty">
+      <div class="content">
+        <h5 *ngIf="currentWeeklyMenuLoaded">No menu for this week yet</h5>
+      </div>
     </div>
-  </div>
+  </ng-container>
 
-  <div class="previousWeeklyMenus">
+  <div class="previousWeeklyMenus" [ngStyle]="{ height: !previousWeeklyMenusLoaded ? '245px' : 'auto' }">
     <h3>Previous weeks</h3>
     <ng-container *ngIf="previousWeeklyMenus && (previousWeeklyMenus.length > 0)">
       <ion-scroll scrollX="true">
@@ -31,12 +34,12 @@
         </div>
       </ion-scroll>
     </ng-container>
-    <ng-container *ngIf="!previousWeeklyMenus || (previousWeeklyMenus.length == 0)">
+    <ng-container *ngIf="(!previousWeeklyMenus || (previousWeeklyMenus.length == 0)) && previousWeeklyMenusLoaded">
       <p text-center>No previous weekly menus available.</p>
     </ng-container>
   </div>
 
-  <div class="upcomingWeeklyMenus" *ngIf="currentUser.isAdmin">
+  <div class="upcomingWeeklyMenus" *ngIf="currentUser.isAdmin" [ngStyle]="{ height: !upcomingWeeklyMenusLoaded ? '245px' : 'auto' }">
     <h3>Upcoming weeks (admin only)</h3>
     <ng-container *ngIf="upcomingWeeklyMenus && (upcomingWeeklyMenus.length > 0)">
       <ion-scroll scrollX="true">
@@ -49,7 +52,7 @@
         </div>
       </ion-scroll>
     </ng-container>
-    <ng-container *ngIf="!upcomingWeeklyMenus || (upcomingWeeklyMenus.length == 0)">
+    <ng-container *ngIf="(!upcomingWeeklyMenus || (upcomingWeeklyMenus.length == 0)) && upcomingWeeklyMenusLoaded">
       <p text-center>No upcoming weekly menus available.</p>
     </ng-container>
   </div>

@@ -1,0 +1,388 @@
+meal {
+  @import "reveal.scss";
+
+  .meal {
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    .reveal {
+      font-family: 'Trocchi' !important;
+      color: color($colors, primary);
+
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Brusher' !important;
+      }
+
+      h1 {
+        font-size: 40px !important;
+      }
+
+      h2 {
+        font-size: 34px !important;
+      }
+
+      h3 {
+        font-size: 28px !important;
+      }
+
+      h4 {
+        font-size: 22px !important;
+      }
+
+      h5 {
+        font-size: 18px !important;
+      }
+
+      .slides {
+        section {
+          height: 100% !important;
+          overflow-y: auto !important;
+          overflow-x: hidden !important;
+
+          &[hidden] {
+            display: block !important;
+          }
+
+          &.firstSlide {
+            color: white !important;
+            background-color: rgba(0, 0, 0, 0.40);
+          }
+
+          .plan {
+            position: absolute;
+            top: 30px;
+            left: 20px;
+            height: 45px;
+            font-size: 16px;
+            border-radius: 50px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+            padding-right: 20px;
+            color: color($colors, light) !important;
+            overflow: hidden;
+            display: flex;
+            cursor: default;
+
+            &.no-icon {
+              padding-left: 20px;
+            }
+
+            &::before {
+              content: ' ';
+              background-color: color($colors, primary-light) !important;
+              opacity: 0.8;
+              display: block;
+              width: 100%;
+              height: 100%;
+              position: absolute;
+              left: 0px;
+              top: 0px;
+              z-index: 0;
+            }
+
+            &.red {
+              cursor: pointer;
+
+              &::before {
+                background-color: color($colors, danger) !important;
+              }
+            }
+
+            &.green {
+              cursor: pointer;
+
+              &::before {
+                background-color: color($colors, success) !important;
+              }
+            }
+
+            div {
+              position: relative;
+            }
+
+            .remove {
+              background-image: url('../asset/ic_remove@2x.png');
+              background-size: contain;
+              background-repeat: no-repeat;
+              width: 30px;
+              height: 30px;
+              cursor: pointer;
+              top: -4px;
+              margin-right: 3px;
+            }
+
+            .add {
+              background-image: url('../asset/ic_remove@2x.png');
+              background-size: contain;
+              background-repeat: no-repeat;
+              transform: rotate(45deg);
+              width: 30px;
+              height: 30px;
+              cursor: pointer;
+              top: -4px;
+              margin-right: 3px;
+            }
+          }
+
+          .favorite {
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: absolute;
+            top: 30px;
+            right: 90px;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            z-index: 1;
+
+            &.on {
+              background-image: url('../asset/ic_circle_heart_full@2x.png');
+            }
+
+            &.off {
+              background-image: url('../asset/ic_circle_heart@2x.png');
+            }
+          }
+
+          .header {
+            margin-top: 20%;
+            padding: 20px;
+
+            .name {
+              padding: 10px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              text-shadow: 2px 1px color($colors, secondary);
+
+              h1 {
+                font-family: 'Trocchi' !important;
+                margin-top: 0px !important;
+                margin-bottom: 0px !important;
+                text-align: left !important;
+                font-weight: bold !important;
+                width: 100% !important;
+              }
+            }
+
+            .h-divider {
+              background-color: color($colors, light) !important;
+              height: 2px;
+              opacity: 0.8;
+              width: 100%;
+              margin-left: auto;
+              margin-right: auto;
+              margin-top: 20px;
+              margin-bottom: 20px;
+            }
+
+            .details {
+              ion-grid {
+                height: 100%;
+              }
+
+              ion-row {
+                height: 100%;
+              }
+
+              ion-col {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                div {
+                  text-align: left !important;
+                }
+              }
+
+              p {
+                font-size: 16px !important;
+                margin-top: 0px !important;
+                margin-bottom: 0px !important;
+                text-shadow: 2px 1px color($colors, secondary);
+              }
+
+              h2 {
+                font-family: 'Trocchi' !important;
+                margin-top: 0px !important;
+                margin-bottom: 0px !important;
+                text-shadow: 2px 1px color($colors, secondary);
+              }
+            }
+          }
+
+          .logoTextWrapper {
+            position: absolute;
+            bottom: 120px;
+            width: 100%;
+            text-align: center;
+          }
+
+          .mealButtonWrapper {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            text-align: center;
+
+            .mealButton {
+              background-color: color($colors, light) !important;
+              color: color($colors, secondary-dark) !important;
+              width: 300px !important;
+              height: 50px;
+              margin: 0 auto !important;
+              padding-right: 0px !important;
+
+              ion-icon {
+                font-size: 24px !important;
+                margin-left: 10px !important;
+              }
+            }
+          }
+
+          .slideContent {
+            padding: 20px;
+            margin-top: 40px;
+            padding-bottom: 60px;
+            font-size: 16px !important;
+
+            h1 {
+              margin-bottom: 30px;
+            }
+
+            .source {
+              font-family: 'Trocchi' !important;
+            }
+
+            ion-grid.listGrid {
+              ion-row {
+                ion-col {
+                  display: flex;
+                  align-items: flex-start;
+                  border-bottom: 1px solid rgba(140, 156, 187, 0.3) !important;
+                  padding-top: 10px;
+                  padding-bottom: 10px;
+
+                  .listPrefixUnordered {
+                    text-align: center;
+                    margin-right: 15px;
+                    flex-shrink: 0 !important;
+                  }
+
+                  .listPrefixOrdered {
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 50%;
+                    background-color: rgba(140, 156, 187, 0.4) !important;
+                    color: color($colors, secondary-dark) !important;
+                    margin-right: 15px;
+                    flex-shrink: 0 !important;
+                  }
+
+                  .listItem {
+                    text-align: left !important;
+
+                    .amount {
+                      color: color($colors, dark) !important;
+                    }
+
+                    .note {
+                      margin-top: 10px;
+                      margin-left: 10px;
+                    }
+                  }
+                }
+
+                &:last-child {
+                  ion-col {
+                    border-bottom: none !important;
+                  }
+                }
+              }
+            }
+
+            .logoWrapper {
+              text-align: center;
+              margin-bottom: 30px;
+
+              img {
+                width: 150px;
+                height: 150px;
+              }
+            }
+          }
+        }
+      }
+
+      .controls {
+        right: 20px;
+        opacity: 0.9;
+
+        .navigate-left .controls-arrow {
+          background-image: url('../asset/ic_circle_arrow@2x.png');
+          background-size: 30px auto !important;
+          background-repeat: no-repeat !important;
+          width: 30px !important;
+          height: 30px !important;
+          transform: rotate(180deg) !important;
+
+          &::before {
+            content: none !important;
+          }
+
+          &::after {
+            content: none !important;
+          }
+        }
+
+        .navigate-right .controls-arrow {
+          background-image: url('../asset/ic_circle_arrow@2x.png');
+          background-size: 30px auto !important;
+          background-repeat: no-repeat !important;
+          width: 30px !important;
+          height: 30px !important;
+          transform: none !important;
+
+          &::before {
+            content: none !important;
+          }
+
+          &::after {
+            content: none !important;
+          }
+        }
+      }
+
+      &.firstSlide {
+        .controls {
+          display: none !important;
+        }
+      }
+
+      .progress {
+        background: white;
+        top: 0px;
+        height: 8px;
+
+        span {
+          background-image: linear-gradient(-270deg, color($colors, secondary) 0%, color($colors, light) 100%);
+          -webkit-transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
+          -moz-transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
+          transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
+          height: 8px;
+        }
+      }
+
+      &.firstSlide {
+        .progress {
+          opacity: 0 !important;
+        }
+      }
+    }
+  }
+
+}

@@ -6,7 +6,7 @@ import { UserDTO } from "../../../../data/dto/user/UserDTO";
 import { UserModel } from "../../../../model/UserModel";
 import * as _ from "lodash";
 import { WeeklyMenuComponent } from "./weeklyMenu/WeeklyMenuComponent";
-import { FavoriteListComponent } from "./favorite/FavoriteListComponent";
+import { FavoritesComponent } from "./favorites/FavoritesComponent";
 
 @Component({
   selector: 'menus',
@@ -17,6 +17,10 @@ export class MenusComponent {
   currentWeeklyMenu: WeeklyMenuDTO;
   previousWeeklyMenus: WeeklyMenuDTO[];
   upcomingWeeklyMenus: WeeklyMenuDTO[];
+
+  currentWeeklyMenuLoaded: boolean = false;
+  previousWeeklyMenusLoaded: boolean = false;
+  upcomingWeeklyMenusLoaded: boolean = false;
 
   public currentUser: UserDTO;
 
@@ -46,6 +50,8 @@ export class MenusComponent {
     this.weeklyMenuModel.getCurrentWeeklyMenu()
       .then((weeklyMenu: WeeklyMenuDTO) => {
         this.currentWeeklyMenu = weeklyMenu;
+
+        this.currentWeeklyMenuLoaded = true;
       })
       .catch((error) => {});
   }
@@ -60,6 +66,8 @@ export class MenusComponent {
 
           if (previousWeeklyMenus.length === MenusComponent.WEEK_RANGE) {
             this.previousWeeklyMenus = _.orderBy(_.compact(previousWeeklyMenus), ['weekNumber'], ['desc']);
+
+            this.previousWeeklyMenusLoaded = true;
           }
         })
         .catch((error) => {});
@@ -76,6 +84,8 @@ export class MenusComponent {
 
           if (upcomingWeeklyMenus.length === MenusComponent.WEEK_RANGE) {
             this.upcomingWeeklyMenus = _.orderBy(_.compact(upcomingWeeklyMenus), ['weekNumber'], ['asc']);
+
+            this.upcomingWeeklyMenusLoaded = true;
           }
         })
         .catch((error) => {
@@ -88,9 +98,8 @@ export class MenusComponent {
   }
 
   showFavoriteList() {
-    this.navCtrl.push(FavoriteListComponent, {},{ animation: 'ios-transition'} )
+    this.navCtrl.push(FavoritesComponent, {},{ animation: 'ios-transition'} )
   }
-
 
 }
 

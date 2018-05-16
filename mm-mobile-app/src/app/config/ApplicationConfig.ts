@@ -7,7 +7,7 @@ export class ApplicationConfig {
 
     public applicationOwner: string = 'OurMindfulMenu';
     public applicationName: string = 'OurMindfulMenu';
-    public version: string = '0.0.5 (2018-05-14)';
+    public version: string = '0.9.5 (2018-05-16)';
 
     public production: boolean;
     public firebase: FirebaseConfig;

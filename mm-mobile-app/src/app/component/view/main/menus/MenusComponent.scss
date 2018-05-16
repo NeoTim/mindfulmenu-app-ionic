@@ -11,6 +11,10 @@ menus {
     cursor: pointer;
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
 
+    &.empty {
+      cursor: default;
+    }
+
     .background {
       position: absolute;
       width: 100%;

@@ -15,6 +15,9 @@ import { WeeklyMenuModel } from "../../../../model/WeeklyMenuModel";
 import { IngredientModel } from "../../../../model/IngredientModel";
 import { IngredientDTO } from "../../../../data/dto/menu/IngredientDTO";
 import { PrepListComponent } from "./prepList/PrepListComponent";
+import { ShoppingListComponent } from "./shoppingList/ShoppingListComponent";
+import { ApplicationModel } from "../../../../model/ApplicationModel";
+import { MealComponent } from "../meal/MealComponent";
 
 @Component({
   selector: 'my-plan',
@@ -32,8 +35,11 @@ export class MyPlanComponent {
   public static readonly WEEK_RANGE: number = 6;
   public WEEK_RANGE: number = MyPlanComponent.WEEK_RANGE; /* exposed separately, just for template usage */
 
+  private firstLoad: boolean;
+
   constructor(public navCtrl: NavController,
               public modalCtrl: ModalController,
+              public applicationModel: ApplicationModel,
               public weeklyMenuModel: WeeklyMenuModel,
               public weeklyPlanModel: WeeklyPlanModel,
               public ingredientModel: IngredientModel,
@@ -44,30 +50,56 @@ export class MyPlanComponent {
   }
 
   ionViewDidLoad() {
-  }
-
-  ionViewDidEnter() {
-    this.currentUser = this.userModel.currentUser;
     this.init();
   }
 
-  init() {
-    this.getWeeklyPlan(this.currentWeekRelation);
+  ionViewDidEnter() {
+    if (!this.firstLoad) {
+     this.silentReload();
+    }
   }
 
-  getWeeklyPlan(weekRelation: number) {
+  init() {
+    this.firstLoad = true;
+
+    this.getWeeklyPlan(this.currentWeekRelation)
+      .then(() => {
+        this.firstLoad = false;
+      })
+      .catch((error) => {
+        this.firstLoad = false;
+      })
+  }
+
+  silentReload() {
+    this.currentUser = this.userModel.currentUser;
+
+    this.applicationModel.suppressLoading = true;
+
+    this.getWeeklyPlan(this.currentWeekRelation)
+      .then(() => {
+        this.applicationModel.suppressLoading = false;
+      })
+      .catch((error) => {
+        this.applicationModel.suppressLoading = false;
+      })
+  }
+
+  getWeeklyPlan(weekRelation: number): Promise<WeeklyPlan> {
     if (weekRelation === 0) {
-      this.weeklyPlanModel.getCurrentWeeklyPlan(this.currentUser.id)
+      return this.weeklyPlanModel.getCurrentWeeklyPlan(this.currentUser.id)
         .then((weeklyPlan: WeeklyPlanDTO) => {
-          this.process(weeklyPlan);
+          return this.process(weeklyPlan);
         })
-        .catch((error) => {});
+        .catch((error) => {
+          return Promise.reject(error);
+        });
     }
     else {
-      this.weeklyPlanModel.getWeeklyPlanInRelationToCurrent(this.currentUser.id, weekRelation)
+      return this.weeklyPlanModel.getWeeklyPlanInRelationToCurrent(this.currentUser.id, weekRelation)
         .then((weeklyPlan: WeeklyPlanDTO) => {
           if (weeklyPlan) {
-            this.process(weeklyPlan);
+            return this.process(weeklyPlan);
           }
           else {
             // 'fake' weekly plan, just to show date range
@@ -80,41 +112,50 @@ export class MyPlanComponent {
           }
         })
         .catch((error) => {
+          return Promise.reject(error);
         });
     }
   }
 
-  private process(weeklyPlan: WeeklyPlanDTO) {
-    let weeklyPlanWithMeals: WeeklyPlan = WeeklyPlan.fromDTO(weeklyPlan);
+  private process(weeklyPlan: WeeklyPlanDTO): Promise<WeeklyPlan> {
+    return new Promise((resolve, reject) => {
+      let weeklyPlanWithMeals: WeeklyPlan = WeeklyPlan.fromDTO(weeklyPlan);
 
-    let mealsLoaded: boolean = false;
-    let ingredientsLoaded: boolean = false;
+      let mealsLoaded: boolean = false;
+      let ingredientsLoaded: boolean = false;
 
-    this.calculateFavoriteMealsMap(weeklyPlan.mealIds, this.currentUser.favoriteMealIds);
+      this.calculateFavoriteMealsMap(weeklyPlan.mealIds, this.currentUser.favoriteMealIds);
 
-    this.mealModel.getMeals(weeklyPlan.mealIds)
-      .then((meals: MealDTO[]) => {
-        weeklyPlanWithMeals.meals = meals;
+      this.mealModel.getMeals(weeklyPlan.mealIds)
+        .then((meals: MealDTO[]) => {
+          weeklyPlanWithMeals.meals = meals;
 
-        mealsLoaded = true;
+          mealsLoaded = true;
 
-        if (mealsLoaded && ingredientsLoaded) {
-          this.weeklyPlan = weeklyPlanWithMeals;
-        }
-      })
-      .catch((error) => {});
+          if (mealsLoaded && ingredientsLoaded) {
+            this.weeklyPlan = weeklyPlanWithMeals;
+            resolve(this.weeklyPlan);
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
 
-    this.ingredientModel.getIngredients(weeklyPlan.customIngredientIds)
-      .then((ingredients: IngredientDTO[]) => {
-        weeklyPlanWithMeals.customIngredients = ingredients;
+      this.ingredientModel.getIngredients(weeklyPlan.customIngredientIds)
+        .then((ingredients: IngredientDTO[]) => {
+          weeklyPlanWithMeals.customIngredients = ingredients;
 
-        ingredientsLoaded = true;
+          ingredientsLoaded = true;
 
-        if (mealsLoaded && ingredientsLoaded) {
-          this.weeklyPlan = weeklyPlanWithMeals;
-        }
-      })
-      .catch((error) => {});
+          if (mealsLoaded && ingredientsLoaded) {
+            this.weeklyPlan = weeklyPlanWithMeals;
+            resolve(this.weeklyPlan);
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
 
   calculateFavoriteMealsMap(mealIds: string[], favoriteMealIds: string[]) {
@@ -133,6 +174,7 @@ export class MyPlanComponent {
 
   getPreviousWeeklyPlan() {
     if (this.currentWeekRelation > -MyPlanComponent.WEEK_RANGE) {
+      this.weeklyPlan = null;
       this.currentWeekRelation--;
       this.getWeeklyPlan(this.currentWeekRelation);
     }
@@ -140,6 +182,7 @@ export class MyPlanComponent {
 
   getNextWeeklyPlan() {
     if (this.currentWeekRelation < 0) {
+      this.weeklyPlan = null;
       this.currentWeekRelation++;
       this.getWeeklyPlan(this.currentWeekRelation);
     }
@@ -175,7 +218,11 @@ export class MyPlanComponent {
   }
 
   showMeal(meal: MealDTO) {
-    console.log(meal);
+    let modal = this.modalCtrl.create(MealComponent, { mealId: meal.id });
+    modal.onDidDismiss(data => {
+      this.silentReload();
+    });
+    modal.present();
   }
 
   showPrepList() {
@@ -187,6 +234,10 @@ export class MyPlanComponent {
   }
 
   showShoppingList() {
-
+    let modal = this.modalCtrl.create(ShoppingListComponent, { weeklyPlanId: this.weeklyPlan.id });
+    modal.onDidDismiss(data => {
+      //
+    });
+    modal.present();
   }
 }

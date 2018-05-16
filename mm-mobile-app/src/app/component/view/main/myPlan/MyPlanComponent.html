@@ -1,22 +1,23 @@
 <div class="top-doodad"></div>
 
 <ion-content class="with-top-doodad" padding>
-  <ng-container *ngIf="weeklyPlan">
-    <ion-grid class="control">
-      <ion-row>
-        <ion-col col-1>
-          <div class="arrow-back" [class.disabled]="currentWeekRelation <= -WEEK_RANGE" (click)="getPreviousWeeklyPlan()"></div>
-        </ion-col>
-        <ion-col col-10>
-          <h3 text-center>My Plan</h3>
-          <h1 text-center>{{ weeklyPlan.startDate | date:'dd MMM' }} - {{ weeklyPlan.endDate | date:'dd MMM' }}</h1>
-        </ion-col>
-        <ion-col col-1>
-          <div class="arrow-forward" [class.disabled]="currentWeekRelation >= 0" (click)="getNextWeeklyPlan()"></div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+  <ion-grid class="control">
+    <ion-row>
+      <ion-col col-1>
+        <div class="arrow-back" [class.disabled]="currentWeekRelation <= -WEEK_RANGE" (click)="getPreviousWeeklyPlan()"></div>
+      </ion-col>
+      <ion-col col-10>
+        <h3 text-center>My Plan</h3>
+        <h1 text-center *ngIf="weeklyPlan">{{ weeklyPlan.startDate | date:'dd MMM' }} - {{ weeklyPlan.endDate | date:'dd MMM' }}</h1>
+        <h1 text-center *ngIf="!weeklyPlan">&nbsp;</h1>
+      </ion-col>
+      <ion-col col-1>
+        <div class="arrow-forward" [class.disabled]="currentWeekRelation >= 0" (click)="getNextWeeklyPlan()"></div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
+  <ng-container *ngIf="weeklyPlan">
     <ng-container *ngIf="!weeklyPlan.id">
       <p text-center>You don't have a weekly plan for that week.</p>
     </ng-container>
@@ -82,4 +83,5 @@
       </div>
     </ng-container>
   </ng-container>
+
 </ion-content>
