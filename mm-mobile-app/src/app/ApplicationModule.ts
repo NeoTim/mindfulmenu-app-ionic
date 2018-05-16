@@ -42,6 +42,9 @@ import { PrepListComponent } from "./component/view/main/myPlan/prepList/PrepLis
 import { FavoritesComponent } from "./component/view/main/menus/favorites/FavoritesComponent";
 import { ShoppingListComponent } from "./component/view/main/myPlan/shoppingList/ShoppingListComponent";
 import { ApplicationModel } from "./model/ApplicationModel";
+import { MealComponent } from "./component/view/main/meal/MealComponent";
+import { Nl2BrPipe } from "./util/pipe/Nl2BrPipe";
+import { SanitizeHtmlPipe } from "./util/pipe/SanitizeHtmlPipe";
 
 @NgModule({
   declarations: [
@@ -52,12 +55,13 @@ import { ApplicationModel } from "./model/ApplicationModel";
     AuthOfflineComponent,
     MainComponent,
     MenusComponent, WeeklyMenuComponent, FavoritesComponent,
+    MealComponent,
     MyPlanComponent, PrepListComponent, ShoppingListComponent,
     MoreComponent, AboutComponent, AccountComponent, AccountChangePasswordComponent,
     // component/ui
     InternalUrlBrowserComponent,
     // util/pipe
-    SanitizeStylePipe
+    Nl2BrPipe, SanitizeHtmlPipe, SanitizeStylePipe
   ],
   entryComponents: [
     // main entry point
@@ -67,6 +71,7 @@ import { ApplicationModel } from "./model/ApplicationModel";
     AuthOfflineComponent,
     MainComponent,
     MenusComponent, WeeklyMenuComponent, FavoritesComponent,
+    MealComponent,
     MyPlanComponent, PrepListComponent, ShoppingListComponent,
     MoreComponent, AboutComponent, AccountComponent, AccountChangePasswordComponent,
     // component/ui

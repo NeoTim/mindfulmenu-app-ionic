@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Navbar, NavController } from 'ionic-angular';
+import { ModalController, Navbar, NavController } from 'ionic-angular';
 import { MealModel } from "../../../../../model/MealModel";
 import { MealDTO } from "../../../../../data/dto/menu/MealDTO";
 import { UserDTO } from "../../../../../data/dto/user/UserDTO";
@@ -7,6 +7,8 @@ import { UserModel } from "../../../../../model/UserModel";
 import { WeeklyPlanDTO } from "../../../../../data/dto/menu/WeeklyPlanDTO";
 import { WeeklyPlanModel } from "../../../../../model/WeeklyPlanModel";
 import * as _ from "lodash";
+import { MealComponent } from "../../meal/MealComponent";
+import { ApplicationModel } from "../../../../../model/ApplicationModel";
 
 @Component({
   selector: 'favorites',
@@ -26,6 +28,8 @@ export class FavoritesComponent {
   inCurrentPlanMealsMap: { [key: string]: boolean };
 
   constructor(public navCtrl: NavController,
+              public modalCtrl: ModalController,
+              public applicationModel: ApplicationModel,
               public mealModel: MealModel,
               public weeklyPlanModel: WeeklyPlanModel,
               public userModel: UserModel) {
@@ -46,28 +50,77 @@ export class FavoritesComponent {
     this.getCurrentWeeklyPlan();
   }
 
-  getFavoriteMeals() {
-    this.mealModel.getMeals(this.currentUser.favoriteMealIds)
+  silentReload() {
+    this.currentUser = this.userModel.currentUser;
+
+    this.applicationModel.suppressLoading = true;
+
+    let getFavoriteMealsFinished: boolean = false;
+    let getCurrentWeeklyPlanFinished: boolean = false;
+
+    this.getFavoriteMeals()
+      .then(() => {
+        getFavoriteMealsFinished = true;
+
+        if (getFavoriteMealsFinished && getCurrentWeeklyPlanFinished) {
+          this.applicationModel.suppressLoading = false;
+        }
+      })
+      .catch(() => {
+        getFavoriteMealsFinished = true;
+
+        if (getFavoriteMealsFinished && getCurrentWeeklyPlanFinished) {
+          this.applicationModel.suppressLoading = false;
+        }
+      });
+
+    this.getCurrentWeeklyPlan()
+      .then(() => {
+        getCurrentWeeklyPlanFinished = true;
+
+        if (getFavoriteMealsFinished && getCurrentWeeklyPlanFinished) {
+          this.applicationModel.suppressLoading = false;
+        }
+      })
+      .catch(() => {
+        getCurrentWeeklyPlanFinished = true;
+
+        if (getFavoriteMealsFinished && getCurrentWeeklyPlanFinished) {
+          this.applicationModel.suppressLoading = false;
+        }
+      });
+  }
+
+  getFavoriteMeals(): Promise<MealDTO[]> {
+    return this.mealModel.getMeals(this.currentUser.favoriteMealIds)
       .then((meals: MealDTO[]) => {
         this.favoriteMeals = meals;
 
         if (this.favoriteMeals && this.weeklyPlanDto) {
           this.calculateInCurrentPlanMealsMap(_.map(this.favoriteMeals, 'id'), this.weeklyPlanDto.mealIds);
         }
+
+        return this.favoriteMeals;
       })
-      .catch((error) => {});
+      .catch((error) => {
+        return Promise.reject(error);
+      })
   }
 
-  getCurrentWeeklyPlan() {
-    this.weeklyPlanModel.getCurrentWeeklyPlan(this.currentUser.id)
+  getCurrentWeeklyPlan(): Promise<WeeklyPlanDTO>  {
+    return this.weeklyPlanModel.getCurrentWeeklyPlan(this.currentUser.id)
       .then((weeklyPlan: WeeklyPlanDTO) => {
         this.weeklyPlanDto = weeklyPlan;
 
         if (this.favoriteMeals && this.weeklyPlanDto) {
           this.calculateInCurrentPlanMealsMap(_.map(this.favoriteMeals, 'id'), this.weeklyPlanDto.mealIds);
         }
+
+        return this.weeklyPlanDto;
       })
-      .catch((error) => {});
+      .catch((error) => {
+        return Promise.reject(error);
+      });
   }
 
   calculateInCurrentPlanMealsMap(mealIds: string[], weeklyPlanMealIds: string[]) {
@@ -98,15 +151,17 @@ export class FavoritesComponent {
       .then((weeklyPlan: WeeklyPlanDTO) => {
         this.weeklyPlanDto = weeklyPlan;
 
-        if (this.favoriteMeals && this.weeklyPlanDto) {
-          this.calculateInCurrentPlanMealsMap(_.map(this.favoriteMeals, 'id'), this.weeklyPlanDto.mealIds);
-        }
+        this.calculateInCurrentPlanMealsMap(_.map(this.favoriteMeals, 'id'), this.weeklyPlanDto.mealIds);
       })
       .catch((error) => {});
   }
 
   showMeal(meal: MealDTO) {
-    console.log(meal);
+    let modal = this.modalCtrl.create(MealComponent, { mealId: meal.id });
+    modal.onDidDismiss(data => {
+      this.silentReload();
+    });
+    modal.present();
   }
 
 }

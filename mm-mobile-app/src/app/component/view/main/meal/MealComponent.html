@@ -1,0 +1,126 @@
+<div class="close-button" [ngClass]="{ 'white': isFirstSlide }" (click)="close()"></div>
+
+<div class="meal">
+
+  <div class="reveal" [ngClass]="{ 'firstSlide': isFirstSlide }">
+
+    <div class="slides" *ngIf="meal">
+
+      <section class="firstSlide" [attr.data-background-image]="meal.imageUrl" data-background-size="cover">
+
+        <div class="plan green" *ngIf="!isInCurrentPlan" (click)="addMealToCurrentWeeklyPlan(); $event.stopPropagation();">
+          <div class="add"></div>
+          <div>Add to My Plan</div>
+        </div>
+        <div class="plan no-icon" *ngIf="isInCurrentPlan" (click)="$event.stopPropagation();">
+          <div>In My Plan</div>
+        </div>
+
+        <div class="favorite" [ngClass]="{ 'on': isFavorite, 'off': !isFavorite }" (click)="toggleFavorite(!isFavorite); $event.stopPropagation();"></div>
+
+        <div class="header">
+          <div class="name" *ngIf="meal.name">
+            <h1>{{ meal.name }}</h1>
+          </div>
+          <div class="h-divider"></div>
+          <div class="details">
+            <ion-grid>
+              <ion-row>
+                <ion-col col-6>
+                  <div *ngIf="meal.prepTime">
+                    <p>Prep. time</p>
+                    <h2>{{ meal.prepTime }} min</h2>
+                  </div>
+                </ion-col>
+                <ion-col col-6>
+                  <div *ngIf="meal.cookTime">
+                    <p>Cook time</p>
+                    <h2>{{ meal.cookTime }} min</h2>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </div>
+
+        <div class="logoTextWrapper">
+          <h2>Mindful Menu</h2>
+        </div>
+
+        <div class="mealButtonWrapper">
+          <button class="mealButton" ion-button block type="button" (click)="startCooking()">
+            <span>Start cooking</span>
+            <ion-icon name="arrow-round-forward" item-end></ion-icon>
+          </button>
+        </div>
+
+      </section>
+
+      <section *ngIf="meal.ingredients && (meal.ingredients.length > 0)">
+        <div class="slideContent">
+          <h1 text-center>Ingredients</h1>
+
+          <ion-grid class="listGrid">
+            <ion-row *ngFor="let ingredient of meal.ingredients">
+              <ion-col col-12>
+                <div class="listPrefixUnordered">&mdash;</div>
+                <div class="listItem">
+                  <span class="amount" *ngIf="ingredient.amount">{{ ingredient.amount }}</span>
+                  <span>{{ ingredient.item }}</span>
+                  <div *ngIf="ingredient.note" class="note">* {{ ingredient.note }}</div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+        </div>
+      </section>
+
+      <section *ngIf="meal.cookInstructions && (meal.cookInstructions.length > 0)">
+        <div class="slideContent">
+          <h1 text-center>Instructions</h1>
+          <p margin-bottom>
+            <span>{{ meal.cookInstructions.length }}</span>
+            <span *ngIf="meal.cookInstructions.length === 1">step</span>
+            <span *ngIf="meal.cookInstructions.length > 1">steps</span>
+          </p>
+
+          <ion-grid class="listGrid">
+            <ion-row *ngFor="let cookInstruction of meal.cookInstructions; let index = index;">
+              <ion-col col-12>
+                <div class="listPrefixOrdered">{{ index + 1 }}</div>
+                <div class="listItem">{{ cookInstruction }}</div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </section>
+
+      <section *ngIf="meal.tip">
+        <div class="slideContent">
+          <div class="logoWrapper">
+            <img src="../asset/logo_mindful_menu@2x.png">
+          </div>
+
+          <h1 text-center>Tip</h1>
+
+          <p [innerHTML]="meal.tip | nl2br | sanitizeHtml"></p>
+        </div>
+      </section>
+
+      <section *ngIf="meal.sourceName && meal.sourceUrl">
+        <div class="slideContent">
+          <h1 text-center>Source</h1>
+
+          <h3 class="source" text-center margin-bottom>"{{ meal.sourceName }}"</h3>
+          <a text-left href="" (click)="openSource(); $event.preventDefault(); $event.stopImmediatePropagation()">{{ meal.sourceUrl }}</a>
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+
+</div>
+
+

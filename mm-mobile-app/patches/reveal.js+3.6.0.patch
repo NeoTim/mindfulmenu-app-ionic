@@ -1,0 +1,13 @@
+patch-package
+Remove the initialized check, to allow for multiple (re)initialization
+--- a/node_modules/reveal.js/js/reveal.js
++++ b/node_modules/reveal.js/js/reveal.js
+@@ -297,7 +297,7 @@
+ 	function initialize( options ) {
+
+ 		// Make sure we only initialize once
+-		if( initialized === true ) return;
++		// if( initialized === true ) return;
+
+ 		initialized = true;
+

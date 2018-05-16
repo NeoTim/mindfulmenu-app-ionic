@@ -171,6 +171,10 @@ input {
   cursor: pointer;
   z-index: 9999;
 
+  &.white {
+    background-image: url(../asset/ic_circle_close_white@3x.png);
+  }
+
   &.with-top-doodad {
     top: 40px;
   }
