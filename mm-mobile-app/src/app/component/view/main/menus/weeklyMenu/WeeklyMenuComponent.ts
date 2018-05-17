@@ -55,8 +55,10 @@ export class WeeklyMenuComponent {
   }
 
   init() {
-    this.getWeeklyMenuWithMeals();
-    this.getCurrentWeeklyPlan();
+    this.getWeeklyMenuWithMeals()
+      .catch(() => {});
+    this.getCurrentWeeklyPlan()
+      .catch(() => {});
   }
 
   silentReload() {
