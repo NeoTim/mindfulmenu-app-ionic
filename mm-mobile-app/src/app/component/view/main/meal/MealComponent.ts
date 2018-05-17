@@ -11,6 +11,7 @@ import { IngredientModel } from "../../../../model/IngredientModel";
 import { Meal } from "../../../../data/local/menu/Meal";
 import * as _ from "lodash";
 import * as Reveal from "reveal.js/js/reveal.js";
+import { StatusBar } from "@ionic-native/status-bar";
 
 @Component({
   selector: 'meal',
@@ -31,6 +32,7 @@ export class MealComponent {
   public isFirstSlide: boolean = true;
 
   constructor(public viewCtrl: ViewController,
+              public statusBar: StatusBar,
               public navParams: NavParams,
               public weeklyPlanModel: WeeklyPlanModel,
               public mealModel: MealModel,
@@ -43,6 +45,10 @@ export class MealComponent {
 
   ionViewDidLoad() {
     this.init();
+  }
+
+  ionViewDidLeave() {
+    this.statusBar.backgroundColorByHexString('#A2B3D2');
   }
 
   init() {
@@ -151,6 +157,8 @@ export class MealComponent {
 
   initSlides() {
     setTimeout(() => {
+      this.statusBar.backgroundColorByHexString('#000000');
+
       Reveal.initialize({
         width: '100%',
         height: '100%',
@@ -172,9 +180,11 @@ export class MealComponent {
 
         if (index == 0) {
           this.isFirstSlide = true;
+          this.statusBar.backgroundColorByHexString('#000000');
         }
         else {
           this.isFirstSlide = false;
+          this.statusBar.backgroundColorByHexString('#A2B3D2');
         }
       });
     }, 100);
