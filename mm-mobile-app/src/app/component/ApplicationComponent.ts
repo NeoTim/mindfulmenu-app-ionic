@@ -176,7 +176,8 @@ export class ApplicationComponent implements OnInit {
 
   setupInterface() {
     if (this.platformUtil.isCordova()) {
-      this.statusBar.styleDefault();
+      this.statusBar.backgroundColorByHexString('#A2B3D2');
+      this.statusBar.overlaysWebView(false);
       this.splashScreen.hide();
     }
   }

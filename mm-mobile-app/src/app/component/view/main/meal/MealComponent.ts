@@ -11,6 +11,8 @@ import { IngredientModel } from "../../../../model/IngredientModel";
 import { Meal } from "../../../../data/local/menu/Meal";
 import * as _ from "lodash";
 import * as Reveal from "reveal.js/js/reveal.js";
+import { StatusBar } from "@ionic-native/status-bar";
+import { PlatformUtil } from "../../../../util/PlatformUtil";
 
 @Component({
   selector: 'meal',
@@ -31,7 +33,9 @@ export class MealComponent {
   public isFirstSlide: boolean = true;
 
   constructor(public viewCtrl: ViewController,
+              public statusBar: StatusBar,
               public navParams: NavParams,
+              public platformUtil: PlatformUtil,
               public weeklyPlanModel: WeeklyPlanModel,
               public mealModel: MealModel,
               public ingredientModel: IngredientModel,
@@ -43,6 +47,12 @@ export class MealComponent {
 
   ionViewDidLoad() {
     this.init();
+  }
+
+  ionViewDidLeave() {
+    if (this.platformUtil.isCordova()) {
+      this.statusBar.backgroundColorByHexString('#A2B3D2');
+    }
   }
 
   init() {
@@ -151,6 +161,10 @@ export class MealComponent {
 
   initSlides() {
     setTimeout(() => {
+      if (this.platformUtil.isCordova()) {
+        this.statusBar.backgroundColorByHexString('#000000');
+      }
+
       Reveal.initialize({
         width: '100%',
         height: '100%',
@@ -172,9 +186,17 @@ export class MealComponent {
 
         if (index == 0) {
           this.isFirstSlide = true;
+
+          if (this.platformUtil.isCordova()) {
+            this.statusBar.backgroundColorByHexString('#000000');
+          }
         }
         else {
           this.isFirstSlide = false;
+
+          if (this.platformUtil.isCordova()) {
+            this.statusBar.backgroundColorByHexString('#A2B3D2');
+          }
         }
       });
     }, 100);

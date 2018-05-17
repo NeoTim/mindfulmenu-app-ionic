@@ -41,7 +41,8 @@ export class ViewUtil {
 
     showLoader(text: string = 'Please wait ...'): void {
         this.loader = this.loadingCtrl.create({
-            content: text
+            content: text,
+            showBackdrop: false
         });
 
         this.loader.present();

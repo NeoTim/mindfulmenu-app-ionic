@@ -46,8 +46,10 @@ export class FavoritesComponent {
   }
 
   init() {
-    this.getFavoriteMeals();
-    this.getCurrentWeeklyPlan();
+    this.getFavoriteMeals()
+      .catch(() => {});
+    this.getCurrentWeeklyPlan()
+      .catch(() => {});
   }
 
   silentReload() {
@@ -141,7 +143,8 @@ export class FavoritesComponent {
     this.userModel.toggleFavoriteMeal(meal.id, isFavorite)
       .then((user: UserDTO) => {
         this.currentUser = user;
-        this.getFavoriteMeals();
+        this.getFavoriteMeals()
+          .catch(() => {});
       })
       .catch((error) => {});
   }

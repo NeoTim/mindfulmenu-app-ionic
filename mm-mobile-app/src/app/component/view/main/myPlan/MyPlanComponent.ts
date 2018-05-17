@@ -176,7 +176,8 @@ export class MyPlanComponent {
     if (this.currentWeekRelation > -MyPlanComponent.WEEK_RANGE) {
       this.weeklyPlan = null;
       this.currentWeekRelation--;
-      this.getWeeklyPlan(this.currentWeekRelation);
+      this.getWeeklyPlan(this.currentWeekRelation)
+        .catch(() => {});
     }
   }
 
@@ -184,7 +185,8 @@ export class MyPlanComponent {
     if (this.currentWeekRelation < 0) {
       this.weeklyPlan = null;
       this.currentWeekRelation++;
-      this.getWeeklyPlan(this.currentWeekRelation);
+      this.getWeeklyPlan(this.currentWeekRelation)
+        .catch(() => {});
     }
   }
 
@@ -192,7 +194,8 @@ export class MyPlanComponent {
     this.userModel.toggleFavoriteMeal(meal.id, isFavorite)
       .then((user: UserDTO) => {
         this.currentUser = user;
-        this.getWeeklyPlan(this.currentWeekRelation);
+        this.getWeeklyPlan(this.currentWeekRelation)
+          .catch(() => {});
       })
       .catch((error) => {});
   }
@@ -202,7 +205,8 @@ export class MyPlanComponent {
       .then((weeklyMenu: WeeklyMenuDTO) => {
         this.weeklyPlanModel.setMealsForWeeklyPlan(WeeklyPlan.toDTO(this.weeklyPlan), weeklyMenu.mealIds)
           .then((weeklyPlan: WeeklyPlanDTO) => {
-            this.process(weeklyPlan);
+            this.process(weeklyPlan)
+              .catch(() => {});
           })
           .catch((error) => {});
       })
@@ -212,7 +216,8 @@ export class MyPlanComponent {
   removeFromPlan(meal: MealDTO) {
     this.weeklyPlanModel.removeMealFromWeeklyPlan(WeeklyPlan.toDTO(this.weeklyPlan), meal.id)
       .then((weeklyPlan: WeeklyPlanDTO) => {
-        this.process(weeklyPlan);
+        this.process(weeklyPlan)
+          .catch(() => {});
       })
       .catch((error) => {});
   }

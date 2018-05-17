@@ -51,6 +51,7 @@ export class ShoppingListComponent {
   private toggleCheckedInProgress: boolean = false;
   private toggleCheckedQueueRunning: boolean = false;
   private toggleCheckedQueue: ShoppingListItem[] = [];
+  private toggleCheckedQueueLastWeeklyPlan: WeeklyPlanDTO;
 
   constructor(public viewCtrl: ViewController,
               public navParams: NavParams,
@@ -228,15 +229,12 @@ export class ShoppingListComponent {
     // item is just a reference for queue purpose. We don't want the connection to the ShoppingList.
     this.toggleCheckedQueue.push(_.cloneDeep(item));
 
-    // immediately after checking, revert to previous state. The actual check state should come from the server.
-    // this way we avoid displaying intermediate item states to the user
-    // (no weird flickering of items that are going to be changed, but the actual change is further in the queue)
-    setTimeout(() => {
-      item.checked = !item.checked;
-    });
-
     if (!this.toggleCheckedQueueRunning) {
       this.toggleCheckedQueueRunning = true;
+
+      // for the purpose of chained actions, we store a reference to a "recently obtained from the call result" weekly plan
+      // initializing it with the current object
+      this.toggleCheckedQueueLastWeeklyPlan = this.weeklyPlan;
 
       let intervalId = setInterval(() => {
         if (this.toggleCheckedQueue.length > 0) {
@@ -259,20 +257,37 @@ export class ShoppingListComponent {
 
       this.applicationModel.suppressLoading = true;
 
-      this.weeklyPlanModel.toggleIngredientCheck(this.weeklyPlan, item.ingredient.id, item.checked)
+      // we want to perform operations on the toggleCheckedQueueLastWeeklyPlan, because this reference will have the updated fields
+      // (as a result of recent calls), while the current weeklyPlan, will not, until we finally update it
+      this.weeklyPlanModel.toggleIngredientCheck(this.toggleCheckedQueueLastWeeklyPlan, item.ingredient.id, item.checked)
         .then((weeklyPlan: WeeklyPlanDTO) => {
           this.applicationModel.suppressLoading = false;
-
-          this.weeklyPlan = weeklyPlan;
-          // always sync model
-          this.dtoToModel();
-
           this.toggleCheckedInProgress = false;
+
+          this.toggleCheckedQueueLastWeeklyPlan = weeklyPlan;
+
+          // If this is the last call, then update the model with whatever recent weeklyPlan state we have
+          // it could not be from this call, if this call failed (it does the same thing in catch() below).
+          // Only now sync the model. The expected recent WeeklyPlan and its state should be exactly the same as current local ShoppingList model
+          // so syncing it should yield no visual changes (things that were checked, will be checked again, things that weren't checked, remain unchecked)
+          // but if there were errors, the model after sync will reflect the actual server state
+          if (this.toggleCheckedQueue.length === 0) {
+            this.weeklyPlan = this.toggleCheckedQueueLastWeeklyPlan;
+            this.toggleCheckedQueueLastWeeklyPlan = null;
+            this.dtoToModel();
+          }
         })
         .catch((error) => {
           this.applicationModel.suppressLoading = false;
-
           this.toggleCheckedInProgress = false;
+
+          // see above
+          if (this.toggleCheckedQueue.length === 0) {
+            this.weeklyPlan = this.toggleCheckedQueueLastWeeklyPlan;
+            this.toggleCheckedQueueLastWeeklyPlan = null;
+            this.dtoToModel();
+          }
+
           return Promise.reject(error);
         });
     }

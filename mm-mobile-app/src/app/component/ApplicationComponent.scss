@@ -15,6 +15,8 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+// Fonts
+
 @font-face {
   font-family: 'Trocchi';
   src: url('../asset/font/Trocchi.woff2') format('woff2'), url('../asset/font/Trocchi.ttf') format('truetype');
@@ -35,6 +37,8 @@
   font-weight: normal;
   font-style: normal;
 }
+
+// Copy & Layout
 
 body {
   font-family: 'Trocchi' !important;
@@ -57,53 +61,6 @@ body {
     }
   }
 }
-
-ion-header {
-  &:after {
-    background: none !important;
-  }
-
-  .toolbar-background {
-    border-color: transparent !important;
-    background: none !important;
-  }
-
-  ion-navbar {
-    min-height: 80px !important;
-    align-items: flex-end !important;
-
-    button {
-      color: color($colors, primary) !important;
-    }
-  }
-}
-
-ion-checkbox {
-  .checkbox-icon {
-    width: 24px !important;
-    height: 24px !important;
-    border-radius: 50% !important;
-    border-color: #d1d9e9 !important;
-    background-color: #d1d9e9 !important;
-  }
-
-  .checkbox-checked {
-    .checkbox-inner {
-      border-color: #56637a !important;
-      left: 6px !important;
-      top: 2px !important;
-      width: 7px !important;
-      height: 13px !important;
-    }
-  }
-}
-
-
-button[ion-button].button {
-  border-radius: 30px !important;
-  text-transform: uppercase !important;
-}
-
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Brusher' !important;
@@ -179,40 +136,77 @@ input {
     top: 40px;
   }
 }
+.logoContainer {
+  padding: 20px;
 
-// -- iOS specific
+  .logo {
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
 
-ion-app.platform-ios {
-  .top-doodad {
-    top: 30px;
+// Ionic overrides
 
-    &:before {
-      content: ' ';
-      background-color: #A2B3D2 !important;
-      height: 30px;
-      width: 100%;
-      display: block;
-      position: relative;
-      top: -30px;
-    }
+ion-nav {
+  z-index: 1001 !important;
+}
+
+ion-header {
+  &:after {
+    background: none !important;
   }
 
-  .content {
-    &.with-top-doodad > .scroll-content {
-      padding-top: 90px !important;
-    }
-
-    &.with-top-doodad.with-header > .scroll-content {
-      padding-top: 16px !important;
-    }
+  .toolbar-background {
+    border-color: transparent !important;
+    background: none !important;
   }
 
-  ion-header {
-    ion-navbar {
-      min-height: 116px !important;
+  ion-navbar {
+    min-height: 80px !important;
+    align-items: flex-end !important;
+
+    button {
+      color: color($colors, primary) !important;
     }
   }
 }
+
+ion-checkbox {
+  .checkbox-icon {
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 50% !important;
+    border-color: #d1d9e9 !important;
+    background-color: #d1d9e9 !important;
+  }
+
+  .checkbox-checked {
+    .checkbox-inner {
+      border-color: #56637a !important;
+      left: 6px !important;
+      top: 2px !important;
+      width: 7px !important;
+      height: 13px !important;
+    }
+  }
+}
+
+
+button[ion-button].button {
+  border-radius: 30px !important;
+  text-transform: uppercase !important;
+}
+
+.loading-wrapper {
+  border: 1px solid color($colors, light) !important;
+}
+
+// -- iOS specific
 
 button.item-ios:not([detail-none]) {
   .item-inner {

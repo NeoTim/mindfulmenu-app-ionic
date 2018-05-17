@@ -45,6 +45,8 @@ import { ApplicationModel } from "./model/ApplicationModel";
 import { MealComponent } from "./component/view/main/meal/MealComponent";
 import { Nl2BrPipe } from "./util/pipe/Nl2BrPipe";
 import { SanitizeHtmlPipe } from "./util/pipe/SanitizeHtmlPipe";
+import { Keyboard } from "@ionic-native/keyboard";
+import { InAppBrowser } from "@ionic-native/in-app-browser";
 
 @NgModule({
   declarations: [
@@ -93,9 +95,11 @@ import { SanitizeHtmlPipe } from "./util/pipe/SanitizeHtmlPipe";
     IonicStorageModule.forRoot(),
   ],
   providers: [
+    Keyboard,
     StatusBar,
     SplashScreen,
     Network,
+    InAppBrowser,
     ApplicationConfig,
     FirebaseManager, FirestoreManager,
     ApplicationModel,

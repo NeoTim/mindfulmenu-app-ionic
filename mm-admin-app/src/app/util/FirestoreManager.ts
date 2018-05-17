@@ -78,7 +78,7 @@ export class FirestoreManager {
 
   public getByIds(idArray: string[], collection: firebase.firestore.CollectionReference): Promise<firebase.firestore.DocumentSnapshot[]> {
     return new Promise((resolve, reject) => {
-      if (idArray === null) {
+      if (_.isNil(idArray)) {
         reject(null);
       }
       else if (idArray.length === 0) {
