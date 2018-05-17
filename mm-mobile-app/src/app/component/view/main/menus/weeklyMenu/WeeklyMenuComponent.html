@@ -8,7 +8,7 @@
   <h3 text-center>Weekly Menu</h3>
 
   <ng-container *ngIf="weeklyMenu && inCurrentPlanMealsMap && favoriteMealsMap">
-    <h1 text-center>{{ weeklyMenu.startDate | date:'dd MMM' }} - {{ weeklyMenu.endDate | date:'dd MMM' }}</h1>
+    <h1 text-center>{{ weeklyMenu.startDate | date:'MMM d' }} - {{ weeklyMenu.endDate | date:'MMM d' }}</h1>
 
     <ng-container *ngIf="!weeklyMenu.meals || (weeklyMenu.meals && (weeklyMenu.meals.length == 0))">
       <p text-center>This menu doesn't have any meals.</p>

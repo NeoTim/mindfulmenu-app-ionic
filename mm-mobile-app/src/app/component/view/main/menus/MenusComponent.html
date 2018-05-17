@@ -8,7 +8,7 @@
       <div class="background" [style.background-image]="('url(' + currentWeeklyMenu.imageUrl + ')') | sanitizeStyle"></div>
       <div class="content">
         <h5>Weekly Menu</h5>
-        <h3>{{ currentWeeklyMenu.startDate | date:'dd MMM' }} - {{ currentWeeklyMenu.endDate | date:'dd MMM' }}</h3>
+        <h3>{{ currentWeeklyMenu.startDate | date:'MMM d' }} - {{ currentWeeklyMenu.endDate | date:'MMM d' }}</h3>
         <div class="bubble">NEW</div>
       </div>
     </div>
@@ -29,7 +29,7 @@
           <div class="background" [style.background-image]="('url(' + previousWeeklyMenu.imageUrl + ')') | sanitizeStyle"></div>
           <div class="content">
             <h6>Weekly Menu</h6>
-            <h5>{{ previousWeeklyMenu.startDate | date:'dd MMM' }} - {{ previousWeeklyMenu.endDate | date:'dd MMM' }}</h5>
+            <h5>{{ previousWeeklyMenu.startDate | date:'MMM d' }} - {{ previousWeeklyMenu.endDate | date:'MMM d' }}</h5>
           </div>
         </div>
       </ion-scroll>
@@ -47,7 +47,7 @@
           <div class="background" [style.background-image]="('url(' + upcomingWeeklyMenu.imageUrl + ')') | sanitizeStyle"></div>
           <div class="content">
             <h6>Weekly Menu</h6>
-            <h5>{{ upcomingWeeklyMenu.startDate | date:'dd MMM' }} - {{ upcomingWeeklyMenu.endDate | date:'dd MMM' }}</h5>
+            <h5>{{ upcomingWeeklyMenu.startDate | date:'MMM d' }} - {{ upcomingWeeklyMenu.endDate | date:'MMM d' }}</h5>
           </div>
         </div>
       </ion-scroll>

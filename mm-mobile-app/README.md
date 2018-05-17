@@ -23,6 +23,10 @@ Then login to Google Play console, select the app, add a new version, and upload
 Run
 
 ```
+# Use this temporarily
+ionic cordova build ios --aot --minifyjs --minifycss --release
+
+# Broken for now
 ionic cordova build ios --prod 
 ```
 
