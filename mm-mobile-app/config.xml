@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="20180511" id="com.ourmindfulmenu.app" ios-CFBundleVersion="20180511" version="0.9.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="20180617" id="com.ourmindfulmenu.app" ios-CFBundleVersion="20180617" version="0.9.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>MindfulMenu</name>
     <description>Mobile app for viewing meals and managing meal plan.</description>
     <author email="ourmindfulmenu@gmail.com" href="https://www.ourmindfulmenu.com/">Mindful Menu Team</author>
@@ -90,9 +90,9 @@
     <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
     <plugin name="cordova-sqlite-storage" spec="^2.3.1" />
+    <content src="index.html" />
+    <allow-navigation href="http://10.1.1.3:8100" />
     <engine name="browser" spec="5.0.3" />
     <engine name="android" spec="7.0.0" />
     <engine name="ios" spec="4.5.4" />
-    <content src="index.html" />
-    <allow-navigation href="http://10.1.1.3:8100" />
 </widget>
