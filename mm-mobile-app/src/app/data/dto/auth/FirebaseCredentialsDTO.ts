@@ -18,7 +18,7 @@ export class FirebaseCredentialsDTO {
 
   creationTime: Date = undefined;
 ​​
-  lastSignInTime: Date = undefined;
+  lastSignInTime: Date = undefined; // this is the date of actual login, not the token refresh. Once a user logs in once, this date won't change.
 
   refreshToken: string = undefined;
 

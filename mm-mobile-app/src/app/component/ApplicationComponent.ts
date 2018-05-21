@@ -80,7 +80,7 @@ export class ApplicationComponent implements OnInit {
 
   setupListeners() {
     this.events.subscribe(Event.AUTH.LOGIN.SUCCESS, (credentials) => {
-      this.userModel.getUserByUID(credentials.uid)
+      this.userModel.getUser(credentials.uid)
         .then((user: UserDTO) => {
           this.userModel.currentUser = user;
           this.rootPage = MainComponent;

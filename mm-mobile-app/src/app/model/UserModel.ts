@@ -39,21 +39,6 @@ export class UserModel {
       })
   }
 
-  public getUserByUID(userUID: string): Promise<UserDTO> {
-    this.events.publish(Event.SYSTEM.LOADING, true);
-
-    return this.userService.getUserByUID(userUID)
-      .then((user: UserDTO) => {
-        this.events.publish(Event.SYSTEM.LOADING, false);
-        return user;
-      })
-      .catch((error) => {
-        this.events.publish(Event.SYSTEM.LOADING, false);
-        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
-        return Promise.reject(error);
-      })
-  }
-
   public toggleFavoriteMeal(mealId: string, isFavorite: boolean): Promise<UserDTO> {
     let favoriteMealIds: string[] = _.cloneDeep(this.currentUser.favoriteMealIds);
 
@@ -85,6 +70,21 @@ export class UserModel {
           return Promise.reject(error);
         })
     }
+  }
+
+  public createUser(user: UserDTO): Promise<UserDTO> {
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.userService.createUser(user)
+      .then((createdUser: UserDTO) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return createdUser;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
   }
 
 }
