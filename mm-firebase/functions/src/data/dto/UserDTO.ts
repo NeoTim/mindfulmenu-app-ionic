@@ -1,6 +1,8 @@
 
 export class UserDTO {
 
+  id: string; // This is only for Functions DTO.
+
   firstName: string;
 
   lastName: string;

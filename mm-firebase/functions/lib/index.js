@@ -3,33 +3,46 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const cors = require("cors");
+const UserDTO_1 = require("./data/dto/UserDTO");
+const class_transformer_1 = require("class-transformer");
 const corsHandler = cors({
     origin: true
 });
 admin.initializeApp(functions.config().firebase);
-// This is called to get the proper user object after authentication
-exports.getUser = functions.https.onRequest((req, res) => {
+/**
+ * Get the user object in Firestore, based on Auth UID.
+ *
+ * @param uid UID of the Auth account, linked to user.
+ */
+const getUserByUid = function (uid) {
+    return new Promise((resolve, reject) => {
+        admin.firestore().collection('users').doc(uid).get()
+            .then((docSnapshot) => {
+            let user = docSnapshot.data();
+            user.id = docSnapshot.id;
+            resolve(class_transformer_1.plainToClass(UserDTO_1.UserDTO, user));
+        }).catch(error => {
+            console.error(error);
+            reject(error);
+        });
+    });
+};
+// This handles SDK calls as well as direct HTTP calls, but doesn't provide auth info.
+exports.syncLoggedUserHttp = functions.https.onRequest((req, res) => {
     return corsHandler(req, res, () => {
         if (req.param('uid')) {
-            // Find the user
-            admin.firestore().collection('users').where('UID', '==', req.param('uid'))
-                .limit(1).get()
-                .then(results => {
-                if (results.docs.length === 1) {
-                    let user = results.docs[0].data();
-                    console.log('User: ' + user.firstName + ' ' + user.lastName);
-                    res.status(200).json({ user: user });
-                    admin.firestore().collection('users').doc(results.docs[0].id).set({ lastAccessed: new Date() }, { merge: true })
-                        .then((result) => { return; })
-                        .catch((error) => { return; });
-                }
-                else {
-                    console.error('There are multiple users with the same UID: ' + req.body.data.uid);
-                    res.status(400).send('There are more than 1 user with this UID.');
-                }
-            }).catch(error => {
+            getUserByUid(req.param('uid'))
+                .then((user) => {
+                let now = new Date();
+                user.lastLoginDate = now;
+                // Update this user object, async.
+                admin.firestore().collection('users').doc(user.id).set({ lastLoginDate: now }, { merge: true })
+                    .then((result) => { return; })
+                    .catch((error) => { return; });
+                res.status(200).json(user);
+            }).catch((error) => {
                 console.error(error);
-                res.sendStatus(500);
+                res.status(400).send('There was an issue with database.');
             });
         }
         else {
@@ -37,37 +50,19 @@ exports.getUser = functions.https.onRequest((req, res) => {
         }
     });
 });
-// this handles SDK calls as well as direct HTTP calls
-// export const addTest = functions.https.onRequest((req, res) => {
-// 	return corsHandler(req, res, () => {
-// 		let newText: string = '';
-// 		// SDK call passing data json object with properties
-// 		if (req.body.data && req.body.data.text) {
-// 			newText = req.body.data.text;
-// 		}
-// 		// direct HTTP call passing data in http query parameter
-// 		else if (req.query.text) {
-// 			newText = req.query.text;
-// 		}
-// 		admin.firestore().collection('test').add({ 'text': newText })
-// 			.then((snapshot) => {
-// 				// you should return json object with data property and your result inside if you want to conform to Firebase SDK protocol
-// 				res.status(200).json({ data: { result: 'OK', snapshot: snapshot } });
-// 			})
-// 			.catch(() => {
-// 				res.sendStatus(500);
-// 			});
-// 	})
-// });
 // this handles SDK calls only, context already provides current auth state
-// export const addTest2 = functions.https.onCall((data: any, context: CallableContext) => {
-// 	let newText: string = data.text;
-// 	return admin.firestore().collection('test').add({ 'text': newText })
-// 		.then((snapshot) => {
-// 			return { result: 'OK', snapshot: snapshot };
-// 		})
-// 		.catch(() => {
-// 			return { result: 'ERROR' };
-// 		});
-// });
+exports.syncLoggedUser = functions.https.onCall((data, context) => {
+    getUserByUid(context.auth.uid)
+        .then((user) => {
+        let now = new Date();
+        user.lastLoginDate = now;
+        // Update this user object, async.
+        admin.firestore().collection('users').doc(user.id).set({ lastLoginDate: now }, { merge: true })
+            .then((result) => { return; })
+            .catch((error) => { return; });
+        return user;
+    }).catch((error) => {
+        return { error: error };
+    });
+});
 //# sourceMappingURL=index.js.map
