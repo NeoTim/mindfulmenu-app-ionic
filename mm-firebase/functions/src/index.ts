@@ -12,7 +12,7 @@ const corsHandler = cors({
 admin.initializeApp(functions.config().firebase);
 
 // This handles SDK calls as well as direct HTTP calls, but doesn't provide auth info.
-export const getUser = functions.https.onRequest((req, res) => {
+export const syncUser = functions.https.onRequest((req, res) => {
 	return corsHandler(req, res, () => {
 		if (req.param('uid')) {
 			this.getUserByUid(req.param('uid'))
@@ -29,7 +29,7 @@ export const getUser = functions.https.onRequest((req, res) => {
 });
 
 // this handles SDK calls only, context already provides current auth state
-export const userLogin = functions.https.onCall((data: any, context: CallableContext) => {
+export const syncLoggedUser = functions.https.onCall((data: any, context: CallableContext) => {
 
 	this.getUserByUid(context.auth.uid)
 		.then((user) => {
