@@ -58,6 +58,20 @@ export class AuthModel {
       })
   }
 
+  public register(username: string, password: string): Promise<FirebaseCredentialsDTO> {
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.authService.register(username, password)
+      .then((credentials: FirebaseCredentialsDTO) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return credentials;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return Promise.reject(error);
+      })
+  }
+
   public changePassword(username: string, currentPassword: string, newPassword: string): Promise<any> {
     this.events.publish(Event.SYSTEM.LOADING, true);
 

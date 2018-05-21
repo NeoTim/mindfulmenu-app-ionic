@@ -14,7 +14,7 @@ export class AuthService {
   public login(username: string, password: string): Promise<FirebaseCredentialsDTO> {
     return new Promise((resolve, reject) => {
       this.firebaseManager.auth.signInWithEmailAndPassword(username, password)
-        .then((result: firebase.User) => {
+        .then((result: firebase.User) => {  /* new API versions are said to return slightly different object/structure, watch out */
           const firebaseCredentials: FirebaseCredentialsDTO = this.convertFirebaseUser(result);
           resolve(firebaseCredentials);
         })
@@ -74,9 +74,28 @@ export class AuthService {
     });
   }
 
+  public register(username: string, password: string): Promise<FirebaseCredentialsDTO> {
+    return new Promise((resolve, reject) => {
+      this.firebaseManager.auth.createUserWithEmailAndPassword(username, password)
+        .then((result: firebase.User) => { /* new API versions are said to return slightly different object/structure, watch out */
+          //return result.sendEmailVerification()
+            //.then(() => {
+              const firebaseCredentials: FirebaseCredentialsDTO = this.convertFirebaseUser(result);
+              resolve(firebaseCredentials);
+            //})
+            //.catch((error) => {
+            //  reject(error);
+            //});
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
   // I've created FirebaseCredentialsDTO to extract the most important data (the rest of the object is just gibberish properties and functions named a,b,c, etc.)
   // firebase.User complains about accessing/copying some metadata (they're marked as readonly (?))
-  // note: FirebaseCredentialsDTO isn't really used anywhere, Firebase SDK maintains its own firebase.User in the background - we just store a simplified copy for reference
+  // note: FirebaseCredentialsDTO isn't really used for authorization, Firebase SDK maintains its own firebase.User in the background - we just store a simplified copy for reference
   private convertFirebaseUser(user: firebase.User): FirebaseCredentialsDTO  {
     const reflectionFirebaseCredentials: FirebaseCredentialsDTO = new FirebaseCredentialsDTO();
     let targetFirebaseCredentials: any = {};

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { plainToClass } from 'class-transformer';
+import { classToPlain, plainToClass } from 'class-transformer';
 import firebase from 'firebase';
 import { UserDTO } from '../data/dto/user/UserDTO';
 import { FirestoreManager } from "../util/FirestoreManager";
@@ -24,20 +24,6 @@ export class UserService {
     });
   }
 
-  public getUserByUID(userUID: string): Promise<UserDTO> {
-    return new Promise((resolve, reject) => {
-      this.firestoreManager.firestore.collection('users').where('UID', '==', userUID).get()
-        .then((querySnapshot: firebase.firestore.QuerySnapshot) => {
-          let result: object = this.firestoreManager.queryToObject(querySnapshot);
-          let data: UserDTO = plainToClass(UserDTO, result as object);
-          resolve(data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
   public updateUserFavoriteMealIds(userId: string, favoriteMealIds: string[]): Promise<UserDTO> {
     return new Promise((resolve, reject) => {
       this.firestoreManager.firestore.collection('users').doc(userId).update( { 'favoriteMealIds': favoriteMealIds })
@@ -50,5 +36,16 @@ export class UserService {
     });
   }
 
+  public createUser(user: UserDTO): Promise<UserDTO> {
+    return new Promise((resolve, reject) => {
+      this.firestoreManager.firestore.collection('users').add(classToPlain(user))
+        .then((documentReference: firebase.firestore.DocumentReference) => {
+          resolve(this.getUser(documentReference.id));
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
 
 }
