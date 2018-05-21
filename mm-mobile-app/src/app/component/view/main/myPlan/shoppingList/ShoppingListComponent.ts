@@ -180,6 +180,10 @@ export class ShoppingListComponent {
           category.items.push(item);
         });
 
+        category.items = _.sortBy(category.items, (item: ShoppingListItem) => {
+          return _.trim(item.ingredient.item.toLowerCase());
+        });
+
         shoppingList.categories.push(category);
       }
       else {
@@ -267,7 +271,7 @@ export class ShoppingListComponent {
           this.toggleCheckedQueueLastWeeklyPlan = weeklyPlan;
 
           // If this is the last call, then update the model with whatever recent weeklyPlan state we have
-          // it could not be from this call, if this call failed (it does the same thing in catch() below).
+          // it could be not from this call, if this call failed (it does the same thing in catch() below).
           // Only now sync the model. The expected recent WeeklyPlan and its state should be exactly the same as current local ShoppingList model
           // so syncing it should yield no visual changes (things that were checked, will be checked again, things that weren't checked, remain unchecked)
           // but if there were errors, the model after sync will reflect the actual server state
@@ -294,7 +298,7 @@ export class ShoppingListComponent {
   }
 
   addItemToCategory(category: ShoppingListCategory) {
-    this.viewUtil.showValuePrompt('Add Ingredient', 'Please enter the name of the new ingredient.')
+    this.viewUtil.showValuePrompt('Add Item', 'Please enter the name of the new item.')
       .then((data: any) => {
         let ingredient: IngredientDTO = new IngredientDTO();
         ingredient.isCustomItem = true;
