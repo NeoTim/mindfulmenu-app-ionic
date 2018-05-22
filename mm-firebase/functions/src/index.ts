@@ -200,6 +200,56 @@ export const createUser = functions.https.onCall((data: any, context: CallableCo
 	}
 });
 
+export const updateUser = functions.https.onCall((data: any, context: CallableContext) => {
+    const userFDTO: UserFDTO = plainToClass(UserFDTO, data.user as object);
+    const userDTO: UserDTO = UserFDTO.toDTO(userFDTO);
+    const userId: string = data.userId;
+
+    return getUser(userId)
+        .then((user: UserDTO) => {
+            if (user.isEnabled !== userDTO.isEnabled) {
+                userDTO.automaticUpdateEnabled = false;
+            }
+            else {
+                userDTO.automaticUpdateEnabled = true;
+            }
+
+            return userDTO;
+        })
+        .then((user: UserDTO) => {
+            return admin.firestore().collection('users').doc(userId).update(classToPlain({
+                'firstName': userDTO.firstName,
+                'lastName': userDTO.lastName,
+                'automaticUpdateEnabled': userDTO.automaticUpdateEnabled,
+                'isAdmin': userDTO.isAdmin,
+                'isEnabled': userDTO.isEnabled
+            }))
+        })
+        .then(() => {
+            return getUser(userId)
+        })
+        .then((user: UserDTO) => {
+            return classToPlain(UserFDTO.fromDTO(user));
+        })
+        .catch((error) => {
+            return Promise.reject(error);
+        });
+});
+
+export const enableAutomaticUpdateForUser = functions.https.onCall((data: any, context: CallableContext) => {
+    const userId: string = data.userId;
+
+    return admin.firestore().collection('users').doc(userId).update(classToPlain({ 'automaticUpdateEnabled': true }))
+        .then(() => {
+            return getUser(userId)
+        })
+        .then((user: UserDTO) => {
+            return classToPlain(UserFDTO.fromDTO(user));
+        })
+        .catch((error) => {
+            return Promise.reject(error);
+        });
+});
 
 // This handles SDK calls as well as direct HTTP calls, but doesn't provide auth info.
 /*
