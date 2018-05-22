@@ -38,18 +38,25 @@ import { WeeklyMenuCreatePopupComponent } from './component/view/main/weeklyMenu
 import { MealEditPopupComponent } from './component/view/main/meals/popup/MealEditPopupComponent';
 import { MealCreatePopupComponent } from './component/view/main/meals/popup/MealCreatePopupComponent';
 import { AuthLoginComponent } from './component/view/preliminary/auth/AuthLoginComponent';
+import { UsersComponent } from './component/view/main/users/UsersComponent';
+import { UserEditPopupComponent } from './component/view/main/users/popup/UserEditPopupComponent';
+import { UserCreatePopupComponent } from './component/view/main/users/popup/UserCreatePopupComponent';
+import { AuthModel } from './model/AuthModel';
+import { AuthService } from './service/AuthService';
 
 @NgModule({
   declarations: [
     MainLayoutComponent, AuthLoginComponent, PreliminaryLayoutComponent, AbstractStateComponent,
     ErrorNotFoundComponent,
-    HomeComponent, WeeklyMenusComponent, MealsComponent,
+    HomeComponent, WeeklyMenusComponent, MealsComponent, UsersComponent,
     WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent,
-    MealEditPopupComponent, MealCreatePopupComponent
+    MealEditPopupComponent, MealCreatePopupComponent,
+    UserEditPopupComponent, UserCreatePopupComponent
   ],
   entryComponents: [
-    WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent, 
-    MealEditPopupComponent, MealCreatePopupComponent
+    WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent,
+    MealEditPopupComponent, MealCreatePopupComponent,
+    UserEditPopupComponent, UserCreatePopupComponent
   ],
   imports: [
     BrowserModule,
@@ -82,6 +89,7 @@ import { AuthLoginComponent } from './component/view/preliminary/auth/AuthLoginC
     StateUtil,
     FirebaseManager, FirestoreManager,
     ApplicationModel,
+    AuthModel, AuthService,
     IngredientModel, IngredientService,
     MealModel, MealService,
     WeeklyMenuModel, WeeklyMenuService,
@@ -96,6 +104,7 @@ import { AuthLoginComponent } from './component/view/preliminary/auth/AuthLoginC
       useFactory: (
         firebaseManager: FirebaseManager,
         applicationModel: ApplicationModel,
+        authModel: AuthModel,
         ingredientModel: IngredientModel,
         mealModel: MealModel,
         weeklyMenuModel: WeeklyMenuModel,
@@ -105,6 +114,7 @@ import { AuthLoginComponent } from './component/view/preliminary/auth/AuthLoginC
       deps: [
         FirebaseManager,
         ApplicationModel,
+        AuthModel,
         IngredientModel,
         MealModel,
         WeeklyMenuModel,

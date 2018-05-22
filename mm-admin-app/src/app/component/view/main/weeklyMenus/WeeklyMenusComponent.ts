@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'weekly-menus',
   templateUrl: 'WeeklyMenusComponent.html',
-  styleUrls: ['WeeklyMenusComponent.css']
+  styleUrls: ['WeeklyMenusComponent.scss']
 })
 export class WeeklyMenusComponent implements OnInit {
 

@@ -6,13 +6,13 @@ export class WeeklyMenuDTO extends IdentifiableDTO {
 
   weekNumber: number;
 
-  @Transform(DateUtil.firebaseDateConversion)
+  @Transform(DateUtil.firebaseFirestoreDateConversion)
   startDate: Date;
 
-  @Transform(DateUtil.firebaseDateConversion)
+  @Transform(DateUtil.firebaseFirestoreDateConversion)
   endDate: Date;
 
-  @Transform(DateUtil.firebaseDateConversion)
+  @Transform(DateUtil.firebaseFirestoreDateConversion)
   publishDate: Date;
 
   mealIds: string[];

@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 @Component({
   selector: 'weekly-menu-edit-popup',
   templateUrl: 'WeeklyMenuEditPopupComponent.html',
-  styleUrls: ['WeeklyMenuEditPopupComponent.css']
+  styleUrls: ['WeeklyMenuEditPopupComponent.scss']
 })
 export class WeeklyMenuEditPopupComponent implements OnInit {
 

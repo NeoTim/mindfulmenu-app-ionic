@@ -5,6 +5,8 @@ import { ApplicationState } from '../data/local/ApplicationState';
 @Injectable()
 export class ApplicationModel {
 
+  public isLoggedIn: boolean = false;
+
   public goingToPreviousState: boolean = false;
   public previousStateHistory: ApplicationState[] = [];
   public currentState: ApplicationState;

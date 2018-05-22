@@ -16,7 +16,7 @@ import * as moment from 'moment';
 @Component({
   selector: 'weekly-menu-create-popup',
   templateUrl: 'WeeklyMenuCreatePopupComponent.html',
-  styleUrls: ['WeeklyMenuCreatePopupComponent.css']
+  styleUrls: ['WeeklyMenuCreatePopupComponent.scss']
 })
 export class WeeklyMenuCreatePopupComponent implements OnInit {
 

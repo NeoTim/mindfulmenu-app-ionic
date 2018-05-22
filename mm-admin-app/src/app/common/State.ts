@@ -4,6 +4,7 @@ export class State {
     HOME:           'main.home',
     WEEKLY_MENUS:   'main.weeklyMenus',
     MEALS:          'main.meals',
+    USERS:          'main.users',
   };
 
   public static readonly PRELIMINARY = {

@@ -9,6 +9,7 @@ import { PreliminaryLayoutComponent } from '../component/view/preliminary/Prelim
 import { WeeklyMenusComponent } from '../component/view/main/weeklyMenus/WeeklyMenusComponent';
 import { MealsComponent } from '../component/view/main/meals/MealsComponent';
 import { AuthLoginComponent } from '../component/view/preliminary/auth/AuthLoginComponent';
+import { UsersComponent } from '../component/view/main/users/UsersComponent';
 
 @Component({ selector: 'abstract', template: '<ui-view></ui-view>' })
 export class AbstractStateComponent { }
@@ -27,5 +28,6 @@ export const StateConfig: Ng2StateDeclaration[] = [
   { url: '^/home', name: State.MAIN.HOME, component: HomeComponent },
   { url: '^/weekly-menus', name: State.MAIN.WEEKLY_MENUS, component: WeeklyMenusComponent },
   { url: '^/meals', name: State.MAIN.MEALS, component: MealsComponent },
+  { url: '^/users', name: State.MAIN.USERS, component: UsersComponent },
 
 ];

@@ -1,0 +1,92 @@
+<div>
+  <div class="modal-header">
+    <h4 class="modal-title">Edit User</h4>
+    <button type="button" class="close" (click)="dismiss()">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #userForm="ngForm" novalidate>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label>ID</label>
+          <div>{{ user.id }}</div>
+        </div>
+        <div class="form-group col-sm-6">
+          <label>Last Login Date</label>
+          <div>{{ user.lastLoginDate | date:'medium' }}</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label>First Name <span style="color:red;">*</span></label>
+          <input type="text" class="form-control" id="firstName" name="firstName"
+                 [ngClass]="{'is-invalid': userForm.submitted && firstName.invalid, 'is-valid': userForm.submitted && firstName.valid }"
+                 #firstName="ngModel" [(ngModel)]="user.firstName" required>
+          <div class="invalid-feedback" *ngIf="userForm.submitted && firstName.invalid">
+            <div *ngIf="firstName.errors?.required">This cannot be empty.</div>
+          </div>
+        </div>
+        <div class="form-group col-sm-6">
+          <label>Last Name <span style="color:red;">*</span></label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="lastName" name="lastName"
+                   [ngClass]="{'is-invalid': userForm.submitted && lastName.invalid, 'is-valid': userForm.submitted && lastName.valid }"
+                   #lastName="ngModel" [(ngModel)]="user.lastName" required>
+            <div class="invalid-feedback" *ngIf="userForm.submitted && lastName.invalid">
+              <div *ngIf="lastName.errors?.required">This cannot be empty.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label>Email</label>
+          <div>{{ user.email }}</div>
+        </div>
+        <div class="form-group col-sm-6">
+          <label>Email Verified</label>
+          <div>
+            <span class="glyphicon glyphicon-ok-circle text-success" title="Email verified" *ngIf="user.emailVerified"></span>
+            <span class="glyphicon glyphicon-ban-circle text-danger" title="Email not verified" *ngIf="!user.emailVerified"></span>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label>Automatic Updates</label>
+          <div>
+            <span class="glyphicon glyphicon-ok text-success" title="Yes" *ngIf="user.automaticUpdateEnabled"></span>
+            <span class="glyphicon glyphicon-remove text-danger" title="No" *ngIf="!user.automaticUpdateEnabled"></span>
+          </div>
+        </div>
+        <div class="form-group col-sm-6">
+          <label>Last Automatic Update Date</label>
+          <div>{{ user.lastAutomaticUpdateDate | date:'medium' }}</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label>Admin</label>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="isAdmin" name="isAdmin"
+                   #isAdmin="ngModel" [(ngModel)]="user.isAdmin">
+            <label class="custom-control-label" for="isAdmin">{{ user.isAdmin ? 'Yes' : 'No' }}</label>
+          </div>
+        </div>
+        <div class="form-group col-sm-6">
+          <label>Enabled</label>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="isEnabled" name="isEnabled"
+                   #isEnabled="ngModel" [(ngModel)]="user.isEnabled">
+            <label class="custom-control-label" for="isEnabled">{{ user.isEnabled ? 'Yes' : 'No' }}</label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="close()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+  </div>
+</div>

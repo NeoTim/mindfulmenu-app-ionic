@@ -9,7 +9,7 @@ import { IngredientModel } from '../../../../model/IngredientModel';
 @Component({
   selector: 'meals',
   templateUrl: 'MealsComponent.html',
-  styleUrls: ['MealsComponent.css']
+  styleUrls: ['MealsComponent.scss']
 })
 export class MealsComponent implements OnInit {
 

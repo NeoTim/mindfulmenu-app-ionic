@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { TransitionService, StateService, Transition } from '@uirouter/angular';
+import { TransitionService, StateService, Transition, Ng2StateDeclaration } from '@uirouter/angular';
 import { Event } from './common/Event';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventsService } from 'angular-event-service/dist';
@@ -8,11 +8,18 @@ import { ApplicationModel } from './model/ApplicationModel';
 import { HtmlUtil } from './util/HtmlUtil';
 import { ApplicationState } from './data/local/ApplicationState';
 import { ApplicationConfig } from './config/ApplicationConfig';
+import { State } from './common/State';
+import * as _ from 'lodash';
 
 @Injectable()
 export class ApplicationInit {
 
   private toastrService: ToastrService;
+
+  private publicStates: string[] = [
+    State.PRELIMINARY.AUTH.LOGIN,
+    State.PRELIMINARY.ERROR.NOT_FOUND
+  ];
 
   constructor(private eventsService: EventsService,
               private transitionService: TransitionService,
@@ -25,10 +32,25 @@ export class ApplicationInit {
       this.toastrService = this.injector.get(ToastrService);
     });
 
+
+    this.configureTransitions();
     this.configureListeners();
   }
 
-  configureListeners() {
+  configureTransitions() {
+    this.transitionService.onBefore({}, (transition: Transition) => {
+      const toState: Ng2StateDeclaration = transition.to();
+      const toStateParams: any = transition.params('entering');
+
+      if (!this.applicationModel.isLoggedIn && !_.includes(this.publicStates, toState.name)) {
+        // return this.stateService.target(State.PRELIMINARY.AUTH.LOGIN);
+        return true;
+      }
+      else {
+        return true;
+      }
+    });
+
     this.transitionService.onSuccess({}, (transition: Transition) => {
       const toState = transition.to();
       const toStateParams = transition.params('entering');
@@ -48,14 +70,16 @@ export class ApplicationInit {
       this.applicationModel.currentUrl = this.stateService.href(
         this.applicationModel.currentState.state,
         this.applicationModel.currentState.params,
-        { absolute: true }
+        {absolute: true}
       );
 
       HtmlUtil.scrollToTop(null, true);
 
       return true;
     });
+  }
 
+  configureListeners() {
     this.eventsService.on(Event.SYSTEM.LOADING, (isLoading: boolean) => {
       this.applicationModel.isLoading.next(isLoading);
     });

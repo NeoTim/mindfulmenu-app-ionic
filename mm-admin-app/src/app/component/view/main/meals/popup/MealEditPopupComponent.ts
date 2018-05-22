@@ -18,7 +18,7 @@ import { IngredientDTO } from '../../../../../data/dto/menu/IngredientDTO';
 @Component({
   selector: 'meal-edit-popup',
   templateUrl: 'MealEditPopupComponent.html',
-  styleUrls: ['MealEditPopupComponent.css']
+  styleUrls: ['MealEditPopupComponent.scss']
 })
 export class MealEditPopupComponent implements OnInit {
 
@@ -81,7 +81,7 @@ export class MealEditPopupComponent implements OnInit {
               .catch((error) => { })
           } else {
             return this.ingredientModel.updateIngredient(ingredient)
-              .then((newIngredient: IngredientDTO) => { 
+              .then((newIngredient: IngredientDTO) => {
               })
               .catch((error) => { })
           }

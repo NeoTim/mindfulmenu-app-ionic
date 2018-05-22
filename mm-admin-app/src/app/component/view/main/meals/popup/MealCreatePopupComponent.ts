@@ -18,7 +18,7 @@ import { Meal } from '../../../../../data/local/menu/Meal';
 @Component({
   selector: 'meal-create-popup',
   templateUrl: 'MealCreatePopupComponent.html',
-  styleUrls: ['MealCreatePopupComponent.css']
+  styleUrls: ['MealCreatePopupComponent.scss']
 })
 export class MealCreatePopupComponent implements OnInit {
 

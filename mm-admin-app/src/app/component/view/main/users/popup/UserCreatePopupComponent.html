@@ -1,0 +1,85 @@
+<div>
+  <div class="modal-header">
+    <h4 class="modal-title">Add User</h4>
+    <button type="button" class="close" (click)="dismiss()">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #userForm="ngForm" novalidate>
+      <div class="form-row">
+        <div class="form-group col-sm-12">
+          <label>Email <span style="color:red;">*</span></label>
+          <input type="email" class="form-control" id="username" name="username"
+                 [ngClass]="{'is-invalid': userForm.submitted && username.invalid, 'is-valid': userForm.submitted && username.valid }"
+                 #username="ngModel" [(ngModel)]="signupData.username" required ngvemail>
+          <div class="invalid-feedback" *ngIf="userForm.submitted && username.invalid">
+            <div *ngIf="username.errors?.required">This cannot be empty.</div>
+            <div *ngIf="username.errors?.email">This doesn't look like a valid email address.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label>First Name <span style="color:red;">*</span></label>
+          <input type="text" class="form-control" id="firstName" name="firstName"
+                 [ngClass]="{'is-invalid': userForm.submitted && firstName.invalid, 'is-valid': userForm.submitted && firstName.valid }"
+                 #firstName="ngModel" [(ngModel)]="signupData.firstName" required>
+          <div class="invalid-feedback" *ngIf="userForm.submitted && firstName.invalid">
+            <div *ngIf="firstName.errors?.required">This cannot be empty.</div>
+          </div>
+        </div>
+        <div class="form-group col-sm-6">
+          <label>Last Name <span style="color:red;">*</span></label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="lastName" name="lastName"
+                   [ngClass]="{'is-invalid': userForm.submitted && lastName.invalid, 'is-valid': userForm.submitted && lastName.valid }"
+                   #lastName="ngModel" [(ngModel)]="signupData.lastName" required>
+            <div class="invalid-feedback" *ngIf="userForm.submitted && lastName.invalid">
+              <div *ngIf="lastName.errors?.required">This cannot be empty.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label>Password <span style="color:red;">*</span></label>
+          <input type="password" class="form-control" id="password" name="password"
+                 [ngClass]="{'is-invalid': userForm.submitted && password.invalid, 'is-valid': userForm.submitted && password.valid }"
+                 #password="ngModel" [(ngModel)]="signupData.password" minlength="6" required>
+          <div class="invalid-feedback" *ngIf="userForm.submitted && password.invalid">
+            <div *ngIf="password.errors?.required">This cannot be empty.</div>
+            <div *ngIf="password.errors?.minlength">Password needs at least 6 characters.</div>
+          </div>
+        </div>
+        <div class="form-group col-sm-6">
+          <label>Repeat Password <span style="color:red;">*</span></label>
+          <div class="input-group">
+            <input type="password" class="form-control" id="passwordRepeat" name="passwordRepeat"
+                   [ngClass]="{'is-invalid': userForm.submitted && passwordRepeat.invalid, 'is-valid': userForm.submitted && passwordRepeat.valid }"
+                   #passwordRepeat="ngModel" [(ngModel)]="signupData.passwordRepeat" minlength="6" [equalTo]="password" required>
+            <div class="invalid-feedback" *ngIf="userForm.submitted && passwordRepeat.invalid">
+              <div *ngIf="passwordRepeat.errors?.required">This cannot be empty.</div>
+              <div *ngIf="passwordRepeat.errors?.minlength">Password needs at least 6 characters.</div>
+              <div *ngIf="passwordRepeat.errors?.equalTo">Passwords do not match.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-12">
+          <label>Admin</label>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="isAdmin" name="isAdmin"
+                   #isAdmin="ngModel" [(ngModel)]="signupData.isAdmin">
+            <label class="custom-control-label" for="isAdmin">{{ signupData.isAdmin ? 'Yes' : 'No' }}</label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="close()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+  </div>
+</div>

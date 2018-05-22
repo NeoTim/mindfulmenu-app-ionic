@@ -33,13 +33,73 @@ export class UserModel {
       });
   }
 
-  public getUserByUID(userUID: string): Promise<UserDTO> {
+  public getAllUsers(): Promise<UserDTO[]> {
     this.eventsService.broadcast(Event.SYSTEM.LOADING, true);
 
-    return this.userService.getUserByUID(userUID)
-      .then((user: UserDTO) => {
+    return this.userService.getAllUsers()
+      .then((users: UserDTO[]) => {
         this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
-        return user;
+        return users;
+      })
+      .catch((error) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        this.eventsService.broadcast(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      });
+  }
+
+  public getUsersByEmail(email: string): Promise<UserDTO[]> {
+    this.eventsService.broadcast(Event.SYSTEM.LOADING, true);
+
+    return this.userService.getUsersByEmail(email)
+      .then((users: UserDTO[]) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        return users;
+      })
+      .catch((error) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        this.eventsService.broadcast(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      });
+  }
+
+  public createUser(user: UserDTO, userId: string = null): Promise<UserDTO> {
+    this.eventsService.broadcast(Event.SYSTEM.LOADING, true);
+
+    return this.userService.createUser(user, userId)
+      .then((createdUser: UserDTO) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        return createdUser;
+      })
+      .catch((error) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        this.eventsService.broadcast(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      });
+  }
+
+  public updateUser(user: UserDTO): Promise<UserDTO> {
+    this.eventsService.broadcast(Event.SYSTEM.LOADING, true);
+
+    return this.userService.updateUser(user)
+      .then((updatedUser: UserDTO) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        return updatedUser;
+      })
+      .catch((error) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        this.eventsService.broadcast(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      });
+  }
+
+  public enableAutomaticUpdateForUser(userId: string): Promise<UserDTO> {
+    this.eventsService.broadcast(Event.SYSTEM.LOADING, true);
+
+    return this.userService.enableAutomaticUpdateForUser(userId)
+      .then((updatedUser: UserDTO) => {
+        this.eventsService.broadcast(Event.SYSTEM.LOADING, false);
+        return updatedUser;
       })
       .catch((error) => {
         this.eventsService.broadcast(Event.SYSTEM.LOADING, false);

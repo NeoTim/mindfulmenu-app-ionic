@@ -1,0 +1,57 @@
+<div>
+  <div class="row">
+    <div class="col-sm-7">
+      <h3>Users:</h3>
+    </div>
+    <div class="col-sm-5">
+      <button type="button" class="btn btn-primary float-right" (click)="addUser()">Add User</button>
+      <input type="text" class="float-right form-control w-50 mr-4" id="email" name="email" [(ngModel)]="email" placeholder="Filter by email" (keyup.enter)="getUsers()">
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Last Login Date</th>
+        <th scope="col" class="text-center">Admin</th>
+        <th scope="col" class="text-center">Enabled</th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of users" >
+        <td>{{ user.id }}</td>
+        <td>{{ user.firstName + ' ' + user.lastName }}</td>
+        <td>
+          <span class="glyphicon glyphicon-ok-circle text-success" title="Email verified" *ngIf="user.emailVerified"></span>
+          <span class="glyphicon glyphicon-ban-circle text-danger" title="Email not verified" *ngIf="!user.emailVerified"></span>
+          <span>{{ user.email }}</span>
+        </td>
+        <td>{{ user.lastLoginDate | date:'medium' }}</td>
+        <td class="text-center">
+          <span class="glyphicon glyphicon-ok text-success" title="Yes" *ngIf="user.isAdmin"></span>
+          <span class="glyphicon glyphicon-remove text-danger" title="No" *ngIf="!user.isAdmin"></span>
+        </td>
+        <td class="text-center">
+          <span class="glyphicon glyphicon-ok text-success" title="Yes" *ngIf="user.isEnabled"></span>
+          <span class="glyphicon glyphicon-remove text-danger" title="No" *ngIf="!user.isEnabled"></span>
+        </td>
+        <td>
+          <div class="float-right">
+            <button *ngIf="!user.automaticUpdateEnabled" type="button" class="btn btn-success btn-sm" (click)="enableAutomaticUpdateForUser(user); $event.stopImmediatePropagation()">
+              <span class="glyphicon glyphicon-play-circle"></span>
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="editUser(user); $event.stopImmediatePropagation()">
+              <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
