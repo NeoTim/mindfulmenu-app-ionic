@@ -7,11 +7,12 @@ export class ApplicationConfig {
 
     public applicationOwner: string = 'OurMindfulMenu';
     public applicationName: string = 'OurMindfulMenu';
-    public version: string = '0.9.8 (2018-05-21)';
+    public version: string = '0.9.9 (2018-05-22)';
 
     public production: boolean;
     public firebase: FirebaseConfig;
     public websiteUrl: string;
+    public subscriptionUrl: { oneMonth: string, sixMonths: string };
     public contactEmail: string;
 
     public environment: string;
@@ -35,6 +36,10 @@ export class ApplicationConfig {
             messagingSenderId: '415539829999'
           },
           websiteUrl: 'https://www.ourmindfulmenu.com/',
+          subscriptionUrl: {
+            oneMonth: 'https://app.moonclerk.com/pay/7j48jz79l754?embed=true',
+            sixMonths: 'https://app.moonclerk.com/pay/49iz8yjpvzpr?embed=true'
+          },
           contactEmail: 'ourmindfulmenu@gmail.com'
 
         },
@@ -49,6 +54,10 @@ export class ApplicationConfig {
             messagingSenderId: '415539829999'
           },
           websiteUrl: 'https://www.ourmindfulmenu.com/',
+          subscriptionUrl: {
+            oneMonth: 'https://app.moonclerk.com/pay/7j48jz79l754?embed=true',
+            sixMonths: 'https://app.moonclerk.com/pay/49iz8yjpvzpr?embed=true'
+          },
           contactEmail: 'ourmindfulmenu@gmail.com'
         }
     };
@@ -62,6 +71,7 @@ export class ApplicationConfig {
           this.production = this.environmentConfigs[environmentName].production;
           this.firebase = this.environmentConfigs[environmentName].firebase;
           this.websiteUrl = this.environmentConfigs[environmentName].websiteUrl;
+          this.subscriptionUrl = this.environmentConfigs[environmentName].subscriptionUrl;
           this.contactEmail = this.environmentConfigs[environmentName].contactEmail;
 
           this.environment = environmentName;

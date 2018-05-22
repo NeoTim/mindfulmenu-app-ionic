@@ -3,11 +3,14 @@ import { classToPlain, plainToClass } from 'class-transformer';
 import firebase from 'firebase';
 import { UserDTO } from '../data/dto/user/UserDTO';
 import { FirestoreManager } from "../util/FirestoreManager";
+import { FirebaseManager } from "../util/FirebaseManager";
+import { UserFDTO } from "../data/dto/user/UserFDTO";
 
 @Injectable()
 export class UserService {
 
-  constructor(private firestoreManager: FirestoreManager) {
+  constructor(private firestoreManager: FirestoreManager,
+              private firebaseManager: FirebaseManager) {
   }
 
   public getUser(userId: string): Promise<UserDTO> {
@@ -24,11 +27,13 @@ export class UserService {
     });
   }
 
-  public updateUserFavoriteMealIds(userId: string, favoriteMealIds: string[]): Promise<UserDTO> {
+  public syncLoggedUser(): Promise<UserDTO> {
     return new Promise((resolve, reject) => {
-      this.firestoreManager.firestore.collection('users').doc(userId).update( { 'favoriteMealIds': favoriteMealIds })
-        .then(() => {
-            resolve(this.getUser(userId));
+      this.firebaseManager.functions.httpsCallable('syncLoggedUser')()
+        .then((result) => {
+          let dataFDTO: UserFDTO = plainToClass(UserFDTO, result.data as object);
+          let data: UserDTO = UserFDTO.toDTO(dataFDTO);
+          resolve(data);
         })
         .catch((error) => {
           reject(error);
@@ -36,11 +41,29 @@ export class UserService {
     });
   }
 
-  public createUser(user: UserDTO): Promise<UserDTO> {
+  public updateUserFavoriteMealIds(userId: string, favoriteMealIds: string[]): Promise<UserDTO> {
     return new Promise((resolve, reject) => {
-      this.firestoreManager.firestore.collection('users').add(classToPlain(user))
-        .then((documentReference: firebase.firestore.DocumentReference) => {
-          resolve(this.getUser(documentReference.id));
+      this.firebaseManager.functions.httpsCallable('updateUserFavoriteMealIds')({ userId: userId, favoriteMealIds: favoriteMealIds })
+        .then((result) => {
+          let dataFDTO: UserFDTO = plainToClass(UserFDTO, result.data as object);
+          let data: UserDTO = UserFDTO.toDTO(dataFDTO);
+          resolve(data);
+        })
+        .catch((error) => {
+          reject(error);
+      });
+    });
+  }
+
+  public createUser(user: UserDTO, userId: string): Promise<UserDTO> {
+    let userFDTO: UserFDTO = UserFDTO.fromDTO(user);
+
+    return new Promise((resolve, reject) => {
+      this.firebaseManager.functions.httpsCallable('createUser')({ user: classToPlain(userFDTO), userId: userId })
+        .then((result) => {
+          let dataFDTO: UserFDTO = plainToClass(UserFDTO, result.data as object);
+          let data: UserDTO = UserFDTO.toDTO(dataFDTO);
+          resolve(data);
         })
         .catch((error) => {
           reject(error);

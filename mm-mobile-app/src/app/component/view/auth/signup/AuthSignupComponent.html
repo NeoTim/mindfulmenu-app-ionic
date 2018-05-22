@@ -1,0 +1,84 @@
+<div class="top-doodad"></div>
+
+<ion-header>
+  <ion-navbar></ion-navbar>
+</ion-header>
+
+<ion-content class="with-top-doodad with-header" padding>
+
+  <div id="signup">
+
+    <ion-grid *ngIf="!signUpComplete">
+      <ion-row class="row">
+        <ion-col align-self-center class="col">
+          <div id="main-content">
+            <h1 class="header" text-center>Sign Up</h1>
+            <form #signUpForm="ngForm" novalidate>
+              <ion-item>
+                <ion-input [(ngModel)]="signupData.username" name="username" #username="ngModel" type="email" placeholder="Email" required ngvemail></ion-input>
+              </ion-item>
+              <div class="error" *ngIf="signUpForm.submitted && username.invalid">
+                <div *ngIf="username.errors.required">This cannot be empty.</div>
+                <div *ngIf="username.errors.email">This doesn't look like a valid email address.</div>
+              </div>
+              <ion-item>
+                <ion-input [(ngModel)]="signupData.firstName" name="firstName" #firstName="ngModel" type="text" placeholder="First Name" required></ion-input>
+              </ion-item>
+              <div class="error" *ngIf="signUpForm.submitted && firstName.invalid">
+                <div *ngIf="firstName.errors.required">This cannot be empty.</div>
+              </div>
+              <ion-item>
+                <ion-input [(ngModel)]="signupData.lastName" name="lastName" #lastName="ngModel" type="text" placeholder="Last Name" required></ion-input>
+              </ion-item>
+              <div class="error" *ngIf="signUpForm.submitted && lastName.invalid">
+                <div *ngIf="lastName.errors.required">This cannot be empty.</div>
+              </div>
+              <ion-item>
+                <ion-input [(ngModel)]="signupData.password" name="password" #password="ngModel" type="password" placeholder="Password" minlength="6" required></ion-input>
+              </ion-item>
+              <div class="error" *ngIf="signUpForm.submitted && password.invalid">
+                <div *ngIf="password.errors.required">This cannot be empty.</div>
+                <div *ngIf="password.errors.minlength">Password needs at least 6 characters.</div>
+              </div>
+              <ion-item>
+                <ion-input [(ngModel)]="signupData.passwordRepeat" name="passwordRepeat" #passwordRepeat="ngModel" type="password" placeholder="Repeat Password" minlength="6" [equalTo]="password" required></ion-input>
+              </ion-item>
+              <div class="error" *ngIf="signUpForm.submitted && passwordRepeat.invalid">
+                <div *ngIf="passwordRepeat.errors.required">This cannot be empty.</div>
+                <div *ngIf="passwordRepeat.errors.minlength">Password needs at least 6 characters.</div>
+                <div *ngIf="passwordRepeat.errors.equalTo">Passwords do not match.</div>
+              </div>
+              <div class="signup-button-wrapper">
+                <button ion-button block type="button" (click)="signUp()">Sign Up</button>
+              </div>
+            </form>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid *ngIf="signUpComplete">
+      <ion-row class="row">
+        <ion-col align-self-center class="col">
+          <div id="main-content">
+            <h1 class="header" text-center>Signup Complete!</h1>
+            <p text-center>You can now set up your subscription.</p>
+            <div class="signup-button-wrapper">
+              <div class="button-wrapper">
+                <button ion-button block type="button" (click)="showSetupMonthlySubscription()">Setup Monthly Subscription</button>
+              </div>
+              <div class="button-wrapper">
+                <button ion-button block type="button" (click)="showSetupSixMonthSubscription()">Setup 6 Months Subscription</button>
+              </div>
+              <div class="button-wrapper">
+                <button ion-button clear type="button" (click)="back()">I'll do it later</button>
+              </div>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </div>
+
+</ion-content>

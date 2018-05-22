@@ -14,10 +14,10 @@ export class UserDTO extends IdentifiableDTO {
 
   emailVerified: boolean;
 
-  @Transform(DateUtil.firebaseDateConversion)
+  @Transform(DateUtil.firebaseFirestoreDateConversion)
   lastLoginDate: Date;
 
-  @Transform(DateUtil.firebaseDateConversion)
+  @Transform(DateUtil.firebaseFirestoreDateConversion)
   lastAutomaticUpdateDate: Date;
 
   automaticUpdateEnabled: boolean;

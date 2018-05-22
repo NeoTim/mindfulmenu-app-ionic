@@ -47,6 +47,8 @@ import { Nl2BrPipe } from "./util/pipe/Nl2BrPipe";
 import { SanitizeHtmlPipe } from "./util/pipe/SanitizeHtmlPipe";
 import { Keyboard } from "@ionic-native/keyboard";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { AuthPurgatoryComponent } from "./component/view/auth/purgatory/AuthPurgatoryComponent";
+import { AuthSignupComponent } from "./component/view/auth/signup/AuthSignupComponent";
 
 @NgModule({
   declarations: [
@@ -54,7 +56,9 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     ApplicationComponent,
     // component/view
     AuthLoginComponent,
+    AuthSignupComponent,
     AuthOfflineComponent,
+    AuthPurgatoryComponent,
     MainComponent,
     MenusComponent, WeeklyMenuComponent, FavoritesComponent,
     MealComponent,
@@ -70,7 +74,9 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
     ApplicationComponent,
     // component/view
     AuthLoginComponent,
+    AuthSignupComponent,
     AuthOfflineComponent,
+    AuthPurgatoryComponent,
     MainComponent,
     MenusComponent, WeeklyMenuComponent, FavoritesComponent,
     MealComponent,

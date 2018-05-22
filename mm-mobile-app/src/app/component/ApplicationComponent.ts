@@ -16,6 +16,7 @@ import { UserModel } from "../model/UserModel";
 import { ApplicationConfig } from "../config/ApplicationConfig";
 import dedent from "dedent";
 import { ApplicationModel } from "../model/ApplicationModel";
+import { AuthPurgatoryComponent } from "./view/auth/purgatory/AuthPurgatoryComponent";
 
 @Component({
   templateUrl: 'ApplicationComponent.html'
@@ -80,10 +81,15 @@ export class ApplicationComponent implements OnInit {
 
   setupListeners() {
     this.events.subscribe(Event.AUTH.LOGIN.SUCCESS, (credentials) => {
-      this.userModel.getUser(credentials.uid)
+      this.userModel.syncLoggedUser()
         .then((user: UserDTO) => {
-          this.userModel.currentUser = user;
-          this.rootPage = MainComponent;
+          if (user.isEnabled) {
+            this.userModel.currentUser = user;
+            this.rootPage = MainComponent;
+          }
+          else {
+            this.rootPage = AuthPurgatoryComponent;
+          }
         })
         .catch((error) => {
           this.rootPage = AuthLoginComponent;

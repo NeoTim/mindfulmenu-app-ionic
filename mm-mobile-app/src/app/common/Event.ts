@@ -16,8 +16,9 @@ export class Event {
     };
 
     public static readonly SYSTEM = {
-        LOADING:            'system_loading',
-        GENERAL_ERROR:      'system_generalError'
+        LOADING:              'system_loading',
+        GENERAL_ERROR:        'system_generalError',
+        FORCE_SILENT_LOGOUT:  'system_forceSilentLogout'
     };
 
     public static readonly NETWORK = {

@@ -1,0 +1,32 @@
+auth-signup {
+
+  #signup {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    padding: 20px;
+  }
+
+  .header {
+    margin-bottom: 20px;
+  }
+
+  .item {
+    padding-left: 0px !important;
+  }
+
+  .signup-button-wrapper {
+    margin-top: 40px;
+
+    .button-wrapper {
+      margin-top: 20px;
+      text-align: center;
+    }
+  }
+
+}

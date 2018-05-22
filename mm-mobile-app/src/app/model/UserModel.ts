@@ -22,12 +22,30 @@ export class UserModel {
     this.events.subscribe(Event.AUTH.LOGOUT.SUCCESS, () => {
       this.currentUser = null;
     });
+    this.events.subscribe(Event.SYSTEM.FORCE_SILENT_LOGOUT, () => {
+      this.currentUser = null;
+    });
   }
 
   public getUser(userId: string): Promise<UserDTO> {
     this.events.publish(Event.SYSTEM.LOADING, true);
 
     return this.userService.getUser(userId)
+      .then((user: UserDTO) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return user;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
+  }
+
+  public syncLoggedUser(): Promise<UserDTO> {
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.userService.syncLoggedUser()
       .then((user: UserDTO) => {
         this.events.publish(Event.SYSTEM.LOADING, false);
         return user;
@@ -72,16 +90,17 @@ export class UserModel {
     }
   }
 
-  public createUser(user: UserDTO): Promise<UserDTO> {
+  public createUser(user: UserDTO, userId: string = null): Promise<UserDTO> {
     this.events.publish(Event.SYSTEM.LOADING, true);
 
-    return this.userService.createUser(user)
+    return this.userService.createUser(user, userId)
       .then((createdUser: UserDTO) => {
         this.events.publish(Event.SYSTEM.LOADING, false);
         return createdUser;
       })
       .catch((error) => {
         this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.FORCE_SILENT_LOGOUT, false);
         this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
         return Promise.reject(error);
       })

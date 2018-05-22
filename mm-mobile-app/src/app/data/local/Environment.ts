@@ -6,6 +6,8 @@ export class Environment {
 
     websiteUrl: string;
 
+    subscriptionUrl: { oneMonth: string, sixMonths: string };
+
     contactEmail: string;
 
     production: boolean;

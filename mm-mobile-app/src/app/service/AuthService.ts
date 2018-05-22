@@ -78,14 +78,14 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.firebaseManager.auth.createUserWithEmailAndPassword(username, password)
         .then((result: firebase.User) => { /* new API versions are said to return slightly different object/structure, watch out */
-          //return result.sendEmailVerification()
-            //.then(() => {
+          return result.sendEmailVerification()
+            .then(() => {
               const firebaseCredentials: FirebaseCredentialsDTO = this.convertFirebaseUser(result);
               resolve(firebaseCredentials);
-            //})
-            //.catch((error) => {
-            //  reject(error);
-            //});
+            })
+            .catch((error) => {
+              reject(error);
+            });
         })
         .catch((error) => {
           reject(error);

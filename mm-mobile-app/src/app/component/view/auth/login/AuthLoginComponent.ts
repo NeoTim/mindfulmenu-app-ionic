@@ -5,8 +5,7 @@ import { ViewUtil } from '../../../../util/ViewUtil';
 import { AuthModel } from '../../../../model/AuthModel';
 import { FirebaseCredentialsDTO } from "../../../../data/dto/auth/FirebaseCredentialsDTO";
 import { NgForm } from "@angular/forms";
-import { UserModel } from "../../../../model/UserModel";
-import { UserDTO } from "../../../../data/dto/user/UserDTO";
+import { AuthSignupComponent } from "../signup/AuthSignupComponent";
 
 @Component({
     selector: 'auth-login',
@@ -26,8 +25,7 @@ export class AuthLoginComponent {
               public navCtrl: NavController,
               public config: ApplicationConfig,
               private viewUtil: ViewUtil,
-              public authModel: AuthModel,
-              public userModel: UserModel) {
+              public authModel: AuthModel) {
   }
 
   ionViewDidLoad() {
@@ -35,7 +33,6 @@ export class AuthLoginComponent {
   }
 
   init() {
-
   }
 
   login() {
@@ -60,43 +57,8 @@ export class AuthLoginComponent {
     }
   }
 
-  signup() {
-   // this.app.getRootNav().push(InternalUrlBrowserComponent, { url: this.config.websiteUrl + 'monthly-menu-subscription' });
-    this.authModel.register(this.loginData.username, this.loginData.password)
-      .then((credentials: FirebaseCredentialsDTO) => {
-        console.log(credentials);
-
-        let newUser: UserDTO = new UserDTO();
-        newUser.id = credentials.uid;
-        newUser.firstName = '';
-        newUser.lastName = '';
-        newUser.email = credentials.email;
-        newUser.emailVerified = credentials.emailVerified;
-        newUser.lastLoginDate = credentials.lastSignInTime;
-        newUser.favoriteMealIds = [];
-        newUser.isAdmin = false;
-        newUser.isEnabled = false;
-
-        this.userModel.createUser(newUser)
-          .then((createdUser: UserDTO) => {
-              console.log(createdUser);
-          })
-          .catch((error) => {});
-      })
-      .catch((error) => {
-        console.log(error);
-        this.viewUtil.showToast(error.code);
-      });
+  signUp() {
+    this.navCtrl.push(AuthSignupComponent, null,{ animation: 'ios-transition'} )
   }
-
-/*
-  auth/email-already-in-use
-  Thrown if there already exists an account with the given email address.
-  auth/invalid-email
-  Thrown if the email address is not valid.
-  auth/operation-not-allowed
-  Thrown if email/password accounts are not enabled. Enable email/password accounts in the Firebase Console, under the Auth tab.
-  auth/weak-password
-*/
 
 }

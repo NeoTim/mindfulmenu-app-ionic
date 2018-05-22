@@ -13,6 +13,20 @@ export class AuthModel {
   constructor(private events: Events,
               private storage: Storage,
               private authService: AuthService) {
+
+    this.setupListeners();
+  }
+
+  private setupListeners(): void {
+    this.events.subscribe(Event.SYSTEM.FORCE_SILENT_LOGOUT, () => {
+      this.authService.logout()
+        .then((result: any) => {
+          this.credentials = null;
+        })
+        .catch((error) => {
+          //
+        })
+    });
   }
 
   public login(username: string, password: string): Promise<FirebaseCredentialsDTO> {
@@ -64,10 +78,12 @@ export class AuthModel {
     return this.authService.register(username, password)
       .then((credentials: FirebaseCredentialsDTO) => {
         this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.FORCE_SILENT_LOGOUT, false);
         return credentials;
       })
       .catch((error) => {
         this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.FORCE_SILENT_LOGOUT, false);
         return Promise.reject(error);
       })
   }
