@@ -1,7 +1,8 @@
+import { IdentifiableDTO } from "./IdentifiableDTO";
+import { Transform } from "class-transformer";
+import { DateUtil } from "../../util/DateUtil";
 
-export class UserDTO {
-
-  id: string; // This is only for Functions DTO.
+export class UserDTO extends IdentifiableDTO {
 
   firstName: string;
 
@@ -13,8 +14,10 @@ export class UserDTO {
 
   emailVerified: boolean;
 
+  @Transform(DateUtil.firebaseFirestoreDateConversion)
   lastLoginDate: Date;
 
+  @Transform(DateUtil.firebaseFirestoreDateConversion)
   lastAutomaticUpdateDate: Date;
 
   automaticUpdateEnabled: boolean;
@@ -22,4 +25,5 @@ export class UserDTO {
   isAdmin: boolean;
 
   isEnabled: boolean;
+
 }

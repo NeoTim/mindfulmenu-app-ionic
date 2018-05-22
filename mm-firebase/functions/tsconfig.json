@@ -3,9 +3,16 @@
     "lib": ["es6"],
     "module": "commonjs",
     "noImplicitReturns": true,
+    "experimentalDecorators": true,
     "outDir": "lib",
     "sourceMap": true,
-    "target": "es6"
+    "target": "es6",
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "types": [
+      "lodash"
+    ]
   },
   "compileOnSave": true,
   "include": [
