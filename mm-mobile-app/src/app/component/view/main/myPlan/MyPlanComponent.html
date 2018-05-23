@@ -9,7 +9,7 @@
       <ion-col col-10>
         <h2 text-center>My Plan</h2>
         <h3 text-center *ngIf="weeklyPlan">{{ weeklyPlan.startDate | date:'MMM d' }} - {{ weeklyPlan.endDate | date:'MMM d' }}</h3>
-        <h1 text-center *ngIf="!weeklyPlan">&nbsp;</h1>
+        <h3 text-center *ngIf="!weeklyPlan">&nbsp;</h3>
       </ion-col>
       <ion-col col-1>
         <div class="arrow-forward" [class.disabled]="currentWeekRelation >= 0" (click)="getNextWeeklyPlan()"></div>
