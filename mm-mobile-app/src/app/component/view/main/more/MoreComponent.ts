@@ -16,6 +16,8 @@ export class MoreComponent {
 
   public currentUser: UserDTO;
 
+  public applicationVersion: string = this.config.version;
+
   constructor(public navCtrl: NavController,
               public viewUtil: ViewUtil,
               public actionSheetCtrl: ActionSheetController,
