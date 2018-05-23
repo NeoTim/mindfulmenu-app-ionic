@@ -1,11 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { App, NavController } from 'ionic-angular';
+import { App, Events, NavController } from 'ionic-angular';
 import { ApplicationConfig } from '../../../../config/ApplicationConfig';
 import { ViewUtil } from '../../../../util/ViewUtil';
 import { AuthModel } from '../../../../model/AuthModel';
 import { FirebaseCredentialsDTO } from "../../../../data/dto/auth/FirebaseCredentialsDTO";
 import { NgForm } from "@angular/forms";
 import { AuthSignupComponent } from "../signup/AuthSignupComponent";
+import { Event } from "../../../../common/Event";
 
 @Component({
     selector: 'auth-login',
@@ -16,13 +17,16 @@ export class AuthLoginComponent {
   @ViewChild('loginForm')
   private loginForm: NgForm;
 
+  private autoLoginBoundFunction: Function = this.autoLogin.bind(this);
+
   loginData = {
-      username: 'u1@example.com',
-      password: 'chpwd!'
+      username: '',
+      password: ''
   };
 
   constructor(public app: App,
               public navCtrl: NavController,
+              private events: Events,
               public config: ApplicationConfig,
               private viewUtil: ViewUtil,
               public authModel: AuthModel) {
@@ -30,6 +34,14 @@ export class AuthLoginComponent {
 
   ionViewDidLoad() {
       this.init();
+  }
+
+  ionViewDidEnter() {
+    this.events.subscribe(Event.SYSTEM.AUTO_LOGIN, this.autoLoginBoundFunction);
+  }
+
+  ionViewDidLeave() {
+    this.events.unsubscribe(Event.SYSTEM.AUTO_LOGIN, this.autoLoginBoundFunction);
   }
 
   init() {
@@ -55,6 +67,14 @@ export class AuthLoginComponent {
           }
         });
     }
+  }
+
+  autoLogin(loginData: { username: string, password: string }) {
+    this.loginData = loginData;
+    // give it time to sync validation state
+    setTimeout(() => {
+      this.login();
+    });
   }
 
   signUp() {

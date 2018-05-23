@@ -18,6 +18,7 @@ export class Event {
     public static readonly SYSTEM = {
         LOADING:              'system_loading',
         GENERAL_ERROR:        'system_generalError',
+        AUTO_LOGIN:           'system_autoLogin',
         FORCE_SILENT_LOGOUT:  'system_forceSilentLogout'
     };
 

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { App, Navbar, NavController } from 'ionic-angular';
+import { App, Events, Navbar, NavController } from 'ionic-angular';
 import { ApplicationConfig } from '../../../../config/ApplicationConfig';
 import { ViewUtil } from '../../../../util/ViewUtil';
 import { AuthModel } from '../../../../model/AuthModel';
@@ -8,6 +8,7 @@ import { NgForm } from "@angular/forms";
 import { UserModel } from "../../../../model/UserModel";
 import { UserDTO } from "../../../../data/dto/user/UserDTO";
 import { InternalUrlBrowserComponent } from "../../../ui/internalUrlBrowser/InternalUrlBrowserComponent";
+import { Event } from "../../../../common/Event";
 
 @Component({
     selector: 'auth-signup',
@@ -33,6 +34,7 @@ export class AuthSignupComponent {
 
   constructor(public app: App,
               public navCtrl: NavController,
+              private events: Events,
               public config: ApplicationConfig,
               private viewUtil: ViewUtil,
               public authModel: AuthModel,
@@ -43,7 +45,7 @@ export class AuthSignupComponent {
     this.init();
 
     this.navbar.backButtonClick = (event: UIEvent) => {
-      this.navCtrl.pop({ animation: 'ios-transition'} );
+      this.back();
     }
   }
 
@@ -99,7 +101,13 @@ export class AuthSignupComponent {
   }
 
   back() {
-    this.navCtrl.pop({ animation: 'ios-transition'} );
+     this.navCtrl.pop({ animation: 'ios-transition' })
+       .then(() => {
+         if (this.signUpComplete) {
+           this.events.publish(Event.SYSTEM.AUTO_LOGIN, { username: this.signupData.username, password: this.signupData.password });
+         }
+       })
+       .catch((error) => {});
   }
 
   showSetupMonthlySubscription() {
