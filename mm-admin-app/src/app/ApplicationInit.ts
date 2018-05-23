@@ -43,8 +43,7 @@ export class ApplicationInit {
       const toStateParams: any = transition.params('entering');
 
       if (!this.applicationModel.isLoggedIn && !_.includes(this.publicStates, toState.name)) {
-        // return this.stateService.target(State.PRELIMINARY.AUTH.LOGIN);
-        return true;
+        return this.stateService.target(State.PRELIMINARY.AUTH.LOGIN);
       }
       else {
         return true;
