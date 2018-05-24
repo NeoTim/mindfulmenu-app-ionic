@@ -214,26 +214,13 @@ my-plan {
         height: 80%;
         width: 1px;
         opacity: 0.5;
-        margin: 0 auto;
       }
 
       .details {
         height: 89px;
-
-        ion-grid {
-          height: 100%;
-        }
-
-        ion-row {
-          height: 100%;
-        }
-
-        ion-col {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-        }
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
 
         p {
           margin-top: 0px !important;

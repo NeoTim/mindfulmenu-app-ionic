@@ -29,21 +29,15 @@
           </div>
           <div class="h-divider"></div>
           <div class="details">
-            <ion-grid>
-              <ion-row>
-                <ion-col push-1 col-4>
-                  <p>Prep. time</p>
-                  <h4>{{ meal.prepTime }} min</h4>
-                </ion-col>
-                <ion-col push-1 col-2>
-                  <div class="v-divider"></div>
-                </ion-col>
-                <ion-col push-1 col-4>
-                  <p>Cook time</p>
-                  <h4>{{ meal.cookTime }} min</h4>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
+            <div text-center *ngIf="meal.prepTime">
+              <p>Prep. time</p>
+              <h4>{{ meal.prepTime | minuteTimeFormat }}</h4>
+            </div>
+            <div class="v-divider" *ngIf="meal.prepTime || meal.cookTime"></div>
+            <div text-center *ngIf="meal.cookTime">
+              <p>Cook time</p>
+              <h4>{{ meal.cookTime | minuteTimeFormat }}</h4>
+            </div>
           </div>
         </div>
       </div>

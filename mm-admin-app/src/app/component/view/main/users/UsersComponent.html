@@ -42,10 +42,10 @@
         </td>
         <td>
           <div class="float-right">
-            <button *ngIf="!user.automaticUpdateEnabled" type="button" class="btn btn-success btn-sm" (click)="enableAutomaticUpdateForUser(user); $event.stopImmediatePropagation()">
+            <button *ngIf="!user.automaticUpdateEnabled" type="button" class="btn btn-success btn-sm" title="Enable Automatic Updates" (click)="enableAutomaticUpdateForUser(user); $event.stopImmediatePropagation()">
               <span class="glyphicon glyphicon-play-circle"></span>
             </button>
-            <button type="button" class="btn btn-primary btn-sm" (click)="editUser(user); $event.stopImmediatePropagation()">
+            <button type="button" class="btn btn-primary btn-sm" title="Edit" (click)="editUser(user); $event.stopImmediatePropagation()">
               <span class="glyphicon glyphicon-pencil"></span>
             </button>
           </div>

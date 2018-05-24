@@ -61,6 +61,7 @@
     "jquery": "^3.3.1",
     "lodash": "^4.17.5",
     "moment": "^2.22.1",
+    "moment-duration-format": "^2.2.2",
     "moment-timezone": "^0.5.16",
     "ng4-validators": "^5.1.0",
     "reveal.js": "^3.6.0",

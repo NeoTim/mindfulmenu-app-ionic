@@ -49,6 +49,7 @@ import { Keyboard } from "@ionic-native/keyboard";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { AuthPurgatoryComponent } from "./component/view/auth/purgatory/AuthPurgatoryComponent";
 import { AuthSignupComponent } from "./component/view/auth/signup/AuthSignupComponent";
+import { MinuteTimeFormatPipe } from "./util/pipe/MinuteTimeFormatPipe";
 
 @NgModule({
   declarations: [
@@ -67,7 +68,7 @@ import { AuthSignupComponent } from "./component/view/auth/signup/AuthSignupComp
     // component/ui
     InternalUrlBrowserComponent,
     // util/pipe
-    Nl2BrPipe, SanitizeHtmlPipe, SanitizeStylePipe
+    MinuteTimeFormatPipe, Nl2BrPipe, SanitizeHtmlPipe, SanitizeStylePipe
   ],
   entryComponents: [
     // main entry point

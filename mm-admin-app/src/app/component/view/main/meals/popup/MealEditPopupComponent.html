@@ -37,6 +37,7 @@
         <div class="form-group col-sm-6">
           <label>Prep Time
             <span style="color:red;">*</span>
+            <span>[displayed as: {{ mealWithIngredients.prepTime | minuteTimeFormat }}]</span>
           </label>
           <input type="number" class="form-control" id="prepTime" name="prepTime" [ngClass]="{'is-invalid': mealForm.submitted && prepTime.invalid, 'is-valid': mealForm.submitted && prepTime.valid }"
             (blur)="onNumberBlur(prepTime)" #prepTime="ngModel" [(ngModel)]="mealWithIngredients.prepTime" required>
@@ -47,6 +48,7 @@
         <div class="form-group col-sm-6">
           <label>Cook Time
             <span style="color:red;">*</span>
+            <span>[displayed as: {{ mealWithIngredients.cookTime | minuteTimeFormat }}]</span>
           </label>
           <input type="number" class="form-control" id="cookTime" name="cookTime" [ngClass]="{'is-invalid': mealForm.submitted && cookTime.invalid, 'is-valid': mealForm.submitted && cookTime.valid }"
             (blur)="onNumberBlur(cookTime)" #cookTime="ngModel" [(ngModel)]="mealWithIngredients.cookTime" required>
@@ -94,7 +96,7 @@
               </div>
               <div class="form-row" *ngFor="let ingredient of mealWithIngredients.ingredients; index as i; trackBy: identify;">
                 <div class="form-group col-sm-2">
-                  <input type="text" class="form-control" id="amount{{i}}" name="amount{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && getFormControl('amount' + i).invalid, 'is-valid': mealForm.submitted && getFormControl('amount' + i).valid }" 
+                  <input type="text" class="form-control" id="amount{{i}}" name="amount{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && getFormControl('amount' + i).invalid, 'is-valid': mealForm.submitted && getFormControl('amount' + i).valid }"
                     #amount="ngModel" [(ngModel)]="mealWithIngredients.ingredients[i].amount" required>
                   <div class="invalid-feedback" *ngIf="mealForm.submitted && getFormControl('amount' + i).invalid">
                     <div *ngIf="getFormControl('amount' + i).errors?.required">This cannot be empty.</div>
@@ -109,7 +111,7 @@
                       </div>
                 </div>
                 <div class="form-group col-sm-2">
-                  <select class="form-control" id="category{{i}}" name="category{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && getFormControl('category' + i).invalid, 'is-valid': mealForm.submitted && getFormControl('category' + i).valid }" 
+                  <select class="form-control" id="category{{i}}" name="category{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && getFormControl('category' + i).invalid, 'is-valid': mealForm.submitted && getFormControl('category' + i).valid }"
                   #category="ngModel" [(ngModel)]="mealWithIngredients.ingredients[i].category"
                     required>
                     <option selected>PRODUCE</option>

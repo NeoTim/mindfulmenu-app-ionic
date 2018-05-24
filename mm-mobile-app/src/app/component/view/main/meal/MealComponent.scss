@@ -186,24 +186,9 @@ meal {
             }
 
             .details {
-              ion-grid {
-                height: 100%;
-              }
-
-              ion-row {
-                height: 100%;
-              }
-
-              ion-col {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-
-                div {
-                  text-align: left !important;
-                }
-              }
+              display: flex;
+              align-items: center;
+              justify-content: space-evenly;
 
               p {
                 font-size: 16px !important;

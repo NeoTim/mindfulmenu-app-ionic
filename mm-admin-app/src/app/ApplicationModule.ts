@@ -43,15 +43,19 @@ import { UserEditPopupComponent } from './component/view/main/users/popup/UserEd
 import { UserCreatePopupComponent } from './component/view/main/users/popup/UserCreatePopupComponent';
 import { AuthModel } from './model/AuthModel';
 import { AuthService } from './service/AuthService';
+import { MinuteTimeFormatPipe } from './util/pipe/MinuteTimeFormatPipe';
 
 @NgModule({
   declarations: [
+    // component/view
     MainLayoutComponent, AuthLoginComponent, PreliminaryLayoutComponent, AbstractStateComponent,
     ErrorNotFoundComponent,
     HomeComponent, WeeklyMenusComponent, MealsComponent, UsersComponent,
     WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent,
     MealEditPopupComponent, MealCreatePopupComponent,
-    UserEditPopupComponent, UserCreatePopupComponent
+    UserEditPopupComponent, UserCreatePopupComponent,
+    // util/pipe
+    MinuteTimeFormatPipe
   ],
   entryComponents: [
     WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent,
