@@ -56,12 +56,24 @@ exports.syncLoggedUser = functions.https.onCall((data, context) => {
         // then, in the next .then block (or use the one below), you could update isEnabled basing on gathered data (set in user)
         .then((user) => {
         if (user.automaticUpdateEnabled) {
+            if (user.emailVerified /* && and other logic, like, if user paid, etc. */) {
+                user.isEnabled = true;
+            }
+            else {
+                user.isEnabled = false;
+            }
+        }
+        return user;
+    })
+        .then((user) => {
+        if (user.automaticUpdateEnabled) {
             user.lastAutomaticUpdateDate = now;
         }
         return user;
     })
         .then((user) => {
         return admin.firestore().collection('users').doc(userId).update({
+            'isEnabled': user.isEnabled,
             'emailVerified': user.emailVerified,
             'lastLoginDate': user.lastLoginDate,
             'lastAutomaticUpdateDate': user.lastAutomaticUpdateDate
@@ -100,12 +112,24 @@ exports.syncUser = functions.https.onCall((data, context) => {
         // then, in the next .then block (or use the one below), you could update isEnabled basing on gathered data (set in user)
         .then((user) => {
         if (user.automaticUpdateEnabled) {
+            if (user.emailVerified /* && and other logic, like, if user paid, etc. */) {
+                user.isEnabled = true;
+            }
+            else {
+                user.isEnabled = false;
+            }
+        }
+        return user;
+    })
+        .then((user) => {
+        if (user.automaticUpdateEnabled) {
             user.lastAutomaticUpdateDate = now;
         }
         return user;
     })
         .then((user) => {
         return admin.firestore().collection('users').doc(userId).update({
+            'isEnabled': user.isEnabled,
             'emailVerified': user.emailVerified,
             'lastAutomaticUpdateDate': user.lastAutomaticUpdateDate
         });

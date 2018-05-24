@@ -62,6 +62,18 @@ export const syncLoggedUser = functions.https.onCall((data: any, context: Callab
         // then, in the next .then block (or use the one below), you could update isEnabled basing on gathered data (set in user)
         .then((user: UserDTO) => {
             if (user.automaticUpdateEnabled) {
+                if (user.emailVerified /* && and other logic, like, if user paid, etc. */) {
+                    user.isEnabled = true;
+                }
+                else {
+                    user.isEnabled = false;
+                }
+            }
+
+            return user;
+        })
+        .then((user: UserDTO) => {
+            if (user.automaticUpdateEnabled) {
                 user.lastAutomaticUpdateDate = now;
             }
 
@@ -69,6 +81,7 @@ export const syncLoggedUser = functions.https.onCall((data: any, context: Callab
         })
         .then((user: UserDTO) => {
             return admin.firestore().collection('users').doc(userId).update({
+                'isEnabled': user.isEnabled,
                 'emailVerified': user.emailVerified,
                 'lastLoginDate': user.lastLoginDate,
                 'lastAutomaticUpdateDate': user.lastAutomaticUpdateDate
@@ -109,6 +122,18 @@ export const syncUser = functions.https.onCall((data: any, context: CallableCont
         // then, in the next .then block (or use the one below), you could update isEnabled basing on gathered data (set in user)
         .then((user: UserDTO) => {
             if (user.automaticUpdateEnabled) {
+                if (user.emailVerified /* && and other logic, like, if user paid, etc. */) {
+                    user.isEnabled = true;
+                }
+                else {
+                    user.isEnabled = false;
+                }
+            }
+
+            return user;
+        })
+        .then((user: UserDTO) => {
+            if (user.automaticUpdateEnabled) {
                 user.lastAutomaticUpdateDate = now;
             }
 
@@ -116,6 +141,7 @@ export const syncUser = functions.https.onCall((data: any, context: CallableCont
         })
         .then((user: UserDTO) => {
             return admin.firestore().collection('users').doc(userId).update({
+                'isEnabled': user.isEnabled,
                 'emailVerified': user.emailVerified,
                 'lastAutomaticUpdateDate': user.lastAutomaticUpdateDate
             })
