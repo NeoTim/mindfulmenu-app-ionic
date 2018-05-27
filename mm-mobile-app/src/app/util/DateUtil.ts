@@ -66,7 +66,7 @@ export class DateUtil {
   public static getFirstDayOfCurrentWeek(): Moment {
     const now: Moment = moment();
 
-    if (((now.day() == 4) && (moment().hour() >= 16)) || (now.day() > 4)) {
+    if (((now.day() == 4) && (moment().hour() >= 16)) || (now.day() > 4 || now.day() == 0)) {
       const firstDayOfNextWeek: Moment = moment().add(1, 'week').startOf('isoWeek');
       return firstDayOfNextWeek;
     }

@@ -89,6 +89,7 @@ shopping-list {
 
           .itemAmount {
             color: color($colors, dark) !important;
+            float: right;
           }
         }
       }

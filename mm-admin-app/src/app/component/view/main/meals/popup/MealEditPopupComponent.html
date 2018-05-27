@@ -97,9 +97,8 @@
               <div class="form-row" *ngFor="let ingredient of mealWithIngredients.ingredients; index as i; trackBy: identify;">
                 <div class="form-group col-sm-2">
                   <input type="text" class="form-control" id="amount{{i}}" name="amount{{i}}" [ngClass]="{'is-invalid': mealForm.submitted && getFormControl('amount' + i).invalid, 'is-valid': mealForm.submitted && getFormControl('amount' + i).valid }"
-                    #amount="ngModel" [(ngModel)]="mealWithIngredients.ingredients[i].amount" required>
+                    #amount="ngModel" [(ngModel)]="mealWithIngredients.ingredients[i].amount">
                   <div class="invalid-feedback" *ngIf="mealForm.submitted && getFormControl('amount' + i).invalid">
-                    <div *ngIf="getFormControl('amount' + i).errors?.required">This cannot be empty.</div>
                   </div>
                 </div>
                 <div class="form-group col-sm-4">
