@@ -80,6 +80,7 @@ export class AuthSignupComponent {
           this.userModel.createUser(newUser, credentials.uid)
             .then((createdUser: UserDTO) => {
                 this.signUpComplete = true;
+                this.back();
             })
             .catch((error) => {});
         })
