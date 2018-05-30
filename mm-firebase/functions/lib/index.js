@@ -8,11 +8,76 @@ const class_transformer_1 = require("class-transformer");
 const FirestoreManager_1 = require("./util/FirestoreManager");
 const UserDTO_1 = require("./data/dto/UserDTO");
 const UserFDTO_1 = require("./data/dto/UserFDTO");
+const nodemailer = require("nodemailer");
 admin.initializeApp(functions.config().firebase).firestore();
 const firestoreManager = new FirestoreManager_1.FirestoreManager();
 const corsHandler = cors({
     origin: true
 });
+/**
+ *      START EMAIL CONFIG
+ */
+const gmailEmail = functions.config().gmail.email;
+const gmailPassword = functions.config().gmail.password;
+const mailTransport = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: gmailEmail,
+        pass: gmailPassword,
+    },
+});
+// Sends a welcome email to the given user.
+const sendWelcomeEmail = (email, displayName) => {
+    const mailOptions = {
+        from: `Mindful Menu Team <` + gmailEmail + `>`,
+        to: email,
+        subject: `Welcome to Mindful Menu!`,
+        text: `Hey ${displayName || ''}! Welcome to Mindful Menu. I hope you will enjoy our service.`
+    };
+    return mailTransport.sendMail(mailOptions)
+        .then(() => {
+        console.log('New welcome email sent to:', email);
+        return;
+    })
+        .catch((error) => {
+        return Promise.reject(error);
+    });
+};
+// Sends a notification email to admin, that new user has registered
+const sendAdminNewUserEmail = (userName, userEmail) => {
+    const mailOptions = {
+        from: `Mindful Menu Team <` + gmailEmail + `>`,
+        to: `ourmindfulmenu@gmail.com`,
+        subject: `New user registered`,
+        text: `${userName || ''} (${userEmail || ''}) has just registered a new account through the Mindful Menu app.`
+    };
+    return mailTransport.sendMail(mailOptions)
+        .then(() => {
+        return;
+    })
+        .catch((error) => {
+        return Promise.reject(error);
+    });
+};
+/**
+ * This handles SDK calls as well as direct HTTP calls
+ *
+ * GET sample:
+ *   https://us-central1-mindful-menu.cloudfunctions.net/testEmail?email=jared%40chanlhealth.com&name=Jared
+ */
+exports.testEmail = functions.https.onRequest((req, res) => {
+    return corsHandler(req, res, () => {
+        sendWelcomeEmail(req.query.email, req.query.name)
+            .then(() => {
+            res.status(200).send("Email successfully sent.");
+        }).catch((error) => {
+            res.status(500).send(error);
+        });
+    });
+});
+/**
+ *      START USER MANAGEMENT
+ */
 /**
  * Get the user object in Firestore
  *
@@ -179,6 +244,9 @@ exports.createUser = functions.https.onCall((data, context) => {
             return getUser(userId);
         })
             .then((user) => {
+            sendAdminNewUserEmail(user.firstName + " " + user.lastName, user.email)
+                .then(() => { return; })
+                .catch((error) => { return; });
             return class_transformer_1.classToPlain(UserFDTO_1.UserFDTO.fromDTO(user));
         })
             .catch((error) => {
@@ -202,6 +270,9 @@ exports.createUser = functions.https.onCall((data, context) => {
             return getUser(documentReference.id);
         })
             .then((user) => {
+            sendAdminNewUserEmail(user.firstName + " " + user.lastName, user.email)
+                .then(() => { return; })
+                .catch((error) => { return; });
             return class_transformer_1.classToPlain(UserFDTO_1.UserFDTO.fromDTO(user));
         })
             .catch((error) => {
@@ -255,30 +326,4 @@ exports.enableAutomaticUpdateForUser = functions.https.onCall((data, context) =>
         return Promise.reject(error);
     });
 });
-// This handles SDK calls as well as direct HTTP calls, but doesn't provide auth info.
-/*
-export const syncLoggedUserHttp = functions.https.onRequest((req, res) => {
-    return corsHandler(req, res, () => {
-        if (req.param('uid')) {
-            getUserById(req.param('uid'))
-                .then((user) => {
-                    let now = new Date();
-                    user.lastLoginDate = now;
-
-                    // Update this user object, async.
-                    admin.firestore().collection('users').doc(user.id).set({ lastLoginDate: now }, { merge: true })
-                        .then((result) => { return })
-                        .catch((error) => { return })
-
-                    res.status(200).json(user);
-                }).catch((error) => {
-                    console.error(error);
-                    res.status(400).send('There was an issue with database.');
-                })
-        } else {
-            res.status(400).send('You must specify parameter `uid`.');
-        }
-    });
-});
-*/ 
 //# sourceMappingURL=index.js.map

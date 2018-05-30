@@ -7,14 +7,87 @@ import { FirestoreManager } from './util/FirestoreManager';
 import { CallableContext } from 'firebase-functions/lib/providers/https';
 import { UserDTO } from './data/dto/UserDTO';
 import { UserFDTO } from "./data/dto/UserFDTO";
+import * as nodemailer from 'nodemailer';
 
 admin.initializeApp(functions.config().firebase).firestore();
 
 const firestoreManager: FirestoreManager = new FirestoreManager();
 
 const corsHandler = cors({
-	origin: true
+    origin: true
 });
+
+/**
+ *      START EMAIL CONFIG
+ */
+
+const gmailEmail = functions.config().gmail.email;
+const gmailPassword = functions.config().gmail.password;
+const mailTransport = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: gmailEmail,
+        pass: gmailPassword,
+    },
+});
+
+// Sends a welcome email to the given user.
+const sendWelcomeEmail = (email, displayName) => {
+    const mailOptions = {
+        from: `Mindful Menu Team <` + gmailEmail + `>`,
+        to: email,
+        subject: `Welcome to Mindful Menu!`,
+        text: `Hey ${displayName || ''}! Welcome to Mindful Menu. I hope you will enjoy our service.`
+    };
+
+    return mailTransport.sendMail(mailOptions)
+    .then(() => {
+        console.log('New welcome email sent to:', email);
+        return;
+    })
+    .catch((error) => {
+        return Promise.reject(error);
+    });
+}
+
+// Sends a notification email to admin, that new user has registered
+const sendAdminNewUserEmail = (userName, userEmail) => {
+    const mailOptions = {
+        from: `Mindful Menu Team <` + gmailEmail + `>`,
+        to: `ourmindfulmenu@gmail.com`,
+        subject: `New user registered`,
+        text: `${userName || ''} (${userEmail || ''}) has just registered a new account through the Mindful Menu app.`
+    };
+
+    return mailTransport.sendMail(mailOptions)
+    .then(() => {
+        return;
+    })
+    .catch((error) => {
+        return Promise.reject(error);
+    });
+}
+
+/**
+ * This handles SDK calls as well as direct HTTP calls
+ * 
+ * GET sample: 
+ *   https://us-central1-mindful-menu.cloudfunctions.net/testEmail?email=jared%40chanlhealth.com&name=Jared
+ */
+export const testEmail = functions.https.onRequest((req, res) => {
+	return corsHandler(req, res, () => {
+        sendWelcomeEmail(req.query.email, req.query.name)
+        .then(() => {
+            res.status(200).send("Email successfully sent.");
+        }).catch((error) => {
+            res.status(500).send(error);
+        })
+	})
+});
+
+/**
+ *      START USER MANAGEMENT
+ */
 
 /**
  * Get the user object in Firestore
@@ -37,8 +110,8 @@ export const syncLoggedUser = functions.https.onCall((data: any, context: Callab
     const userId: string = context.auth.uid;
     const now: Date = new Date();
 
-	return getUser(userId)
-		.then((user: UserDTO) => {
+    return getUser(userId)
+        .then((user: UserDTO) => {
             user.lastLoginDate = now;
 
             return user;
@@ -95,11 +168,11 @@ export const syncLoggedUser = functions.https.onCall((data: any, context: Callab
         })
         .catch((error) => {
             return Promise.reject(error);
-		})
+        })
 });
 
 export const syncUser = functions.https.onCall((data: any, context: CallableContext) => {
-	const userId: string = data.userId;
+    const userId: string = data.userId;
     const now: Date = new Date();
 
     return getUser(userId)
@@ -162,15 +235,15 @@ export const updateUserFavoriteMealIds = functions.https.onCall((data: any, cont
     const favoriteMealIds: string[] = data.favoriteMealIds;
 
     return admin.firestore().collection('users').doc(userId).update({ 'favoriteMealIds': favoriteMealIds })
-		.then(() => {
+        .then(() => {
             return getUser(userId)
         })
         .then((user: UserDTO) => {
             return classToPlain(UserFDTO.fromDTO(user));
-		})
-		.catch((error) => {
+        })
+        .catch((error) => {
             return Promise.reject(error);
-		});
+        });
 });
 
 export const createUser = functions.https.onCall((data: any, context: CallableContext) => {
@@ -180,50 +253,56 @@ export const createUser = functions.https.onCall((data: any, context: CallableCo
 
     if (userId) {
         return admin.firestore().collection('users').doc(userId).set(classToPlain({
-				'firstName': userDTO.firstName,
-				'lastName': userDTO.lastName,
-				'email': userDTO.email,
-				'favoriteMealIds': userDTO.favoriteMealIds,
-				'emailVerified': false,
-				'lastLoginDate': userDTO.lastLoginDate,
-				'lastAutomaticUpdateDate': userDTO.lastAutomaticUpdateDate,
-				'automaticUpdateEnabled': userDTO.automaticUpdateEnabled,
-				'isAdmin': userDTO.isAdmin,
-				'isEnabled': false
-			}))
+            'firstName': userDTO.firstName,
+            'lastName': userDTO.lastName,
+            'email': userDTO.email,
+            'favoriteMealIds': userDTO.favoriteMealIds,
+            'emailVerified': false,
+            'lastLoginDate': userDTO.lastLoginDate,
+            'lastAutomaticUpdateDate': userDTO.lastAutomaticUpdateDate,
+            'automaticUpdateEnabled': userDTO.automaticUpdateEnabled,
+            'isAdmin': userDTO.isAdmin,
+            'isEnabled': false
+        }))
             .then(() => {
                 return getUser(userId)
             })
             .then((user: UserDTO) => {
+                sendAdminNewUserEmail(user.firstName + " " + user.lastName, user.email)
+                .then(() => {return;})
+                .catch((error) => {return;})
                 return classToPlain(UserFDTO.fromDTO(user));
             })
             .catch((error) => {
                 return Promise.reject(error);
             });
-	}
+    }
     else {
-    	return admin.firestore().collection('users').add(classToPlain({
-                'firstName': userDTO.firstName,
-                'lastName': userDTO.lastName,
-                'email': userDTO.email,
-                'favoriteMealIds': userDTO.favoriteMealIds,
-                'emailVerified': false,
-                'lastLoginDate': userDTO.lastLoginDate,
-                'lastAutomaticUpdateDate': userDTO.lastAutomaticUpdateDate,
-                'automaticUpdateEnabled': userDTO.automaticUpdateEnabled,
-                'isAdmin': userDTO.isAdmin,
-                'isEnabled': false
-            }))
+        return admin.firestore().collection('users').add(classToPlain({
+            'firstName': userDTO.firstName,
+            'lastName': userDTO.lastName,
+            'email': userDTO.email,
+            'favoriteMealIds': userDTO.favoriteMealIds,
+            'emailVerified': false,
+            'lastLoginDate': userDTO.lastLoginDate,
+            'lastAutomaticUpdateDate': userDTO.lastAutomaticUpdateDate,
+            'automaticUpdateEnabled': userDTO.automaticUpdateEnabled,
+            'isAdmin': userDTO.isAdmin,
+            'isEnabled': false
+        }))
             .then((documentReference: FirebaseFirestore.DocumentReference) => {
                 return getUser(documentReference.id)
             })
             .then((user: UserDTO) => {
+                sendAdminNewUserEmail(user.firstName + " " + user.lastName, user.email)
+                .then(() => {return;})
+                .catch((error) => {return;})
                 return classToPlain(UserFDTO.fromDTO(user));
             })
             .catch((error) => {
                 return Promise.reject(error);
             });
-	}
+    }
 });
 
 export const updateUser = functions.https.onCall((data: any, context: CallableContext) => {
@@ -276,30 +355,3 @@ export const enableAutomaticUpdateForUser = functions.https.onCall((data: any, c
             return Promise.reject(error);
         });
 });
-
-// This handles SDK calls as well as direct HTTP calls, but doesn't provide auth info.
-/*
-export const syncLoggedUserHttp = functions.https.onRequest((req, res) => {
-	return corsHandler(req, res, () => {
-		if (req.param('uid')) {
-            getUserById(req.param('uid'))
-				.then((user) => {
-					let now = new Date();
-					user.lastLoginDate = now;
-
-					// Update this user object, async.
-					admin.firestore().collection('users').doc(user.id).set({ lastLoginDate: now }, { merge: true })
-						.then((result) => { return })
-						.catch((error) => { return })
-
-					res.status(200).json(user);
-				}).catch((error) => {
-					console.error(error);
-					res.status(400).send('There was an issue with database.');
-				})
-		} else {
-			res.status(400).send('You must specify parameter `uid`.');
-		}
-	});
-});
-*/

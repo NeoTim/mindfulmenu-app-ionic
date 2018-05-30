@@ -18,10 +18,12 @@
     "lodash": "^4.17.10",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.17",
+    "nodemailer": "^4.6.0",
     "reflect-metadata": "^0.1.12"
   },
   "devDependencies": {
     "@types/cors": "^2.8.4",
+    "@types/nodemailer": "^4.6.0",
     "tslint": "^5.8.0",
     "typescript": "^2.5.3"
   },
