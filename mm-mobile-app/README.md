@@ -7,13 +7,15 @@
 More detailed instructions are [here](https://ionicframework.com/docs/intro/deploying/).
 
 ```
-export CH_ANDROID_VERSION='0.0.1'
+export MM_ANDROID_VERSION='0.9.14'
 export ANDROID_BUILD_TOOLS_PATH='/users/jared/Library/android-sdk-macosx/build-tools/28.0.0-rc1' # Note: You cannot use ~ in the path.
 
 cd path/to/mm-mobile-app
-ionic cordova build android --prod --release &&
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore mindfulmenu-keystore.jks platforms/android/build/outputs/apk/android-release-unsigned.apk ch-android &&
-${ANDROID_BUILD_TOOLS_PATH}/zipalign -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk build/android/mindfulmenu-${CH_ANDROID_VERSION}.apk
+# Use this temporarily
+ionic cordova build android --aot --minifyjs --minifycss --release &&
+## ionic cordova build android --prod --release &&
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore mindfulmenu-keystore.jks platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk mindfulmenu &&
+${ANDROID_BUILD_TOOLS_PATH}/zipalign -v 4 platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk build/android/mindfulmenu-${MM_ANDROID_VERSION}.apk
 ```
 
 Then login to Google Play console, select the app, add a new version, and upload the APK.
@@ -35,6 +37,9 @@ ionic cordova build ios --prod
 ### Android 
 
 We use the "Google Play App Signing", so just need the "Upload Key" to sign the apps locally.  To set that up, download the Upload Key from Google Play console, and add to the keystore with: `keytool -importcert -file ~/Downloads/upload_cert.der -keystore mindfulmenu-keystore.jks`.
+
+However, for the first upload, there was no Upload Key for the app, so we generate one with: `keytool -genkey -v -keystore mindfulmenu-keystore.jks -alias mindfulmenu -keyalg RSA -keysize 2048 -validity 10000`
+
 
 # Default Ionic README (below)
 
