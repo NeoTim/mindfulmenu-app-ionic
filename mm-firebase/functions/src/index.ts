@@ -8,6 +8,7 @@ import { CallableContext } from 'firebase-functions/lib/providers/https';
 import { UserDTO } from './data/dto/UserDTO';
 import { UserFDTO } from "./data/dto/UserFDTO";
 import * as nodemailer from 'nodemailer';
+import * as Email from 'email-templates';
 
 admin.initializeApp(functions.config().firebase).firestore();
 
@@ -32,22 +33,41 @@ const mailTransport = nodemailer.createTransport({
 });
 
 // Sends a welcome email to the given user.
-const sendWelcomeEmail = (email, displayName) => {
-    const mailOptions = {
-        from: `Mindful Menu Team <` + gmailEmail + `>`,
-        to: email,
-        subject: `Welcome to Mindful Menu!`,
-        text: `Hey ${displayName || ''}! Welcome to Mindful Menu. I hope you will enjoy our service.`
-    };
-
-    return mailTransport.sendMail(mailOptions)
-    .then(() => {
-        console.log('New welcome email sent to:', email);
-        return;
-    })
-    .catch((error) => {
-        return Promise.reject(error);
+const sendWelcomeEmail = (address, displayName) => {
+    const email = new Email({
+        message: {
+            from: `Mindful Menu Team <` + gmailEmail + `>`
+        },
+        send: true,
+        transport: mailTransport
     });
+
+    return email
+        .send({
+            template: 'welcome',
+            message: {
+                to: address
+            },
+            locals: {
+                name: displayName
+            }
+        });
+
+    // const mailOptions = {
+    //     from: `Mindful Menu Team <` + gmailEmail + `>`,
+    //     to: email,
+    //     subject: `Welcome to Mindful Menu!`,
+    //     text: `Hey ${displayName || ''}! Welcome to Mindful Menu. I hope you will enjoy our service.`
+    // };
+
+    // return mailTransport.sendMail(mailOptions)
+    // .then(() => {
+    //     console.log('New welcome email sent to:', email);
+    //     return;
+    // })
+    // .catch((error) => {
+    //     return Promise.reject(error);
+    // });
 }
 
 // Sends a notification email to admin, that new user has registered
@@ -60,12 +80,12 @@ const sendAdminNewUserEmail = (userName, userEmail) => {
     };
 
     return mailTransport.sendMail(mailOptions)
-    .then(() => {
-        return;
-    })
-    .catch((error) => {
-        return Promise.reject(error);
-    });
+        .then(() => {
+            return;
+        })
+        .catch((error) => {
+            return Promise.reject(error);
+        });
 }
 
 /**
@@ -75,14 +95,15 @@ const sendAdminNewUserEmail = (userName, userEmail) => {
  *   https://us-central1-mindful-menu.cloudfunctions.net/testEmail?email=jared%40chanlhealth.com&name=Jared
  */
 export const testEmail = functions.https.onRequest((req, res) => {
-	return corsHandler(req, res, () => {
+    return corsHandler(req, res, () => {
         sendWelcomeEmail(req.query.email, req.query.name)
-        .then(() => {
-            res.status(200).send("Email successfully sent.");
-        }).catch((error) => {
-            res.status(500).send(error);
-        })
-	})
+            .then((result) => {
+                console.log('result.originalMessage', result.originalMessage)
+                res.status(200).send("Email successfully sent.");
+            }).catch((error) => {
+                res.status(500).send(error);
+            })
+    })
 });
 
 /**
@@ -269,8 +290,8 @@ export const createUser = functions.https.onCall((data: any, context: CallableCo
             })
             .then((user: UserDTO) => {
                 sendAdminNewUserEmail(user.firstName + " " + user.lastName, user.email)
-                .then(() => {return;})
-                .catch((error) => {return;})
+                    .then(() => { return; })
+                    .catch((error) => { return; })
                 return classToPlain(UserFDTO.fromDTO(user));
             })
             .catch((error) => {
@@ -295,8 +316,8 @@ export const createUser = functions.https.onCall((data: any, context: CallableCo
             })
             .then((user: UserDTO) => {
                 sendAdminNewUserEmail(user.firstName + " " + user.lastName, user.email)
-                .then(() => {return;})
-                .catch((error) => {return;})
+                    .then(() => { return; })
+                    .catch((error) => { return; })
                 return classToPlain(UserFDTO.fromDTO(user));
             })
             .catch((error) => {

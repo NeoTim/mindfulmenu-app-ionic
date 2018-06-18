@@ -9,6 +9,7 @@ const FirestoreManager_1 = require("./util/FirestoreManager");
 const UserDTO_1 = require("./data/dto/UserDTO");
 const UserFDTO_1 = require("./data/dto/UserFDTO");
 const nodemailer = require("nodemailer");
+const Email = require("email-templates");
 admin.initializeApp(functions.config().firebase).firestore();
 const firestoreManager = new FirestoreManager_1.FirestoreManager();
 const corsHandler = cors({
@@ -27,21 +28,38 @@ const mailTransport = nodemailer.createTransport({
     },
 });
 // Sends a welcome email to the given user.
-const sendWelcomeEmail = (email, displayName) => {
-    const mailOptions = {
-        from: `Mindful Menu Team <` + gmailEmail + `>`,
-        to: email,
-        subject: `Welcome to Mindful Menu!`,
-        text: `Hey ${displayName || ''}! Welcome to Mindful Menu. I hope you will enjoy our service.`
-    };
-    return mailTransport.sendMail(mailOptions)
-        .then(() => {
-        console.log('New welcome email sent to:', email);
-        return;
-    })
-        .catch((error) => {
-        return Promise.reject(error);
+const sendWelcomeEmail = (address, displayName) => {
+    const email = new Email({
+        message: {
+            from: `Mindful Menu Team <` + gmailEmail + `>`
+        },
+        send: true,
+        transport: mailTransport
     });
+    return email
+        .send({
+        template: 'welcome',
+        message: {
+            to: address
+        },
+        locals: {
+            name: displayName
+        }
+    });
+    // const mailOptions = {
+    //     from: `Mindful Menu Team <` + gmailEmail + `>`,
+    //     to: email,
+    //     subject: `Welcome to Mindful Menu!`,
+    //     text: `Hey ${displayName || ''}! Welcome to Mindful Menu. I hope you will enjoy our service.`
+    // };
+    // return mailTransport.sendMail(mailOptions)
+    // .then(() => {
+    //     console.log('New welcome email sent to:', email);
+    //     return;
+    // })
+    // .catch((error) => {
+    //     return Promise.reject(error);
+    // });
 };
 // Sends a notification email to admin, that new user has registered
 const sendAdminNewUserEmail = (userName, userEmail) => {
@@ -68,7 +86,8 @@ const sendAdminNewUserEmail = (userName, userEmail) => {
 exports.testEmail = functions.https.onRequest((req, res) => {
     return corsHandler(req, res, () => {
         sendWelcomeEmail(req.query.email, req.query.name)
-            .then(() => {
+            .then((result) => {
+            console.log('result.originalMessage', result.originalMessage);
             res.status(200).send("Email successfully sent.");
         }).catch((error) => {
             res.status(500).send(error);

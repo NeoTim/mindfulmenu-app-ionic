@@ -31,7 +31,7 @@ export class UsersComponent implements OnInit {
     if (_.isEmpty(this.email)) {
       this.userModel.getAllUsers()
         .then((users: UserDTO[]) => {
-          this.users = users;
+          this.users = _.sortBy(users, ['lastName', 'firstName']);
         })
         .catch((error) => {});
     }
