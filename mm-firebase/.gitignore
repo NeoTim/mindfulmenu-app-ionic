@@ -1,2 +1,4 @@
 node_modules
+.idea
+functions/firebase-debug.log
 functions/lib/
