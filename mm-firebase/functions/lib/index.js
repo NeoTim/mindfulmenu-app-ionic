@@ -3,13 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const cors = require("cors");
+const path = require("path");
 require("reflect-metadata");
+const nodemailer = require("nodemailer");
+const Email = require("email-templates");
 const class_transformer_1 = require("class-transformer");
 const FirestoreManager_1 = require("./util/FirestoreManager");
 const UserDTO_1 = require("./data/dto/UserDTO");
 const UserFDTO_1 = require("./data/dto/UserFDTO");
-const nodemailer = require("nodemailer");
-const Email = require("email-templates");
 admin.initializeApp(functions.config().firebase).firestore();
 const firestoreManager = new FirestoreManager_1.FirestoreManager();
 const corsHandler = cors({
@@ -27,6 +28,7 @@ const mailTransport = nodemailer.createTransport({
         pass: gmailPassword,
     },
 });
+const mailTemplateDir = path.resolve(__dirname, 'emails');
 // Sends a welcome email to the given user.
 const sendWelcomeEmail = (address, displayName) => {
     const email = new Email({
@@ -34,7 +36,10 @@ const sendWelcomeEmail = (address, displayName) => {
             from: `Mindful Menu Team <` + gmailEmail + `>`
         },
         send: true,
-        transport: mailTransport
+        transport: mailTransport,
+        views: {
+            root: mailTemplateDir
+        }
     });
     return email
         .send({

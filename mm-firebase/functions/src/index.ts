@@ -1,14 +1,15 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as cors from 'cors';
+import * as path from 'path';
 import 'reflect-metadata';
+import * as nodemailer from 'nodemailer';
+import * as Email from 'email-templates';
 import { classToPlain, plainToClass } from 'class-transformer';
 import { FirestoreManager } from './util/FirestoreManager';
 import { CallableContext } from 'firebase-functions/lib/providers/https';
 import { UserDTO } from './data/dto/UserDTO';
 import { UserFDTO } from "./data/dto/UserFDTO";
-import * as nodemailer from 'nodemailer';
-import * as Email from 'email-templates';
 
 admin.initializeApp(functions.config().firebase).firestore();
 
@@ -31,6 +32,7 @@ const mailTransport = nodemailer.createTransport({
         pass: gmailPassword,
     },
 });
+const mailTemplateDir = path.resolve(__dirname, 'emails');
 
 // Sends a welcome email to the given user.
 const sendWelcomeEmail = (address, displayName) => {
@@ -39,7 +41,10 @@ const sendWelcomeEmail = (address, displayName) => {
             from: `Mindful Menu Team <` + gmailEmail + `>`
         },
         send: true,
-        transport: mailTransport
+        transport: mailTransport,
+        views: {
+            root: mailTemplateDir
+        }
     });
 
     return email
