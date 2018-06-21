@@ -50,9 +50,17 @@ my-plan {
     }
   }
 
-  ion-grid.lists {
+  ion-grid.action-buttons {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    margin-left: -10px !important;
+    margin-right: -10px !important;
+    width: calc(100% + 20px) !important;
+
     button {
       font-size: 12px !important;
+      padding-left: 5px !important;
+      padding-right: 5px !important;
     }
 
     .prep-list-icon {
