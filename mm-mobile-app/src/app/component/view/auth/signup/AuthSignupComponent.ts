@@ -9,6 +9,7 @@ import { UserModel } from "../../../../model/UserModel";
 import { UserDTO } from "../../../../data/dto/user/UserDTO";
 import { InternalUrlBrowserComponent } from "../../../ui/internalUrlBrowser/InternalUrlBrowserComponent";
 import { Event } from "../../../../common/Event";
+import { AccountStatus } from "../../../../data/enum/user/AccountStatus";
 
 @Component({
     selector: 'auth-signup',
@@ -76,6 +77,7 @@ export class AuthSignupComponent {
           newUser.lastLoginDate = null;
           newUser.lastAutomaticUpdateDate = null;
           newUser.automaticUpdateEnabled = true;
+          newUser.accountStatus = AccountStatus.EMAIL_UNVERIFIED;
           newUser.isAdmin = false;
           newUser.isEnabled = false;
 

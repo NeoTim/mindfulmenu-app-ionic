@@ -10,6 +10,7 @@ import { FirestoreManager } from './util/FirestoreManager';
 import { CallableContext } from 'firebase-functions/lib/providers/https';
 import { UserDTO } from './data/dto/UserDTO';
 import { UserFDTO } from "./data/dto/UserFDTO";
+import { AccountStatus } from "./data/enum/user/AccountStatus";
 
 admin.initializeApp(functions.config().firebase).firestore();
 
@@ -288,6 +289,7 @@ export const createUser = functions.https.onCall((data: any, context: CallableCo
             'lastLoginDate': userDTO.lastLoginDate,
             'lastAutomaticUpdateDate': userDTO.lastAutomaticUpdateDate,
             'automaticUpdateEnabled': userDTO.automaticUpdateEnabled,
+            'accountStatus': userDTO.accountStatus ? userDTO.accountStatus : AccountStatus.EMAIL_UNVERIFIED,
             'isAdmin': userDTO.isAdmin,
             'isEnabled': false
         }))
@@ -315,6 +317,7 @@ export const createUser = functions.https.onCall((data: any, context: CallableCo
             'lastLoginDate': userDTO.lastLoginDate,
             'lastAutomaticUpdateDate': userDTO.lastAutomaticUpdateDate,
             'automaticUpdateEnabled': userDTO.automaticUpdateEnabled,
+            'accountStatus': userDTO.accountStatus ? userDTO.accountStatus : AccountStatus.EMAIL_UNVERIFIED,
             'isAdmin': userDTO.isAdmin,
             'isEnabled': false
         }))

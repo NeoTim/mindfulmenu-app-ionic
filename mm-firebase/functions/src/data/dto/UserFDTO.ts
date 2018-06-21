@@ -3,6 +3,7 @@ import { UserDTO } from "./UserDTO";
 import * as _ from 'lodash';
 import { IdentifiableDTO } from "./IdentifiableDTO";
 import { DateUtil } from "../../util/DateUtil";
+import { AccountStatus } from "../enum/user/AccountStatus";
 
 export class UserFDTO extends IdentifiableDTO {
 
@@ -26,6 +27,8 @@ export class UserFDTO extends IdentifiableDTO {
 
   automaticUpdateEnabled: boolean;
 
+  accountStatus: AccountStatus;
+
   isAdmin: boolean;
 
   isEnabled: boolean;
@@ -36,7 +39,7 @@ export class UserFDTO extends IdentifiableDTO {
     let userFDTO = new UserFDTO();
 
     const copiedProperties: string[] =
-      ['id', 'firstName', 'lastName', 'email', 'source', 'favoriteMealIds', 'emailVerified', 'lastLoginDate', 'lastAutomaticUpdateDate', 'automaticUpdateEnabled', 'isAdmin', 'isEnabled'];
+      ['id', 'firstName', 'lastName', 'email', 'source', 'favoriteMealIds', 'emailVerified', 'lastLoginDate', 'lastAutomaticUpdateDate', 'automaticUpdateEnabled', 'accountStatus', 'isAdmin', 'isEnabled'];
 
     for (let copiedProperty of copiedProperties) {
       if (_.has(dto, copiedProperty)) {
@@ -51,7 +54,7 @@ export class UserFDTO extends IdentifiableDTO {
     let dto = new UserDTO();
 
     const copiedProperties: string[] =
-      ['id', 'firstName', 'lastName', 'email', 'source', 'favoriteMealIds', 'emailVerified', 'lastLoginDate', 'lastAutomaticUpdateDate', 'automaticUpdateEnabled', 'isAdmin', 'isEnabled'];
+      ['id', 'firstName', 'lastName', 'email', 'source', 'favoriteMealIds', 'emailVerified', 'lastLoginDate', 'lastAutomaticUpdateDate', 'automaticUpdateEnabled', 'accountStatus', 'isAdmin', 'isEnabled'];
 
     for (let copiedProperty of copiedProperties) {
       if (_.has(userFDTO, copiedProperty)) {
