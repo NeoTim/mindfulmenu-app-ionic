@@ -33,9 +33,15 @@
               </div>
 
               <div class="mb-3">
-                <small>Prep: {{ meal.prepTime | minuteTimeFormat }} | Cook: {{ meal.cookTime | minuteTimeFormat }} | Serves: {{ meal.servingsCount | replaceEmpty }} | {{ meal.ingredientIds?.length }} ingredients
-                  listed | Source:
-                  <a [href]="meal.sourceUrl" target="_blank">{{ meal.sourceName | replaceEmpty }}</a>
+                <small>
+                  <span>Prep: {{ meal.prepTime | minuteTimeFormat }} | </span>
+                  <span>Cook: {{ meal.cookTime | minuteTimeFormat }} | </span>
+                  <span>Serves: {{ meal.servingsCount | replaceEmpty }} | </span>
+                  <span>{{ meal.ingredientIds?.length }} ingredients listed | </span>
+                  <span>Source:
+                    <a *ngIf="meal.sourceUrl" [href]="meal.sourceUrl" target="_blank">{{ meal.sourceName | replaceEmpty }}</a>
+                    <ng-container *ngIf="!meal.sourceUrl">{{ meal.sourceName | replaceEmpty }}</ng-container>
+                  </span>
                 </small>
               </div>
 
