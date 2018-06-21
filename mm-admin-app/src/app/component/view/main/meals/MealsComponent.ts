@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MealEditPopupComponent } from './popup/MealEditPopupComponent';
 import { MealCreatePopupComponent } from './popup/MealCreatePopupComponent';
 import { IngredientModel } from '../../../../model/IngredientModel';
+
 @Component({
   selector: 'meals',
   templateUrl: 'MealsComponent.html',
