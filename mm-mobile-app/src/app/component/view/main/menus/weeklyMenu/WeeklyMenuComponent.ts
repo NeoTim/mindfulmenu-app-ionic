@@ -179,6 +179,7 @@ export class WeeklyMenuComponent {
     this.userModel.toggleFavoriteMeal(meal.id, isFavorite)
       .then((user: UserDTO) => {
         this.currentUser = user;
+
         this.calculateFavoriteMealsMap(this.weeklyMenuDto.mealIds, this.currentUser.favoriteMealIds);
       })
       .catch((error) => {});

@@ -229,4 +229,19 @@ export class WeeklyPlanModel {
     }
   }
 
+  public emailPlan(weeklyPlan: WeeklyPlanDTO, userId: string): Promise<void> {
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.weeklyPlanService.emailPlan(weeklyPlan.id, userId)
+      .then(() => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, error);
+        return Promise.reject(error);
+      })
+  }
+
 }

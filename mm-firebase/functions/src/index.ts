@@ -381,3 +381,10 @@ export const enableAutomaticUpdateForUser = functions.https.onCall((data: any, c
             return Promise.reject(error);
         });
 });
+
+export const emailPlan = functions.https.onCall((data: any, context: CallableContext) => {
+    const weeklyPlanId: string = data.weeklyPlanId;
+    const userId: string = data.userId;
+
+    return { result: 'OK' };
+});

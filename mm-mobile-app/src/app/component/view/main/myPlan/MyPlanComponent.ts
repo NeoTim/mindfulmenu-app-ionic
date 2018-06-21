@@ -18,6 +18,7 @@ import { PrepListComponent } from "./prepList/PrepListComponent";
 import { ShoppingListComponent } from "./shoppingList/ShoppingListComponent";
 import { ApplicationModel } from "../../../../model/ApplicationModel";
 import { MealComponent } from "../meal/MealComponent";
+import { ViewUtil } from "../../../../util/ViewUtil";
 
 @Component({
   selector: 'my-plan',
@@ -39,6 +40,7 @@ export class MyPlanComponent {
 
   constructor(public navCtrl: NavController,
               public modalCtrl: ModalController,
+              private viewUtil: ViewUtil,
               public applicationModel: ApplicationModel,
               public weeklyMenuModel: WeeklyMenuModel,
               public weeklyPlanModel: WeeklyPlanModel,
@@ -194,6 +196,9 @@ export class MyPlanComponent {
     this.userModel.toggleFavoriteMeal(meal.id, isFavorite)
       .then((user: UserDTO) => {
         this.currentUser = user;
+
+        // this.calculateFavoriteMealsMap(_.map(this.weeklyPlan.meals, 'id'), this.currentUser.favoriteMealIds);
+
         this.getWeeklyPlan(this.currentWeekRelation)
           .catch(() => {});
       })
@@ -244,5 +249,13 @@ export class MyPlanComponent {
       //
     });
     modal.present();
+  }
+
+  emailPlan() {
+    this.weeklyPlanModel.emailPlan(WeeklyPlan.toDTO(this.weeklyPlan), this.currentUser.id)
+      .then(() => {
+        this.viewUtil.showToast('Check your email for printable version of the plan.');
+      })
+      .catch(() => {});
   }
 }

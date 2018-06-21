@@ -3,11 +3,15 @@ import { classToPlain, plainToClass } from 'class-transformer';
 import firebase from "firebase";
 import { FirestoreManager } from "../util/FirestoreManager";
 import { WeeklyPlanDTO } from "../data/dto/menu/WeeklyPlanDTO";
+import { UserFDTO } from "../data/dto/user/UserFDTO";
+import { UserDTO } from "../data/dto/user/UserDTO";
+import { FirebaseManager } from "../util/FirebaseManager";
 
 @Injectable()
 export class WeeklyPlanService {
 
-  constructor(private firestoreManager: FirestoreManager) {
+  constructor(private firestoreManager: FirestoreManager,
+              private firebaseManager: FirebaseManager) {
   }
 
   public getWeeklyPlan(weeklyPlanId: string): Promise<WeeklyPlanDTO> {
@@ -79,6 +83,18 @@ export class WeeklyPlanService {
       this.firestoreManager.firestore.collection('weeklyPlans').doc(weeklyPlanId).update( { 'checkedIngredientIds': checkedIngredientIds })
         .then(() => {
           resolve(this.getWeeklyPlan(weeklyPlanId));
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  public emailPlan(weeklyPlanId: string, userId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.firebaseManager.functions.httpsCallable('emailPlan')({ weeklyPlanId: weeklyPlanId, userId: userId })
+        .then((result) => {
+          resolve();
         })
         .catch((error) => {
           reject(error);
