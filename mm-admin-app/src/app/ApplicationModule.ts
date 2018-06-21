@@ -44,6 +44,9 @@ import { UserCreatePopupComponent } from './component/view/main/users/popup/User
 import { AuthModel } from './model/AuthModel';
 import { AuthService } from './service/AuthService';
 import { MinuteTimeFormatPipe } from './util/pipe/MinuteTimeFormatPipe';
+import { Nl2BrPipe } from './util/pipe/Nl2BrPipe';
+import { ReplaceEmptyPipe } from './util/pipe/ReplaceEmptyPipe';
+import { SanitizeHtmlPipe } from './util/pipe/SanitizeHtmlPipe';
 
 @NgModule({
   declarations: [
@@ -55,7 +58,7 @@ import { MinuteTimeFormatPipe } from './util/pipe/MinuteTimeFormatPipe';
     MealEditPopupComponent, MealCreatePopupComponent,
     UserEditPopupComponent, UserCreatePopupComponent,
     // util/pipe
-    MinuteTimeFormatPipe
+    MinuteTimeFormatPipe, Nl2BrPipe, ReplaceEmptyPipe, SanitizeHtmlPipe
   ],
   entryComponents: [
     WeeklyMenuCreatePopupComponent, WeeklyMenuEditPopupComponent,

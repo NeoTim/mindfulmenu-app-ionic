@@ -18,12 +18,14 @@ export class WeeklyMenu {
 
   imageUrl: string;
 
+  intro: string;
+
   // --
 
   public static fromDTO(dto: WeeklyMenuDTO): WeeklyMenu {
     let weeklyMenu = new WeeklyMenu();
 
-    const copiedProperties: string[] = ['id', 'weekNumber', 'startDate', 'endDate', 'publishDate', 'imageUrl'];
+    const copiedProperties: string[] = ['id', 'weekNumber', 'startDate', 'endDate', 'publishDate', 'imageUrl', 'intro'];
 
     for (let copiedProperty of copiedProperties) {
       if (_.has(dto, copiedProperty)) {
@@ -37,7 +39,7 @@ export class WeeklyMenu {
   public static toDTO(weeklyMenu: WeeklyMenu): WeeklyMenuDTO {
     let dto = new WeeklyMenuDTO();
 
-    const copiedProperties: string[] = ['id', 'weekNumber', 'startDate', 'endDate', 'publishDate', 'imageUrl'];
+    const copiedProperties: string[] = ['id', 'weekNumber', 'startDate', 'endDate', 'publishDate', 'imageUrl', 'intro'];
 
     for (let copiedProperty of copiedProperties) {
       if (_.has(weeklyMenu, copiedProperty)) {

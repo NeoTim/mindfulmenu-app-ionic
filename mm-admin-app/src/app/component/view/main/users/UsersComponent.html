@@ -18,6 +18,7 @@
           <th scope="col">Name</th>
           <th scope="col">Email</th>
           <th scope="col">Last Login Date</th>
+          <th scope="col">Status</th>
           <th scope="col" class="text-center">Admin</th>
           <th scope="col"></th>
         </tr>
@@ -35,6 +36,7 @@
             <span>{{ user.email }}</span>
           </td>
           <td>{{ user.lastLoginDate | date:'medium' }}</td>
+          <td>{{ user.accountStatus | replaceEmpty }}</td>
           <td class="text-center">
             <span class="glyphicon glyphicon-ok text-success" title="Yes" *ngIf="user.isAdmin"></span>
             <span class="glyphicon glyphicon-remove text-danger" title="No" *ngIf="!user.isAdmin"></span>

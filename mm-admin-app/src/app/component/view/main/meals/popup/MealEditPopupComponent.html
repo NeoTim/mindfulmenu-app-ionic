@@ -34,10 +34,10 @@
       </div>
 
       <div class="form-row">
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-4">
           <label>Prep Time
             <span style="color:red;">*</span>
-            <span>[displayed as: {{ mealWithIngredients.prepTime | minuteTimeFormat }}]</span>
+            <span>[{{ mealWithIngredients.prepTime | minuteTimeFormat }}]</span>
           </label>
           <input type="number" class="form-control" id="prepTime" name="prepTime" [ngClass]="{'is-invalid': mealForm.submitted && prepTime.invalid, 'is-valid': mealForm.submitted && prepTime.valid }"
             (blur)="onNumberBlur(prepTime)" #prepTime="ngModel" [(ngModel)]="mealWithIngredients.prepTime" required>
@@ -45,15 +45,50 @@
             <div *ngIf="prepTime.errors?.required">This cannot be empty.</div>
           </div>
         </div>
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-4">
           <label>Cook Time
             <span style="color:red;">*</span>
-            <span>[displayed as: {{ mealWithIngredients.cookTime | minuteTimeFormat }}]</span>
+            <span>[{{ mealWithIngredients.cookTime | minuteTimeFormat }}]</span>
           </label>
           <input type="number" class="form-control" id="cookTime" name="cookTime" [ngClass]="{'is-invalid': mealForm.submitted && cookTime.invalid, 'is-valid': mealForm.submitted && cookTime.valid }"
             (blur)="onNumberBlur(cookTime)" #cookTime="ngModel" [(ngModel)]="mealWithIngredients.cookTime" required>
           <div class="invalid-feedback" *ngIf="mealForm.submitted && cookTime.invalid">
             <div *ngIf="cookTime.errors?.required">This cannot be empty.</div>
+          </div>
+        </div>
+        <div class="form-group col-sm-4">
+          <label>Serves</label>
+          <input type="text" class="form-control" id="servingsCount" name="servingsCount" [ngClass]="{'is-invalid': mealForm.submitted && servingsCount.invalid, 'is-valid': mealForm.submitted && servingsCount.valid }"
+                 #servingsCount="ngModel" [(ngModel)]="mealWithIngredients.servingsCount">
+          <div class="invalid-feedback" *ngIf="mealForm.submitted && servingsCount.invalid">
+            <div *ngIf="servingsCount.errors?.required">This cannot be empty.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-sm-4">
+          <label>Gluten free</label>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="isGlutenFree" name="isGlutenFree"
+                   #isGlutenFree="ngModel" [(ngModel)]="mealWithIngredients.isGlutenFree">
+            <label class="custom-control-label" for="isGlutenFree">{{ mealWithIngredients.isGlutenFree ? 'Yes' : 'No' }}</label>
+          </div>
+        </div>
+        <div class="form-group col-sm-4">
+          <label>Dairy free</label>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="isDairyFree" name="isDairyFree"
+                   #isDairyFree="ngModel" [(ngModel)]="mealWithIngredients.isDairyFree">
+            <label class="custom-control-label" for="isDairyFree">{{ mealWithIngredients.isDairyFree ? 'Yes' : 'No' }}</label>
+          </div>
+        </div>
+        <div class="form-group col-sm-4">
+          <label>Vegetarian</label>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="isVegetarian" name="isVegetarian"
+                   #isVegetarian="ngModel" [(ngModel)]="mealWithIngredients.isVegetarian">
+            <label class="custom-control-label" for="isVegetarian">{{ mealWithIngredients.isVegetarian ? 'Yes' : 'No' }}</label>
           </div>
         </div>
       </div>

@@ -33,9 +33,9 @@
               </div>
 
               <div class="mb-3">
-                <small>Prep: {{ meal.prepTime | minuteTimeFormat }} | Cook: {{ meal.cookTime | minuteTimeFormat }} | {{ meal.ingredientIds?.length }} ingredients
+                <small>Prep: {{ meal.prepTime | minuteTimeFormat }} | Cook: {{ meal.cookTime | minuteTimeFormat }} | Serves: {{ meal.servingsCount | replaceEmpty }} | {{ meal.ingredientIds?.length }} ingredients
                   listed | Source:
-                  <a [href]="meal.sourceUrl" target="_blank">{{ meal.sourceName }}</a>
+                  <a [href]="meal.sourceUrl" target="_blank">{{ meal.sourceName | replaceEmpty }}</a>
                 </small>
               </div>
 
