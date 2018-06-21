@@ -1,4 +1,4 @@
-<div class="top-doodad temporary"></div>
+<div class="top-doodad" [class.temporary]="isFirstSlide"></div>
 
 <div class="close-button with-top-doodad" [ngClass]="{ 'white': isFirstSlide }" (click)="close()"></div>
 
@@ -50,6 +50,18 @@
 
       </section>
 
+      <section *ngIf="meal.tip">
+        <div class="slideContent">
+          <div class="logoWrapper">
+            <img src="./asset/logo_mindful_menu@3x.png">
+          </div>
+
+          <h1 text-center>Tip</h1>
+
+          <p [innerHTML]="meal.tip | nl2br | sanitizeHtml"></p>
+        </div>
+      </section>
+
       <section *ngIf="meal.ingredients && (meal.ingredients.length > 0)">
         <div class="slideContent">
           <h1 text-center>Ingredients</h1>
@@ -87,18 +99,6 @@
               </ion-col>
             </ion-row>
           </ion-grid>
-        </div>
-      </section>
-
-      <section *ngIf="meal.tip">
-        <div class="slideContent">
-          <div class="logoWrapper">
-            <img src="./asset/logo_mindful_menu@3x.png">
-          </div>
-
-          <h1 text-center>Tip</h1>
-
-          <p [innerHTML]="meal.tip | nl2br | sanitizeHtml"></p>
         </div>
       </section>
 
