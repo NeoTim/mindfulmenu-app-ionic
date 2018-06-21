@@ -21,6 +21,13 @@
     </div>
   </ng-container>
 
+  <div class="favorite">
+    <button ion-button block type="button" (click)="showFavoriteList()">
+      <span class="favorite-list-icon"></span>
+      <span>Favorite Recipes</span>
+    </button>
+  </div>
+
   <div class="previousWeeklyMenus" [ngStyle]="{ height: !previousWeeklyMenusLoaded ? '245px' : 'auto' }">
     <h3>Previous weeks</h3>
     <ng-container *ngIf="previousWeeklyMenus && (previousWeeklyMenus.length > 0)">
@@ -55,13 +62,6 @@
     <ng-container *ngIf="(!upcomingWeeklyMenus || (upcomingWeeklyMenus.length == 0)) && upcomingWeeklyMenusLoaded">
       <p text-center>No upcoming weekly menus available.</p>
     </ng-container>
-  </div>
-
-  <div class="favorite">
-    <button ion-button block type="button" (click)="showFavoriteList()">
-      <span class="favorite-list-icon"></span>
-      <span>Favorite Recipes</span>
-    </button>
   </div>
 
 </ion-content>
