@@ -2,10 +2,16 @@
 
 ## Deploy functions
 
+Make sure you've run `npm install` in mm-firebase/functions directory.
+
 ```
 cd mm-firebase
 firebase deploy --only functions
 ```
+
+## Running unit tests
+
+You can run the unit tests with `npm test`.
 
 ## Set environment variables
 
