@@ -12,6 +12,8 @@ export class UserFDTO extends IdentifiableDTO {
 
   email: string;
 
+  source: string;
+
   favoriteMealIds: string[];
 
   emailVerified: boolean;
@@ -34,7 +36,7 @@ export class UserFDTO extends IdentifiableDTO {
     let userFDTO = new UserFDTO();
 
     const copiedProperties: string[] =
-      ['id', 'firstName', 'lastName', 'email', 'favoriteMealIds', 'emailVerified', 'lastLoginDate', 'lastAutomaticUpdateDate', 'automaticUpdateEnabled', 'isAdmin', 'isEnabled'];
+      ['id', 'firstName', 'lastName', 'email', 'source', 'favoriteMealIds', 'emailVerified', 'lastLoginDate', 'lastAutomaticUpdateDate', 'automaticUpdateEnabled', 'isAdmin', 'isEnabled'];
 
     for (let copiedProperty of copiedProperties) {
       if (_.has(dto, copiedProperty)) {
@@ -49,7 +51,7 @@ export class UserFDTO extends IdentifiableDTO {
     let dto = new UserDTO();
 
     const copiedProperties: string[] =
-      ['id', 'firstName', 'lastName', 'email', 'favoriteMealIds', 'emailVerified', 'lastLoginDate', 'lastAutomaticUpdateDate', 'automaticUpdateEnabled', 'isAdmin', 'isEnabled'];
+      ['id', 'firstName', 'lastName', 'email', 'source', 'favoriteMealIds', 'emailVerified', 'lastLoginDate', 'lastAutomaticUpdateDate', 'automaticUpdateEnabled', 'isAdmin', 'isEnabled'];
 
     for (let copiedProperty of copiedProperties) {
       if (_.has(userFDTO, copiedProperty)) {

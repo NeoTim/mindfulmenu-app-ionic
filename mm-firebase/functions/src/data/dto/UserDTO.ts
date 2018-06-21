@@ -10,6 +10,8 @@ export class UserDTO extends IdentifiableDTO {
 
   email: string;
 
+  source: string;
+
   favoriteMealIds: string[];
 
   emailVerified: boolean;

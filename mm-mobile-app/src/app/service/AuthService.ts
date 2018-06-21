@@ -93,6 +93,18 @@ export class AuthService {
     });
   }
 
+  public forgotPassword(username: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.firebaseManager.auth.sendPasswordResetEmail(username)
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
   // I've created FirebaseCredentialsDTO to extract the most important data (the rest of the object is just gibberish properties and functions named a,b,c, etc.)
   // firebase.User complains about accessing/copying some metadata (they're marked as readonly (?))
   // note: FirebaseCredentialsDTO isn't really used for authorization, Firebase SDK maintains its own firebase.User in the background - we just store a simplified copy for reference

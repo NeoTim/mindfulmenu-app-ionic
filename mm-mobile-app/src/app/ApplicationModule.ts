@@ -50,16 +50,14 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { AuthPurgatoryComponent } from "./component/view/auth/purgatory/AuthPurgatoryComponent";
 import { AuthSignupComponent } from "./component/view/auth/signup/AuthSignupComponent";
 import { MinuteTimeFormatPipe } from "./util/pipe/MinuteTimeFormatPipe";
+import { AuthForgotPasswordComponent } from "./component/view/auth/forgotPassword/AuthForgotPasswordComponent";
 
 @NgModule({
   declarations: [
     // main entry point
     ApplicationComponent,
     // component/view
-    AuthLoginComponent,
-    AuthSignupComponent,
-    AuthOfflineComponent,
-    AuthPurgatoryComponent,
+    AuthLoginComponent, AuthSignupComponent, AuthOfflineComponent, AuthForgotPasswordComponent, AuthPurgatoryComponent,
     MainComponent,
     MenusComponent, WeeklyMenuComponent, FavoritesComponent,
     MealComponent,
@@ -74,10 +72,7 @@ import { MinuteTimeFormatPipe } from "./util/pipe/MinuteTimeFormatPipe";
     // main entry point
     ApplicationComponent,
     // component/view
-    AuthLoginComponent,
-    AuthSignupComponent,
-    AuthOfflineComponent,
-    AuthPurgatoryComponent,
+    AuthLoginComponent, AuthSignupComponent, AuthOfflineComponent, AuthForgotPasswordComponent, AuthPurgatoryComponent,
     MainComponent,
     MenusComponent, WeeklyMenuComponent, FavoritesComponent,
     MealComponent,

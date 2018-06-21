@@ -102,4 +102,19 @@ export class AuthModel {
       })
   }
 
+  public forgotPassword(username: string): Promise<void> {
+    this.events.publish(Event.SYSTEM.LOADING, true);
+
+    return this.authService.forgotPassword(username)
+      .then((result: any) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return result;
+      })
+      .catch((error) => {
+        this.events.publish(Event.SYSTEM.LOADING, false);
+        return Promise.reject(error);
+      })
+  }
+
+
 }

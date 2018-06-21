@@ -27,7 +27,8 @@ export class AuthSignupComponent {
       firstName: '',
       lastName: '',
       password: '',
-      passwordRepeat: ''
+      passwordRepeat: '',
+      source: ''
   };
 
   signUpComplete: boolean = false;
@@ -69,6 +70,7 @@ export class AuthSignupComponent {
           newUser.firstName = this.signupData.firstName;
           newUser.lastName = this.signupData.lastName;
           newUser.email = credentials.email;
+          newUser.source = this.signupData.source;
           newUser.favoriteMealIds = [];
           newUser.emailVerified = false;
           newUser.lastLoginDate = null;
