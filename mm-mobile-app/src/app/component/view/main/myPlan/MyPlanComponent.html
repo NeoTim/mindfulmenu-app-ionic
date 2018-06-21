@@ -63,6 +63,17 @@
           <div>Remove from Plan</div>
         </div>
         <div class="favorite" [ngClass]="{ 'on': favoriteMealsMap[meal.id], 'off': !favoriteMealsMap[meal.id] }" (click)="toggleFavorite(meal, !favoriteMealsMap[meal.id]); $event.stopPropagation();"></div>
+        <div class="details-wrapper">
+          <div class="details-item" *ngIf="meal.isGlutenFree">
+            <div>GF</div>
+          </div>
+          <div class="details-item" *ngIf="meal.isDairyFree">
+            <div>DF</div>
+          </div>
+          <div class="details-item" *ngIf="meal.isVegetarian">
+            <div>V</div>
+          </div>
+        </div>
         <div class="content">
           <div class="name">
             <h4>{{ meal.name }}</h4>
@@ -73,10 +84,15 @@
               <p>Prep. time</p>
               <h4>{{ meal.prepTime | minuteTimeFormat }}</h4>
             </div>
-            <div class="v-divider" *ngIf="meal.prepTime || meal.cookTime"></div>
+            <div class="v-divider" *ngIf="meal.prepTime && meal.cookTime"></div>
             <div text-center *ngIf="meal.cookTime">
               <p>Cook time</p>
               <h4>{{ meal.cookTime | minuteTimeFormat }}</h4>
+            </div>
+            <div class="v-divider" *ngIf="(meal.prepTime || meal.cookTime) && meal.servingsCount"></div>
+            <div text-center *ngIf="meal.servingsCount">
+              <p>Serves</p>
+              <h4>{{ meal.servingsCount }}</h4>
             </div>
           </div>
         </div>

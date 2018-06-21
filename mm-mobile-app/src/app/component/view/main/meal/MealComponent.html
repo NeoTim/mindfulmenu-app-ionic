@@ -34,6 +34,21 @@
               <p>Cook time</p>
               <h2>{{ meal.cookTime | minuteTimeFormat }}</h2>
             </div>
+            <div *ngIf="meal.servingsCount" text-center>
+              <p>Serves</p>
+              <h2>{{ meal.servingsCount }}</h2>
+            </div>
+          </div>
+          <div class="additional-details">
+            <div class="additional-details-item" *ngIf="meal.isGlutenFree">
+              <div>GF</div>
+            </div>
+            <div class="additional-details-item" *ngIf="meal.isDairyFree">
+              <div>DF</div>
+            </div>
+            <div class="additional-details-item" *ngIf="meal.isVegetarian">
+              <div>V</div>
+            </div>
           </div>
         </div>
 

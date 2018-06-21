@@ -10,6 +10,14 @@ export class MealDTO extends IdentifiableDTO {
 
   cookTime: number;
 
+  servingsCount: string;
+
+  isGlutenFree: boolean;
+
+  isDairyFree: boolean;
+
+  isVegetarian: boolean;
+
   sourceName: string;
 
   sourceUrl: string;

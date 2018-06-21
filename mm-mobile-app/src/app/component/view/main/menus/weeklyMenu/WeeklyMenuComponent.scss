@@ -8,6 +8,16 @@ weekly-menu {
     margin-bottom: 0px !important;
   }
 
+  .intro {
+    font-size: 16px !important;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 7px;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+    padding: 20px;
+  }
+
   .meal {
     width: 100%;
     height: 420px;
@@ -123,6 +133,49 @@ weekly-menu {
         cursor: pointer;
         top: -2px;
         margin-right: 3px;
+      }
+    }
+
+    .details-wrapper {
+      position: absolute;
+      top: 196px;
+      right: 7px;
+      height: 36px;
+      color: color($colors, light) !important;
+      overflow: hidden;
+      display: flex;
+      cursor: default;
+
+      .details-item {
+        font-size: 12px;
+        border-radius: 15px;
+        text-align: center;
+        padding-top: 9px;
+        height: 36px;
+        width: 36px;
+        position: relative;
+
+        &:not(:last-child) {
+          margin-right: 7px;
+        }
+
+        &::before {
+          content: ' ';
+          background-color: color($colors, secondary) !important;
+          opacity: 0.8;
+          display: block;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          left: 0px;
+          top: 0px;
+          z-index: 0;
+          border-radius: 50%;
+        }
+
+        div {
+          position: relative;
+        }
       }
     }
 
