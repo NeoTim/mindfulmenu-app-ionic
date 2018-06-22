@@ -1,7 +1,5 @@
 <div class="top-doodad"></div>
 
-
-
 <ion-header>
   <ion-navbar></ion-navbar>
 </ion-header>
@@ -49,6 +47,12 @@
                 <div *ngIf="passwordRepeat.errors.required">This cannot be empty.</div>
                 <div *ngIf="passwordRepeat.errors.minlength">Password needs at least 6 characters.</div>
                 <div *ngIf="passwordRepeat.errors.equalTo">Passwords do not match.</div>
+              </div>
+              <ion-item class="source">
+                <ion-textarea [(ngModel)]="signupData.source" name="source" #source="ngModel" type="text" placeholder="How did you hear about us?"></ion-textarea>
+              </ion-item>
+              <div class="error" *ngIf="signUpForm.submitted && source.invalid">
+                <div *ngIf="source.errors.required">This cannot be empty.</div>
               </div>
               <div class="signup-button-wrapper">
                 <button ion-button block type="button" (click)="signUp()">Sign Up</button>

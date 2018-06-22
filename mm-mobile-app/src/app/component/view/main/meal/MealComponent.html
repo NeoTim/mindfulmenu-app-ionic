@@ -1,4 +1,4 @@
-<div class="top-doodad temporary"></div>
+<div class="top-doodad" [class.temporary]="isFirstSlide"></div>
 
 <div class="close-button with-top-doodad" [ngClass]="{ 'white': isFirstSlide }" (click)="close()"></div>
 
@@ -34,6 +34,21 @@
               <p>Cook time</p>
               <h2>{{ meal.cookTime | minuteTimeFormat }}</h2>
             </div>
+            <div *ngIf="meal.servingsCount" text-center>
+              <p>Serves</p>
+              <h2>{{ meal.servingsCount }}</h2>
+            </div>
+          </div>
+          <div class="additional-details">
+            <div class="additional-details-item" *ngIf="meal.isGlutenFree">
+              <div>GF</div>
+            </div>
+            <div class="additional-details-item" *ngIf="meal.isDairyFree">
+              <div>DF</div>
+            </div>
+            <div class="additional-details-item" *ngIf="meal.isVegetarian">
+              <div>V</div>
+            </div>
           </div>
         </div>
 
@@ -48,6 +63,18 @@
           </button>
         </div>
 
+      </section>
+
+      <section *ngIf="meal.tip">
+        <div class="slideContent">
+          <div class="logoWrapper">
+            <img src="./asset/logo_mindful_menu@3x.png">
+          </div>
+
+          <h1 text-center>Tip</h1>
+
+          <p [innerHTML]="meal.tip | nl2br | sanitizeHtml"></p>
+        </div>
       </section>
 
       <section *ngIf="meal.ingredients && (meal.ingredients.length > 0)">
@@ -87,18 +114,6 @@
               </ion-col>
             </ion-row>
           </ion-grid>
-        </div>
-      </section>
-
-      <section *ngIf="meal.tip">
-        <div class="slideContent">
-          <div class="logoWrapper">
-            <img src="./asset/logo_mindful_menu@3x.png">
-          </div>
-
-          <h1 text-center>Tip</h1>
-
-          <p [innerHTML]="meal.tip | nl2br | sanitizeHtml"></p>
         </div>
       </section>
 

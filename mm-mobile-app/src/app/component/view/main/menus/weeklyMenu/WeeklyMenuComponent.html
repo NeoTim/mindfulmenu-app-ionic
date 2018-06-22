@@ -15,6 +15,10 @@
     </ng-container>
 
     <ng-container *ngIf="weeklyMenu.meals && (weeklyMenu.meals.length > 0)">
+      <div class="intro" *ngIf="weeklyMenu.intro">
+        <p [innerHTML]="weeklyMenu.intro | nl2br | sanitizeHtml"></p>
+      </div>
+
       <div class="meal" *ngFor="let meal of weeklyMenu.meals" (click)="showMeal(meal)">
         <div class="background" [style.background-image]="('url(' + meal.imageUrl + ')') | sanitizeStyle"></div>
         <div class="plan green" *ngIf="!inCurrentPlanMealsMap[meal.id]" (click)="addMealToCurrentWeeklyPlan(meal); $event.stopPropagation();">
@@ -25,6 +29,17 @@
           <div>In My Plan</div>
         </div>
         <div class="favorite" [ngClass]="{ 'on': favoriteMealsMap[meal.id], 'off': !favoriteMealsMap[meal.id] }" (click)="toggleFavorite(meal, !favoriteMealsMap[meal.id]); $event.stopPropagation();"></div>
+        <div class="details-wrapper">
+          <div class="details-item" *ngIf="meal.isGlutenFree">
+            <div>GF</div>
+          </div>
+          <div class="details-item" *ngIf="meal.isDairyFree">
+            <div>DF</div>
+          </div>
+          <div class="details-item" *ngIf="meal.isVegetarian">
+            <div>V</div>
+          </div>
+        </div>
         <div class="content">
           <div class="name">
             <h4>{{ meal.name }}</h4>
@@ -35,10 +50,15 @@
               <p>Prep. time</p>
               <h4>{{ meal.prepTime | minuteTimeFormat }}</h4>
             </div>
-            <div class="v-divider" *ngIf="meal.prepTime || meal.cookTime"></div>
+            <div class="v-divider" *ngIf="meal.prepTime && meal.cookTime"></div>
             <div text-center *ngIf="meal.cookTime">
               <p>Cook time</p>
               <h4>{{ meal.cookTime | minuteTimeFormat }}</h4>
+            </div>
+            <div class="v-divider" *ngIf="(meal.prepTime || meal.cookTime) && meal.servingsCount"></div>
+            <div text-center *ngIf="meal.servingsCount">
+              <p>Serves</p>
+              <h4>{{ meal.servingsCount }}</h4>
             </div>
           </div>
         </div>

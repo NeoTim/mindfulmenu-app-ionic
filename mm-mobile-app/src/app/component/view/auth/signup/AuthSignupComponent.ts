@@ -9,6 +9,7 @@ import { UserModel } from "../../../../model/UserModel";
 import { UserDTO } from "../../../../data/dto/user/UserDTO";
 import { InternalUrlBrowserComponent } from "../../../ui/internalUrlBrowser/InternalUrlBrowserComponent";
 import { Event } from "../../../../common/Event";
+import { AccountStatus } from "../../../../data/enum/user/AccountStatus";
 
 @Component({
     selector: 'auth-signup',
@@ -27,7 +28,8 @@ export class AuthSignupComponent {
       firstName: '',
       lastName: '',
       password: '',
-      passwordRepeat: ''
+      passwordRepeat: '',
+      source: ''
   };
 
   signUpComplete: boolean = false;
@@ -69,11 +71,13 @@ export class AuthSignupComponent {
           newUser.firstName = this.signupData.firstName;
           newUser.lastName = this.signupData.lastName;
           newUser.email = credentials.email;
+          newUser.source = this.signupData.source;
           newUser.favoriteMealIds = [];
           newUser.emailVerified = false;
           newUser.lastLoginDate = null;
           newUser.lastAutomaticUpdateDate = null;
           newUser.automaticUpdateEnabled = true;
+          newUser.accountStatus = AccountStatus.EMAIL_UNVERIFIED;
           newUser.isAdmin = false;
           newUser.isEnabled = false;
 

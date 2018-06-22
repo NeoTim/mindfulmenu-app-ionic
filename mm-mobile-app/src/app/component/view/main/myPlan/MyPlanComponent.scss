@@ -50,9 +50,17 @@ my-plan {
     }
   }
 
-  ion-grid.lists {
+  ion-grid.action-buttons {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    margin-left: -10px !important;
+    margin-right: -10px !important;
+    width: calc(100% + 20px) !important;
+
     button {
       font-size: 12px !important;
+      padding-left: 5px !important;
+      padding-right: 5px !important;
     }
 
     .prep-list-icon {
@@ -188,6 +196,49 @@ my-plan {
         margin-right: 3px;
       }
 
+    }
+
+    .details-wrapper {
+      position: absolute;
+      top: 196px;
+      right: 7px;
+      height: 36px;
+      color: color($colors, light) !important;
+      overflow: hidden;
+      display: flex;
+      cursor: default;
+
+      .details-item {
+        font-size: 12px;
+        border-radius: 15px;
+        text-align: center;
+        padding-top: 9px;
+        height: 36px;
+        width: 36px;
+        position: relative;
+
+        &:not(:last-child) {
+          margin-right: 7px;
+        }
+
+        &::before {
+          content: ' ';
+          background-color: color($colors, secondary) !important;
+          opacity: 0.8;
+          display: block;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          left: 0px;
+          top: 0px;
+          z-index: 0;
+          border-radius: 50%;
+        }
+
+        div {
+          position: relative;
+        }
+      }
     }
 
     .content {

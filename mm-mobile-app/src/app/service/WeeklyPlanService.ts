@@ -3,8 +3,6 @@ import { classToPlain, plainToClass } from 'class-transformer';
 import firebase from "firebase";
 import { FirestoreManager } from "../util/FirestoreManager";
 import { WeeklyPlanDTO } from "../data/dto/menu/WeeklyPlanDTO";
-import { UserFDTO } from "../data/dto/user/UserFDTO";
-import { UserDTO } from "../data/dto/user/UserDTO";
 import { FirebaseManager } from "../util/FirebaseManager";
 
 @Injectable()

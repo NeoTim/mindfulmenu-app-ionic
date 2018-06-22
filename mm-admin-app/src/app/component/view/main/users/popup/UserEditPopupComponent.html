@@ -8,13 +8,9 @@
   <div class="modal-body">
     <form #userForm="ngForm" novalidate>
       <div class="form-row">
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-12">
           <label>ID</label>
           <div>{{ user.id }}</div>
-        </div>
-        <div class="form-group col-sm-6">
-          <label>Last Login Date</label>
-          <div>{{ user.lastLoginDate | date:'medium' }}</div>
         </div>
       </div>
       <div class="form-row">
@@ -54,19 +50,6 @@
       </div>
       <div class="form-row">
         <div class="form-group col-sm-6">
-          <label>Automatic Updates</label>
-          <div>
-            <span class="glyphicon glyphicon-ok text-success" title="Yes" *ngIf="user.automaticUpdateEnabled"></span>
-            <span class="glyphicon glyphicon-remove text-danger" title="No" *ngIf="!user.automaticUpdateEnabled"></span>
-          </div>
-        </div>
-        <div class="form-group col-sm-6">
-          <label>Last Automatic Update Date</label>
-          <div>{{ user.lastAutomaticUpdateDate | date:'medium' }}</div>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-sm-6">
           <label>Admin</label>
           <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" id="isAdmin" name="isAdmin"
@@ -81,6 +64,35 @@
                    #isEnabled="ngModel" [(ngModel)]="user.isEnabled">
             <label class="custom-control-label" for="isEnabled">{{ user.isEnabled ? 'Yes' : 'No' }}</label>
           </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label>Account Status</label>
+          <div>{{ user.accountStatus | replaceEmpty }}</div>
+        </div>
+        <div class="form-group col-sm-6">
+          <label>Last Login Date</label>
+          <div>{{ user.lastLoginDate | date:'medium' }}</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-6">
+          <label>Automatic Updates</label>
+          <div>
+            <span class="glyphicon glyphicon-ok text-success" title="Yes" *ngIf="user.automaticUpdateEnabled"></span>
+            <span class="glyphicon glyphicon-remove text-danger" title="No" *ngIf="!user.automaticUpdateEnabled"></span>
+          </div>
+        </div>
+        <div class="form-group col-sm-6">
+          <label>Last Automatic Update Date</label>
+          <div>{{ user.lastAutomaticUpdateDate | date:'medium' }}</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-sm-12">
+          <label>Source</label>
+          <div [innerHTML]="user.source | replaceEmpty | nl2br | sanitizeHtml"></div>
         </div>
       </div>
     </form>

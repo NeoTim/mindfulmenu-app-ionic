@@ -1,6 +1,7 @@
 import { IdentifiableDTO } from "../IdentifiableDTO";
 import { Transform } from "class-transformer";
 import { DateUtil } from "../../../util/DateUtil";
+import { AccountStatus } from "../../enum/user/AccountStatus";
 
 export class UserDTO extends IdentifiableDTO {
 
@@ -9,6 +10,8 @@ export class UserDTO extends IdentifiableDTO {
   lastName: string;
 
   email: string;
+
+  source: string;
 
   favoriteMealIds: string[];
 
@@ -21,6 +24,8 @@ export class UserDTO extends IdentifiableDTO {
   lastAutomaticUpdateDate: Date;
 
   automaticUpdateEnabled: boolean;
+
+  accountStatus: AccountStatus;
 
   isAdmin: boolean;
 

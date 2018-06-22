@@ -10,6 +10,7 @@ import { FirestoreManager } from './util/FirestoreManager';
 import { CallableContext } from 'firebase-functions/lib/providers/https';
 import { UserDTO } from './data/dto/UserDTO';
 import { UserFDTO } from "./data/dto/UserFDTO";
+import { AccountStatus } from "./data/enum/user/AccountStatus";
 
 admin.initializeApp(functions.config().firebase).firestore();
 
@@ -282,11 +283,13 @@ export const createUser = functions.https.onCall((data: any, context: CallableCo
             'firstName': userDTO.firstName,
             'lastName': userDTO.lastName,
             'email': userDTO.email,
+            'source': userDTO.source ? userDTO.source : '',
             'favoriteMealIds': userDTO.favoriteMealIds,
             'emailVerified': false,
             'lastLoginDate': userDTO.lastLoginDate,
             'lastAutomaticUpdateDate': userDTO.lastAutomaticUpdateDate,
             'automaticUpdateEnabled': userDTO.automaticUpdateEnabled,
+            'accountStatus': userDTO.accountStatus ? userDTO.accountStatus : AccountStatus.EMAIL_UNVERIFIED,
             'isAdmin': userDTO.isAdmin,
             'isEnabled': false
         }))
@@ -296,7 +299,7 @@ export const createUser = functions.https.onCall((data: any, context: CallableCo
             .then((user: UserDTO) => {
                 sendAdminNewUserEmail(user.firstName + " " + user.lastName, user.email)
                     .then(() => { return; })
-                    .catch((error) => { return; })
+                    .catch((error) => { return; });
                 return classToPlain(UserFDTO.fromDTO(user));
             })
             .catch((error) => {
@@ -308,11 +311,13 @@ export const createUser = functions.https.onCall((data: any, context: CallableCo
             'firstName': userDTO.firstName,
             'lastName': userDTO.lastName,
             'email': userDTO.email,
+            'source': userDTO.source ? userDTO.source : '',
             'favoriteMealIds': userDTO.favoriteMealIds,
             'emailVerified': false,
             'lastLoginDate': userDTO.lastLoginDate,
             'lastAutomaticUpdateDate': userDTO.lastAutomaticUpdateDate,
             'automaticUpdateEnabled': userDTO.automaticUpdateEnabled,
+            'accountStatus': userDTO.accountStatus ? userDTO.accountStatus : AccountStatus.EMAIL_UNVERIFIED,
             'isAdmin': userDTO.isAdmin,
             'isEnabled': false
         }))
@@ -322,7 +327,7 @@ export const createUser = functions.https.onCall((data: any, context: CallableCo
             .then((user: UserDTO) => {
                 sendAdminNewUserEmail(user.firstName + " " + user.lastName, user.email)
                     .then(() => { return; })
-                    .catch((error) => { return; })
+                    .catch((error) => { return; });
                 return classToPlain(UserFDTO.fromDTO(user));
             })
             .catch((error) => {

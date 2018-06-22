@@ -7,6 +7,7 @@ import { FirebaseCredentialsDTO } from "../../../../data/dto/auth/FirebaseCreden
 import { NgForm } from "@angular/forms";
 import { AuthSignupComponent } from "../signup/AuthSignupComponent";
 import { Event } from "../../../../common/Event";
+import { AuthForgotPasswordComponent } from "../forgotPassword/AuthForgotPasswordComponent";
 
 @Component({
     selector: 'auth-login',
@@ -75,6 +76,10 @@ export class AuthLoginComponent {
     setTimeout(() => {
       this.login();
     });
+  }
+
+  forgotPassword() {
+    this.navCtrl.push(AuthForgotPasswordComponent, null,{ animation: 'ios-transition'} )
   }
 
   signUp() {

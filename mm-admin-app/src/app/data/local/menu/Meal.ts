@@ -14,6 +14,14 @@ export class Meal {
 
   cookTime: number;
 
+  servingsCount: string;
+
+  isGlutenFree: boolean;
+
+  isDairyFree: boolean;
+
+  isVegetarian: boolean;
+
   sourceName: string;
 
   sourceUrl: string;
@@ -31,7 +39,7 @@ export class Meal {
   public static fromDTO(dto: MealDTO): Meal {
     let meal = new Meal();
 
-    const copiedProperties: string[] = ['id', 'name', 'imageUrl', 'prepTime', 'cookTime', 'sourceName', 'sourceUrl', 'tip', 'cookInstructions', 'prepInstructions'];
+    const copiedProperties: string[] = ['id', 'name', 'imageUrl', 'prepTime', 'cookTime', 'servingsCount', 'isGlutenFree', 'isDairyFree', 'isVegetarian', 'sourceName', 'sourceUrl', 'tip', 'cookInstructions', 'prepInstructions'];
 
     for (let copiedProperty of copiedProperties) {
       if (_.has(dto, copiedProperty)) {
@@ -45,7 +53,7 @@ export class Meal {
   public static toDTO(meal: Meal): MealDTO {
     let dto = new MealDTO();
 
-    const copiedProperties: string[] = ['id', 'name', 'imageUrl', 'prepTime', 'cookTime', 'sourceName', 'sourceUrl', 'tip', 'cookInstructions', 'prepInstructions'];
+    const copiedProperties: string[] = ['id', 'name', 'imageUrl', 'prepTime', 'cookTime', 'servingsCount', 'isGlutenFree', 'isDairyFree', 'isVegetarian', 'sourceName', 'sourceUrl', 'tip', 'cookInstructions', 'prepInstructions'];
 
     for (let copiedProperty of copiedProperties) {
       if (_.has(meal, copiedProperty)) {
