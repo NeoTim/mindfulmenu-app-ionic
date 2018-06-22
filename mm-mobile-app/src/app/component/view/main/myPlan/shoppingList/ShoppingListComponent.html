@@ -41,7 +41,7 @@
               <div class="removeIcon"></div>
             </div>
           </ion-item>
-          <div class="amountsExpanded" [@toggle] [class.checked]="item.checked" *ngIf="item.expanded">
+          <div class="amountsExpanded" [@expand]="item.expanded" [class.checked]="item.checked">
             <div class="itemAmount" *ngIf="item.ingredient.amount">({{ item.ingredient.amount }})</div>
             <ng-container *ngFor="let identicalItem of item.identicalItems">
               <div class="itemAmount" *ngIf="identicalItem.ingredient.amount">({{ identicalItem.ingredient.amount }})</div>

@@ -15,20 +15,21 @@ import { ShoppingListItem } from "../../../../../data/local/shoppingList/Shoppin
 import { IngredientCategory } from "../../../../../data/enum/menu/IngredientCategory";
 import { ApplicationModel } from "../../../../../model/ApplicationModel";
 import { ViewUtil } from "../../../../../util/ViewUtil";
-import { animate, style, transition, trigger } from "@angular/animations";
+import { animate, state, style, transition, trigger } from "@angular/animations";
 
 @Component({
   selector: 'shopping-list',
   templateUrl: 'ShoppingListComponent.html',
   animations: [
-    trigger('toggle', [
-      transition(':enter', [
-        style({ height: 0 }),
-        animate('350ms ease-out', style({ height: '*' }))
-      ]),
-      transition(':leave', [
-        animate('350ms ease-in', style({ height: 0 }))
-      ])
+    trigger('expand',[
+      state('true',
+        style({ height: '*' })
+      ),
+      state('false',
+        style({ height: 0 })
+      ),
+      transition('false => true', animate('350ms ease-out')),
+      transition('true => false', animate('350ms ease-in'))
     ])
   ]
 })
