@@ -21,6 +21,7 @@ export class ShoppingList {
 
     _.forEach(this.categories, (category: ShoppingListCategory) => {
       _.forEach(category.items, (item: ShoppingListItem) => {
+        // we ignore the identical ingredients here, as user won't see them as "checkable"
         if (item.checked) {
           totalChecked++;
         }

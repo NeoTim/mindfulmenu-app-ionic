@@ -6,4 +6,8 @@ export class ShoppingListItem {
 
   checked: boolean;
 
+  identicalItems: ShoppingListItem[];
+
+  expanded: boolean;
+
 }

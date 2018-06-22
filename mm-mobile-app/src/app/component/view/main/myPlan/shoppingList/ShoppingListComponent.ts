@@ -15,10 +15,22 @@ import { ShoppingListItem } from "../../../../../data/local/shoppingList/Shoppin
 import { IngredientCategory } from "../../../../../data/enum/menu/IngredientCategory";
 import { ApplicationModel } from "../../../../../model/ApplicationModel";
 import { ViewUtil } from "../../../../../util/ViewUtil";
+import { animate, style, transition, trigger } from "@angular/animations";
 
 @Component({
   selector: 'shopping-list',
-  templateUrl: 'ShoppingListComponent.html'
+  templateUrl: 'ShoppingListComponent.html',
+  animations: [
+    trigger('toggle', [
+      transition(':enter', [
+        style({ height: 0 }),
+        animate('350ms ease-out', style({ height: '*' }))
+      ]),
+      transition(':leave', [
+        animate('350ms ease-in', style({ height: 0 }))
+      ])
+    ])
+  ]
 })
 export class ShoppingListComponent {
 
@@ -175,13 +187,20 @@ export class ShoppingListComponent {
         _.forEach(ingredientCategories[categoryName], (ingredient: IngredientDTO) => {
           let item: ShoppingListItem = new ShoppingListItem();
           item.checked = false;
-          item.ingredient = ingredient;
+          item.ingredient = _.cloneDeep(ingredient);
+          item.identicalItems = [];
+          item.expanded = false;
+
+          // lots of additional spaces shows up here during editing, I'm removing them from display
+          // ideally, of course, they should not be there in the first place
+          item.ingredient.item = _.trim(item.ingredient.item);
+          item.ingredient.amount = _.trim(item.ingredient.amount);
 
           category.items.push(item);
         });
 
         category.items = _.sortBy(category.items, (item: ShoppingListItem) => {
-          return _.trim(item.ingredient.item.toLowerCase());
+          return item.ingredient.item.toLowerCase();
         });
 
         shoppingList.categories.push(category);
@@ -195,6 +214,52 @@ export class ShoppingListComponent {
       }
     });
 
+    // filter out duplicates and hide them "under" first item of those with duplicated name
+
+    _.forEach(shoppingList.categories, (category: ShoppingListCategory) => {
+      let newItemList: ShoppingListItem[] = [];
+
+      let itemsGroupedByName: { [key: string]: ShoppingListItem[] } = _.groupBy(category.items, (item: ShoppingListItem) => {
+        return item.ingredient.item.toLowerCase();
+      });
+
+      _.forEach(itemsGroupedByName, (value: ShoppingListItem[], index: string) => {
+        // let's sort them by id, to always have a predictable order (_.groupBy results could be randomly ordered)
+        value = _.sortBy(value, ['ingredient.id']);
+
+        let firstItem: ShoppingListItem = value[0]; // guaranteed to be there, as a result of _.groupBy function
+        newItemList.push(firstItem);
+
+        if (value.length > 1) {
+          // add the rest as identical items under first item
+          firstItem.identicalItems = _.slice(value, 1, value.length);
+        }
+      });
+
+      category.items = newItemList;
+
+      // let's sort by name again (before this transformation, in 190), to always have predictable order
+      // probably not needed, but just to be sure
+      category.items = _.sortBy(category.items, (item: ShoppingListItem) => {
+        return item.ingredient.item.toLowerCase();
+      });
+    });
+
+    // copy the "expanded" state from previous model, if there was any
+
+    if (this.shoppingList) {
+      _.forEach(this.shoppingList.categories, (category: ShoppingListCategory, index: any) => {
+        _.forEach(category.items, (item: ShoppingListItem) => {
+          if (item.expanded) {
+            let foundItem: ShoppingListItem = _.find(shoppingList.categories[index].items, ['ingredient.id', item.ingredient.id]);
+            if (foundItem) {
+              foundItem.expanded = true;
+            }
+          }
+        });
+      });
+    }
+
     this.shoppingList = shoppingList;
   }
 
@@ -207,6 +272,15 @@ export class ShoppingListComponent {
         else {
           item.checked = false;
         }
+
+        _.forEach(item.identicalItems, (identicalItem: ShoppingListItem) => {
+          if (_.includes(this.weeklyPlan.checkedIngredientIds, identicalItem.ingredient.id)) {
+            identicalItem.checked = true;
+          }
+          else {
+            identicalItem.checked = false;
+          }
+        });
       })
     });
   }
@@ -220,6 +294,12 @@ export class ShoppingListComponent {
         if (item.checked) {
           checkedIngredientIds.push(item.ingredient.id);
         }
+
+        _.forEach(item.identicalItems, (identicalItem: ShoppingListItem) => {
+          if (identicalItem.checked) {
+            checkedIngredientIds.push(identicalItem.ingredient.id);
+          }
+        })
       })
     });
 
@@ -232,6 +312,17 @@ export class ShoppingListComponent {
   onShoppingListItemChecked(item: ShoppingListItem, value: boolean) {
     // item is just a reference for queue purpose. We don't want the connection to the ShoppingList.
     this.toggleCheckedQueue.push(_.cloneDeep(item));
+
+    _.forEach(item.identicalItems, (identicalItem: ShoppingListItem) => {
+      if (value) {
+        identicalItem.checked = true;
+      }
+      else {
+        identicalItem.checked = false;
+      }
+
+      this.toggleCheckedQueue.push(_.cloneDeep(identicalItem));
+    });
 
     if (!this.toggleCheckedQueueRunning) {
       this.toggleCheckedQueueRunning = true;
@@ -295,6 +386,10 @@ export class ShoppingListComponent {
           return Promise.reject(error);
         });
     }
+  }
+
+  toggleItem(item: ShoppingListItem) {
+    item.expanded = !item.expanded;
   }
 
   addItemToCategory(category: ShoppingListCategory) {

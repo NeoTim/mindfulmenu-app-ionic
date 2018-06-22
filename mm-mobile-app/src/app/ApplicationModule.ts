@@ -51,6 +51,8 @@ import { AuthPurgatoryComponent } from "./component/view/auth/purgatory/AuthPurg
 import { AuthSignupComponent } from "./component/view/auth/signup/AuthSignupComponent";
 import { MinuteTimeFormatPipe } from "./util/pipe/MinuteTimeFormatPipe";
 import { AuthForgotPasswordComponent } from "./component/view/auth/forgotPassword/AuthForgotPasswordComponent";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import 'web-animations-js/web-animations.min';
 
 @NgModule({
   declarations: [
@@ -83,6 +85,7 @@ import { AuthForgotPasswordComponent } from "./component/view/auth/forgotPasswor
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     CustomFormsModule,
     IonicModule.forRoot(ApplicationComponent, {

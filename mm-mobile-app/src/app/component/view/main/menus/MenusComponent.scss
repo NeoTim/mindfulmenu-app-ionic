@@ -12,6 +12,7 @@ menus {
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
 
     &.empty {
+      background-color: color($colors, primary) !important;
       cursor: default;
     }
 

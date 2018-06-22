@@ -31,13 +31,23 @@
           <ion-item>
             <ion-label>
               <span class="itemName">{{ item.ingredient.item }}</span>
-              <span class="itemAmount" *ngIf="item.ingredient.amount">({{ item.ingredient.amount }})</span>
             </ion-label>
             <ion-checkbox [(ngModel)]="item.checked" (ngModelChange)="onShoppingListItemChecked(item, $event)"></ion-checkbox>
+            <div class="itemAmount" *ngIf="!item.ingredient.isCustomItem && (item.identicalItems.length === 0) && item.ingredient.amount" item-end>({{ item.ingredient.amount }})</div>
+            <div class="amounts" *ngIf="!item.ingredient.isCustomItem && (item.identicalItems.length > 0)" item-end (click)="toggleItem(item); $event.preventDefault();">
+              <div [class.expandIcon]="!item.expanded" [class.collapseIcon]="item.expanded"></div>
+            </div>
             <div class="remove" *ngIf="item.ingredient.isCustomItem" item-end (click)="removeItemFromCategory(item, category); $event.preventDefault();">
               <div class="removeIcon"></div>
             </div>
           </ion-item>
+          <div class="amountsExpanded" [@toggle] [class.checked]="item.checked" *ngIf="item.expanded">
+            <div class="itemAmount" *ngIf="item.ingredient.amount">({{ item.ingredient.amount }})</div>
+            <ng-container *ngFor="let identicalItem of item.identicalItems">
+              <div class="itemAmount" *ngIf="identicalItem.ingredient.amount">({{ identicalItem.ingredient.amount }})</div>
+            </ng-container>
+            <div style="height: 10px">&nbsp;</div><!-- helps with animation smoothness, as css set margin/padding makes it slightly choppy -->
+          </div>
           <div class="h-divider"></div>
         </div>
         <div class="slItem">
