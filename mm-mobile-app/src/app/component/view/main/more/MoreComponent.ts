@@ -8,6 +8,7 @@ import { AccountComponent } from "./account/AccountComponent";
 import { AboutComponent } from "./about/AboutComponent";
 import { ApplicationConfig } from "../../../../config/ApplicationConfig";
 import { GoogleAnalyticsModel } from "../../../../model/GoogleAnalyticsModel";
+import { PlatformUtil } from "../../../../util/PlatformUtil";
 
 @Component({
   selector: 'more',
@@ -18,9 +19,11 @@ export class MoreComponent {
   public currentUser: UserDTO;
 
   public applicationVersion: string = this.config.version;
+  public platforms: string[] = this.platformUtil.platforms;
 
   constructor(public navCtrl: NavController,
               public viewUtil: ViewUtil,
+              public platformUtil: PlatformUtil,
               public actionSheetCtrl: ActionSheetController,
               public config: ApplicationConfig,
               public authModel: AuthModel,

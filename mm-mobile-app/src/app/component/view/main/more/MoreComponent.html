@@ -21,6 +21,10 @@
     </button>
   </ion-list>
 
-  <p id="version" text-center>{{ applicationVersion }}</p>
+  <p id="version" text-center>
+    <span>{{ applicationVersion }}</span>
+    <br />
+    [<span *ngFor="let platform of platforms; let last = last;">{{ platform }}<ng-container *ngIf="!last">,&nbsp;</ng-container></span>]
+  </p>
 
 </ion-content>

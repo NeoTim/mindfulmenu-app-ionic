@@ -4,7 +4,10 @@ import { Platform } from 'ionic-angular';
 @Injectable()
 export class PlatformUtil {
 
-    constructor(public platform: Platform) {
+    public platforms: string[] = [];
+
+    constructor(private platform: Platform) {
+      this.platforms = platform.platforms();
     }
 
     public isCordova(): boolean {
@@ -22,5 +25,5 @@ export class PlatformUtil {
     public isAndroid(): boolean {
         return this.platform.is('android');
     }
-    
+
 }
