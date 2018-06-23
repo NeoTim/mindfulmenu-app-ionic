@@ -17,6 +17,7 @@ import { ApplicationConfig } from "../config/ApplicationConfig";
 import dedent from "dedent";
 import { ApplicationModel } from "../model/ApplicationModel";
 import { AuthPurgatoryComponent } from "./view/auth/purgatory/AuthPurgatoryComponent";
+import { GoogleAnalyticsModel } from "../model/GoogleAnalyticsModel";
 
 @Component({
   templateUrl: 'ApplicationComponent.html'
@@ -41,6 +42,7 @@ export class ApplicationComponent implements OnInit {
               public config: ApplicationConfig,
               public applicationModel: ApplicationModel,
               public networkModel: NetworkModel,
+              public googleAnalyticsModel: GoogleAnalyticsModel,
               public authModel: AuthModel,
               public userModel: UserModel) {
   }
@@ -52,7 +54,9 @@ export class ApplicationComponent implements OnInit {
   init() {
     this.platform.ready()
       .then(() => {
+
         if (this.platformUtil.isCordova()) {
+          this.googleAnalyticsModel.initializeGoogleAnalytics();
           this.networkModel.initializeNetworkCheck();
         }
 

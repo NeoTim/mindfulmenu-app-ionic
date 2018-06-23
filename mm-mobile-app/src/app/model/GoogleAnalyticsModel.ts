@@ -5,7 +5,6 @@ import { GoogleAnalytics } from "@ionic-native/google-analytics";
 import { ApplicationConfig } from "../config/ApplicationConfig";
 import { Event } from "../common/Event";
 import { FirebaseCredentialsDTO } from "../data/dto/auth/FirebaseCredentialsDTO";
-import { PlatformUtil } from "../util/PlatformUtil";
 
 @Injectable()
 export class GoogleAnalyticsModel {
@@ -16,33 +15,33 @@ export class GoogleAnalyticsModel {
   constructor(private events: Events,
               private storage: Storage,
               private config: ApplicationConfig,
-              private platformUtil: PlatformUtil,
               private googleAnalytics: GoogleAnalytics) {
 
     this.setupListeners();
+  }
 
-    if (platformUtil.isCordova()) {
-      this.googleAnalyticsInitializing = true;
+  public initializeGoogleAnalytics() {
+    this.googleAnalyticsInitializing = true;
 
-      this.googleAnalytics.startTrackerWithId(config.googleAnalyticsId)
-        .then(() => {
-          return this.googleAnalytics.setAppVersion(config.version);
-        })
-        .then(() => {
-          // not sure if you want this
-          return this.googleAnalytics.setAllowIDFACollection(true)
-        })
-        .then(() => {
-          this.googleAnalyticsInitializing = false;
-          this.googleAnalyticsReady = true;
-        })
-        .catch((error) => {
-          this.googleAnalyticsInitializing = false;
-          this.googleAnalyticsReady = false;
+    this.googleAnalytics.startTrackerWithId(this.config.googleAnalyticsId)
+      .then(() => {
+        return this.googleAnalytics.setAppVersion(this.config.version);
+      })
+      /* crashes GA on mobile currently, also not sure if you actually want to track this
+      .then(() => {
+        return this.googleAnalytics.setAllowIDFACollection(true);
+      })
+      */
+      .then(() => {
+        this.googleAnalyticsInitializing = false;
+        this.googleAnalyticsReady = true;
+      })
+      .catch((error) => {
+        this.googleAnalyticsInitializing = false;
+        this.googleAnalyticsReady = false;
 
-          console.log('Error starting Google Analytics', error)
-        });
-    }
+        this.events.publish(Event.SYSTEM.GENERAL_ERROR, 'Error starting Google Analytics!');
+      });
   }
 
   private setupListeners(): void {
@@ -53,7 +52,7 @@ export class GoogleAnalyticsModel {
             .then(() => {})
             .catch((error) => { console.log(error) });
         })
-        .catch((error) => {})
+        .catch(() => {})
     });
     this.events.subscribe(Event.AUTH.LOGOUT.SUCCESS, () => {
       this.waitForGoogleAnalytics()
@@ -62,7 +61,7 @@ export class GoogleAnalyticsModel {
             .then(() => {})
             .catch((error) => { console.log(error) });
         })
-        .catch((error) => {})
+        .catch(() => {})
     });
   }
 
@@ -100,7 +99,7 @@ export class GoogleAnalyticsModel {
           .then(() => {})
           .catch((error) => { console.log(error) });
       })
-      .catch((error) => {})
+      .catch(() => {})
   }
 
   public trackEvent(category: string, action: string, label: string = null, value: number = null, newSession: boolean = false) {
@@ -110,7 +109,7 @@ export class GoogleAnalyticsModel {
           .then(() => {})
           .catch((error) => { console.log(error) });
       })
-      .catch((error) => {})
+      .catch(() => {})
   }
 
   public trackMetric(key: number, value: any) {
@@ -120,7 +119,7 @@ export class GoogleAnalyticsModel {
           .then(() => {})
           .catch((error) => { console.log(error) });
       })
-      .catch((error) => {})
+      .catch(() => {})
   }
 
 }
