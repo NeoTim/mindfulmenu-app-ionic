@@ -53,6 +53,8 @@ import { MinuteTimeFormatPipe } from "./util/pipe/MinuteTimeFormatPipe";
 import { AuthForgotPasswordComponent } from "./component/view/auth/forgotPassword/AuthForgotPasswordComponent";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import 'web-animations-js/web-animations.min';
+import { GoogleAnalytics } from "@ionic-native/google-analytics";
+import { GoogleAnalyticsModel } from "./model/GoogleAnalyticsModel";
 
 @NgModule({
   declarations: [
@@ -105,10 +107,12 @@ import 'web-animations-js/web-animations.min';
     SplashScreen,
     Network,
     InAppBrowser,
+    GoogleAnalytics,
     ApplicationConfig,
     FirebaseManager, FirestoreManager,
     ApplicationModel,
     NetworkModel,
+    GoogleAnalyticsModel,
     AuthModel, AuthService,
     IngredientModel, IngredientService,
     MealModel, MealService,
@@ -129,6 +133,7 @@ import 'web-animations-js/web-animations.min';
                    ApplicationModel: ApplicationModel,
                    AuthModel: AuthModel,
                    NetworkModel: NetworkModel,
+                   GoogleAnalyticsModel: GoogleAnalyticsModel,
                    IngredientModel: IngredientModel,
                    MealModel: MealModel,
                    WeeklyMenuModel: WeeklyMenuModel,
@@ -140,6 +145,7 @@ import 'web-animations-js/web-animations.min';
         ApplicationModel,
         AuthModel,
         NetworkModel,
+        GoogleAnalyticsModel,
         IngredientModel,
         MealModel,
         WeeklyMenuModel,

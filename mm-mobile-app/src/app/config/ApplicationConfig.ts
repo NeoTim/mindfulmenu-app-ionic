@@ -14,6 +14,7 @@ export class ApplicationConfig {
     public websiteUrl: string;
     public subscriptionUrl: { oneMonth: string, sixMonths: string };
     public contactEmail: string;
+    public googleAnalyticsId: string;
 
     public environment: string;
 
@@ -40,7 +41,8 @@ export class ApplicationConfig {
             oneMonth: 'https://app.moonclerk.com/pay/7j48jz79l754?embed=true',
             sixMonths: 'https://app.moonclerk.com/pay/49iz8yjpvzpr?embed=true'
           },
-          contactEmail: 'ourmindfulmenu@gmail.com'
+          contactEmail: 'ourmindfulmenu@gmail.com',
+          googleAnalyticsId: 'UA-121323114-1'
 
         },
         DEVELOP: {
@@ -58,7 +60,8 @@ export class ApplicationConfig {
             oneMonth: 'https://app.moonclerk.com/pay/7j48jz79l754?embed=true',
             sixMonths: 'https://app.moonclerk.com/pay/49iz8yjpvzpr?embed=true'
           },
-          contactEmail: 'ourmindfulmenu@gmail.com'
+          contactEmail: 'ourmindfulmenu@gmail.com',
+          googleAnalyticsId: 'UA-121323114-1'
         }
     };
 
@@ -73,6 +76,7 @@ export class ApplicationConfig {
           this.websiteUrl = this.environmentConfigs[environmentName].websiteUrl;
           this.subscriptionUrl = this.environmentConfigs[environmentName].subscriptionUrl;
           this.contactEmail = this.environmentConfigs[environmentName].contactEmail;
+          this.googleAnalyticsId = this.environmentConfigs[environmentName].googleAnalyticsId;
 
           this.environment = environmentName;
         }

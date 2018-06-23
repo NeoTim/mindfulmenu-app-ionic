@@ -16,6 +16,7 @@ import { IngredientCategory } from "../../../../../data/enum/menu/IngredientCate
 import { ApplicationModel } from "../../../../../model/ApplicationModel";
 import { ViewUtil } from "../../../../../util/ViewUtil";
 import { animate, state, style, transition, trigger } from "@angular/animations";
+import { GoogleAnalyticsModel } from "../../../../../model/GoogleAnalyticsModel";
 
 @Component({
   selector: 'shopping-list',
@@ -73,7 +74,8 @@ export class ShoppingListComponent {
               public weeklyPlanModel: WeeklyPlanModel,
               public mealModel: MealModel,
               public ingredientModel: IngredientModel,
-              public userModel: UserModel) {
+              public userModel: UserModel,
+              public googleAnalyticsModel: GoogleAnalyticsModel) {
 
     this.currentUser = userModel.currentUser;
     this.weeklyPlanId = this.navParams.data.weeklyPlanId;
@@ -81,6 +83,8 @@ export class ShoppingListComponent {
 
   ionViewDidLoad() {
     this.init();
+
+    this.googleAnalyticsModel.trackView('SHOPPING_LIST');
   }
 
   init() {

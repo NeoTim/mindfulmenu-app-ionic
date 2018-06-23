@@ -7,6 +7,7 @@ import { WeeklyPlanDTO } from "../../../../../data/dto/menu/WeeklyPlanDTO";
 import { WeeklyPlanModel } from "../../../../../model/WeeklyPlanModel";
 import { WeeklyPlan } from "../../../../../data/local/menu/WeeklyPlan";
 import { MealDTO } from "../../../../../data/dto/menu/MealDTO";
+import { GoogleAnalyticsModel } from "../../../../../model/GoogleAnalyticsModel";
 
 @Component({
   selector: 'prep-list',
@@ -23,7 +24,8 @@ export class PrepListComponent {
               public navParams: NavParams,
               public weeklyPlanModel: WeeklyPlanModel,
               public mealModel: MealModel,
-              public userModel: UserModel) {
+              public userModel: UserModel,
+              public googleAnalyticsModel: GoogleAnalyticsModel) {
 
     this.currentUser = userModel.currentUser;
     this.weeklyPlanId = this.navParams.data.weeklyPlanId;
@@ -31,6 +33,8 @@ export class PrepListComponent {
 
   ionViewDidLoad() {
     this.init();
+
+    this.googleAnalyticsModel.trackView('PREP_LIST');
   }
 
   init() {

@@ -31,6 +31,7 @@
     "@angular/platform-browser": "5.2.9",
     "@angular/platform-browser-dynamic": "5.2.9",
     "@ionic-native/core": "4.6.0",
+    "@ionic-native/google-analytics": "^4.8.0",
     "@ionic-native/in-app-browser": "^4.7.0",
     "@ionic-native/keyboard": "^4.7.0",
     "@ionic-native/network": "^4.7.0",
@@ -45,6 +46,7 @@
     "cordova-browser": "5.0.3",
     "cordova-ios": "4.5.4",
     "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-google-analytics": "^1.8.3",
     "cordova-plugin-inappbrowser": "^3.0.0",
     "cordova-plugin-ionic-keyboard": "^2.1.2",
     "cordova-plugin-ionic-webview": "^1.2.1",
@@ -86,7 +88,8 @@
       "cordova-sqlite-storage": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-keyboard": {},
-      "cordova-plugin-inappbrowser": {}
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-google-analytics": {}
     },
     "platforms": [
       "browser",

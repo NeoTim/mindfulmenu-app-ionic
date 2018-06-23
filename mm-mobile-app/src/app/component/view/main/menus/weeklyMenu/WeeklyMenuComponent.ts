@@ -12,6 +12,7 @@ import { WeeklyPlanModel } from "../../../../../model/WeeklyPlanModel";
 import { WeeklyPlanDTO } from "../../../../../data/dto/menu/WeeklyPlanDTO";
 import { MealComponent } from "../../meal/MealComponent";
 import { ApplicationModel } from "../../../../../model/ApplicationModel";
+import { GoogleAnalyticsModel } from "../../../../../model/GoogleAnalyticsModel";
 
 @Component({
   selector: 'weekly-menu',
@@ -40,7 +41,8 @@ export class WeeklyMenuComponent {
               public weeklyMenuModel: WeeklyMenuModel,
               public weeklyPlanModel: WeeklyPlanModel,
               public mealModel: MealModel,
-              public userModel: UserModel) {
+              public userModel: UserModel,
+              public googleAnalyticsModel: GoogleAnalyticsModel) {
 
     this.currentUser = userModel.currentUser;
     this.weeklyMenuId = this.navParams.data.weeklyMenuId;
@@ -48,6 +50,8 @@ export class WeeklyMenuComponent {
 
   ionViewDidLoad() {
     this.init();
+
+    this.googleAnalyticsModel.trackView('WEEKLY_MENU');
 
     this.navbar.backButtonClick = (event: UIEvent) => {
       this.navCtrl.pop({ animation: 'ios-transition'} );

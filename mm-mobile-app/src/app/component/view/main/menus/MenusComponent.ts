@@ -7,6 +7,7 @@ import { UserModel } from "../../../../model/UserModel";
 import * as _ from "lodash";
 import { WeeklyMenuComponent } from "./weeklyMenu/WeeklyMenuComponent";
 import { FavoritesComponent } from "./favorites/FavoritesComponent";
+import { GoogleAnalyticsModel } from "../../../../model/GoogleAnalyticsModel";
 
 @Component({
   selector: 'menus',
@@ -28,13 +29,16 @@ export class MenusComponent {
 
   constructor(public navCtrl: NavController,
               public weeklyMenuModel: WeeklyMenuModel,
-              public userModel: UserModel) {
+              public userModel: UserModel,
+              public googleAnalyticsModel: GoogleAnalyticsModel) {
 
     this.currentUser = userModel.currentUser;
   }
 
   ionViewDidLoad() {
     this.init();
+
+    this.googleAnalyticsModel.trackView('MENUS');
   }
 
   init() {

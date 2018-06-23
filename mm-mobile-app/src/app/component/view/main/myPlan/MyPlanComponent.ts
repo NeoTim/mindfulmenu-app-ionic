@@ -17,6 +17,7 @@ import { ShoppingListComponent } from "./shoppingList/ShoppingListComponent";
 import { ApplicationModel } from "../../../../model/ApplicationModel";
 import { MealComponent } from "../meal/MealComponent";
 import { ViewUtil } from "../../../../util/ViewUtil";
+import { GoogleAnalyticsModel } from "../../../../model/GoogleAnalyticsModel";
 
 @Component({
   selector: 'my-plan',
@@ -43,13 +44,16 @@ export class MyPlanComponent {
               public weeklyMenuModel: WeeklyMenuModel,
               public weeklyPlanModel: WeeklyPlanModel,
               public mealModel: MealModel,
-              public userModel: UserModel) {
+              public userModel: UserModel,
+              public googleAnalyticsModel: GoogleAnalyticsModel) {
 
     this.currentUser = userModel.currentUser;
   }
 
   ionViewDidLoad() {
     this.init();
+
+    this.googleAnalyticsModel.trackView('MY_PLAN');
   }
 
   ionViewDidEnter() {
@@ -227,6 +231,8 @@ export class MyPlanComponent {
   }
 
   emailPlan() {
+    this.googleAnalyticsModel.trackEvent('PLAN', 'EMAIL');
+
     this.weeklyPlanModel.emailPlan(WeeklyPlan.toDTO(this.weeklyPlan), this.currentUser.id)
       .then(() => {
         this.viewUtil.showToast('Check your email for printable version of the plan.');

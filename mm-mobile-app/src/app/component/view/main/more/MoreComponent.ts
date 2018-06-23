@@ -7,6 +7,7 @@ import { ViewUtil } from "../../../../util/ViewUtil";
 import { AccountComponent } from "./account/AccountComponent";
 import { AboutComponent } from "./about/AboutComponent";
 import { ApplicationConfig } from "../../../../config/ApplicationConfig";
+import { GoogleAnalyticsModel } from "../../../../model/GoogleAnalyticsModel";
 
 @Component({
   selector: 'more',
@@ -23,9 +24,19 @@ export class MoreComponent {
               public actionSheetCtrl: ActionSheetController,
               public config: ApplicationConfig,
               public authModel: AuthModel,
-              public userModel: UserModel) {
+              public userModel: UserModel,
+              public googleAnalyticsModel: GoogleAnalyticsModel) {
 
     this.currentUser = userModel.currentUser;
+  }
+
+  ionViewDidLoad() {
+    this.init();
+
+    this.googleAnalyticsModel.trackView('MORE');
+  }
+
+  init() {
   }
 
   showAccount() {

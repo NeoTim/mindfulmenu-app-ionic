@@ -10,6 +10,8 @@ export class Environment {
 
     contactEmail: string;
 
+    googleAnalyticsId: string;
+
     production: boolean;
 
 }

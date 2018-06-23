@@ -9,6 +9,7 @@ import { WeeklyPlanModel } from "../../../../../model/WeeklyPlanModel";
 import * as _ from "lodash";
 import { MealComponent } from "../../meal/MealComponent";
 import { ApplicationModel } from "../../../../../model/ApplicationModel";
+import { GoogleAnalyticsModel } from "../../../../../model/GoogleAnalyticsModel";
 
 @Component({
   selector: 'favorites',
@@ -32,13 +33,16 @@ export class FavoritesComponent {
               public applicationModel: ApplicationModel,
               public mealModel: MealModel,
               public weeklyPlanModel: WeeklyPlanModel,
-              public userModel: UserModel) {
+              public userModel: UserModel,
+              public googleAnalyticsModel: GoogleAnalyticsModel) {
 
     this.currentUser = userModel.currentUser;
   }
 
   ionViewDidLoad() {
     this.init();
+
+    this.googleAnalyticsModel.trackView('FAVORITES');
 
     this.navbar.backButtonClick = (event: UIEvent) => {
       this.navCtrl.pop({ animation: 'ios-transition'} );
