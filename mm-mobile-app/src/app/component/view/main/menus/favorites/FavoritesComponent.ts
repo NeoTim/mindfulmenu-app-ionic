@@ -143,8 +143,9 @@ export class FavoritesComponent {
     this.userModel.toggleFavoriteMeal(meal.id, isFavorite)
       .then((user: UserDTO) => {
         this.currentUser = user;
-        this.getFavoriteMeals()
-          .catch(() => {});
+
+        _.remove(this.favoriteMeals, ['id', meal.id ]);
+        this.calculateInCurrentPlanMealsMap(_.map(this.favoriteMeals, 'id'), this.weeklyPlanDto.mealIds);
       })
       .catch((error) => {});
   }

@@ -154,7 +154,7 @@ export class ShoppingListComponent {
 
     return this.ingredientModel.getIngredients(ingredientIds)
       .then((ingredients: IngredientDTO[]) => {
-        this.mealIngredients = ingredients;
+        this.mealIngredients = _.sortBy(ingredients, ['id']);
         return ingredients;
       })
       .catch((error) => {
@@ -165,7 +165,7 @@ export class ShoppingListComponent {
   getCustomIngredients(): Promise<IngredientDTO[]> {
     return this.ingredientModel.getIngredients(this.weeklyPlan.customIngredientIds)
       .then((ingredients: IngredientDTO[]) => {
-        this.customIngredients = ingredients;
+        this.customIngredients = _.sortBy(ingredients, ['id']);
         return ingredients;
       })
       .catch((error) => {
@@ -405,24 +405,18 @@ export class ShoppingListComponent {
         return this.ingredientModel.createIngredient(ingredient);
       })
       .then((ingredient: IngredientDTO) => {
-        return this.weeklyPlanModel.addCustomIngredientToWeeklyPlan(this.weeklyPlan, ingredient.id);
-      })
-      .then((weeklyPlan: WeeklyPlanDTO) => {
-        this.weeklyPlan = weeklyPlan;
+        this.weeklyPlanModel.addCustomIngredientToWeeklyPlan(this.weeklyPlan, ingredient.id)
+          .then((weeklyPlan: WeeklyPlanDTO) => {
+            this.weeklyPlan = weeklyPlan;
 
-        // We've added an ingredient to DB and then assigned it to weekly plan
-        // weekly plan customIngredientIds is updated and we have the newly created Ingredient.
-        // At this stage, we could manipulate model (ShoppingList) directly (using that new Ingredient), so that we would "fake" sync with the server
-        // or we could add that new Ingredient to customIngredients and sync the model.
-        // But I want to avoid managing local data and exposing the app to potential corner-case errors (i.e. with order in display, most probably),
-        // so I'm just reloading custom ingredients and building model from scratch.
-        // Less code, less potential for errors. But - yes - that is one additional, potentially "unnecessary", call.
-        return this.getCustomIngredients();
-      })
-      .then((customIngredients: IngredientDTO[]) => {
-        let allIngredients: IngredientDTO[] = this.mealIngredients.concat(this.customIngredients);
-        this.buildModel(allIngredients);
-        this.dtoToModel();
+            this.customIngredients.push(ingredient);
+            this.customIngredients = _.sortBy(this.customIngredients, ['id']);
+
+            let allIngredients: IngredientDTO[] = this.mealIngredients.concat(this.customIngredients);
+            this.buildModel(allIngredients);
+            this.dtoToModel();
+          })
+          .catch((error) => {});
       })
       .catch((error) => {});
   }
@@ -440,10 +434,9 @@ export class ShoppingListComponent {
       .then((weeklyPlan: WeeklyPlanDTO) => {
         this.weeklyPlan = weeklyPlan;
 
-        // see the note in addItemToCategory above
-        return this.getCustomIngredients();
-      })
-      .then((customIngredients: IngredientDTO[]) => {
+        _.remove(this.customIngredients, ['id', item.ingredient.id ]);
+        this.customIngredients = _.sortBy(this.customIngredients, ['id']);
+
         let allIngredients: IngredientDTO[] = this.mealIngredients.concat(this.customIngredients);
         this.buildModel(allIngredients);
         this.dtoToModel();

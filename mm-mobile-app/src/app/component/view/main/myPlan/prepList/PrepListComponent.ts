@@ -7,8 +7,6 @@ import { WeeklyPlanDTO } from "../../../../../data/dto/menu/WeeklyPlanDTO";
 import { WeeklyPlanModel } from "../../../../../model/WeeklyPlanModel";
 import { WeeklyPlan } from "../../../../../data/local/menu/WeeklyPlan";
 import { MealDTO } from "../../../../../data/dto/menu/MealDTO";
-import { IngredientDTO } from "../../../../../data/dto/menu/IngredientDTO";
-import { IngredientModel } from "../../../../../model/IngredientModel";
 
 @Component({
   selector: 'prep-list',
@@ -25,7 +23,6 @@ export class PrepListComponent {
               public navParams: NavParams,
               public weeklyPlanModel: WeeklyPlanModel,
               public mealModel: MealModel,
-              public ingredientModel: IngredientModel,
               public userModel: UserModel) {
 
     this.currentUser = userModel.currentUser;
@@ -50,32 +47,18 @@ export class PrepListComponent {
 
   private process(weeklyPlan: WeeklyPlanDTO) {
     let weeklyPlanWithMeals: WeeklyPlan = WeeklyPlan.fromDTO(weeklyPlan);
-    let mealsLoaded: boolean = false;
-    let ingredientsLoaded: boolean = false;
 
     this.mealModel.getMeals(weeklyPlan.mealIds)
       .then((meals: MealDTO[]) => {
         weeklyPlanWithMeals.meals = meals;
 
-        mealsLoaded = true;
+        this.weeklyPlan = weeklyPlanWithMeals;
 
-        if (mealsLoaded && ingredientsLoaded) {
-          this.weeklyPlan = weeklyPlanWithMeals;
-        }
       })
       .catch((error) => {});
 
-    this.ingredientModel.getIngredients(weeklyPlan.customIngredientIds)
-      .then((ingredients: IngredientDTO[]) => {
-        weeklyPlanWithMeals.customIngredients = ingredients;
-
-        ingredientsLoaded = true;
-
-        if (mealsLoaded && ingredientsLoaded) {
-          this.weeklyPlan = weeklyPlanWithMeals;
-        }
-      })
-      .catch((error) => {});
+    // Technically, we should also load customIngredients here to completely fill WeeklyPlan, but we don't need them here so far
+    // I've been loading them before, check repo history
   }
 
   close() {

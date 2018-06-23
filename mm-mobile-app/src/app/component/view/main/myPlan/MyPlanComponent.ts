@@ -12,8 +12,6 @@ import { DateUtil } from "../../../../util/DateUtil";
 import * as _ from "lodash";
 import { WeeklyMenuDTO } from "../../../../data/dto/menu/WeeklyMenuDTO";
 import { WeeklyMenuModel } from "../../../../model/WeeklyMenuModel";
-import { IngredientModel } from "../../../../model/IngredientModel";
-import { IngredientDTO } from "../../../../data/dto/menu/IngredientDTO";
 import { PrepListComponent } from "./prepList/PrepListComponent";
 import { ShoppingListComponent } from "./shoppingList/ShoppingListComponent";
 import { ApplicationModel } from "../../../../model/ApplicationModel";
@@ -44,7 +42,6 @@ export class MyPlanComponent {
               public applicationModel: ApplicationModel,
               public weeklyMenuModel: WeeklyMenuModel,
               public weeklyPlanModel: WeeklyPlanModel,
-              public ingredientModel: IngredientModel,
               public mealModel: MealModel,
               public userModel: UserModel) {
 
@@ -123,40 +120,21 @@ export class MyPlanComponent {
     return new Promise((resolve, reject) => {
       let weeklyPlanWithMeals: WeeklyPlan = WeeklyPlan.fromDTO(weeklyPlan);
 
-      let mealsLoaded: boolean = false;
-      let ingredientsLoaded: boolean = false;
-
       this.calculateFavoriteMealsMap(weeklyPlan.mealIds, this.currentUser.favoriteMealIds);
 
       this.mealModel.getMeals(weeklyPlan.mealIds)
         .then((meals: MealDTO[]) => {
           weeklyPlanWithMeals.meals = meals;
 
-          mealsLoaded = true;
-
-          if (mealsLoaded && ingredientsLoaded) {
-            this.weeklyPlan = weeklyPlanWithMeals;
-            resolve(this.weeklyPlan);
-          }
+          this.weeklyPlan = weeklyPlanWithMeals;
+          resolve(this.weeklyPlan);
         })
         .catch((error) => {
           reject(error);
         });
 
-      this.ingredientModel.getIngredients(weeklyPlan.customIngredientIds)
-        .then((ingredients: IngredientDTO[]) => {
-          weeklyPlanWithMeals.customIngredients = ingredients;
-
-          ingredientsLoaded = true;
-
-          if (mealsLoaded && ingredientsLoaded) {
-            this.weeklyPlan = weeklyPlanWithMeals;
-            resolve(this.weeklyPlan);
-          }
-        })
-        .catch((error) => {
-          reject(error);
-        });
+      // Technically, we should also load customIngredients here to completely fill WeeklyPlan, but we don't need them here so far
+      // I've been loading them before, check repo history
     });
   }
 
@@ -197,10 +175,7 @@ export class MyPlanComponent {
       .then((user: UserDTO) => {
         this.currentUser = user;
 
-        // this.calculateFavoriteMealsMap(_.map(this.weeklyPlan.meals, 'id'), this.currentUser.favoriteMealIds);
-
-        this.getWeeklyPlan(this.currentWeekRelation)
-          .catch(() => {});
+        this.calculateFavoriteMealsMap(_.map(this.weeklyPlan.meals, 'id'), this.currentUser.favoriteMealIds);
       })
       .catch((error) => {});
   }
@@ -221,8 +196,8 @@ export class MyPlanComponent {
   removeFromPlan(meal: MealDTO) {
     this.weeklyPlanModel.removeMealFromWeeklyPlan(WeeklyPlan.toDTO(this.weeklyPlan), meal.id)
       .then((weeklyPlan: WeeklyPlanDTO) => {
-        this.process(weeklyPlan)
-          .catch(() => {});
+        _.remove(this.weeklyPlan.meals, ['id', meal.id ]);
+        this.calculateFavoriteMealsMap(weeklyPlan.mealIds, this.currentUser.favoriteMealIds);
       })
       .catch((error) => {});
   }
