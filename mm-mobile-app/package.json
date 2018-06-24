@@ -43,7 +43,6 @@
     "@types/lodash": "^4.14.109",
     "class-transformer": "^0.1.9",
     "cordova-android": "7.0.0",
-    "cordova-browser": "5.0.3",
     "cordova-ios": "4.5.4",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-google-analytics": "^1.8.3",
@@ -92,7 +91,6 @@
       "cordova-plugin-google-analytics": {}
     },
     "platforms": [
-      "browser",
       "android",
       "ios"
     ]

@@ -7,7 +7,7 @@
 More detailed instructions are [here](https://ionicframework.com/docs/intro/deploying/).
 
 ```
-export MM_ANDROID_VERSION='0.9.14'
+export MM_ANDROID_VERSION='1.0.1'
 export ANDROID_BUILD_TOOLS_PATH='/users/jared/Library/android-sdk-macosx/build-tools/28.0.0-rc1' # Note: You cannot use ~ in the path.
 
 cd path/to/mm-mobile-app
