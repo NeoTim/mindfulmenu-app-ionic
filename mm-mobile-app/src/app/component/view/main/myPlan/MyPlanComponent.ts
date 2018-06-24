@@ -157,6 +157,8 @@ export class MyPlanComponent {
   }
 
   getPreviousWeeklyPlan() {
+    this.googleAnalyticsModel.trackEvent('PLAN', 'PREV_WEEK');
+
     if (this.currentWeekRelation > -MyPlanComponent.WEEK_RANGE) {
       this.weeklyPlan = null;
       this.currentWeekRelation--;
@@ -166,6 +168,8 @@ export class MyPlanComponent {
   }
 
   getNextWeeklyPlan() {
+    this.googleAnalyticsModel.trackEvent('PLAN', 'NEXT_WEEK');
+
     if (this.currentWeekRelation < 0) {
       this.weeklyPlan = null;
       this.currentWeekRelation++;
@@ -185,6 +189,8 @@ export class MyPlanComponent {
   }
 
   addCurrentWeekMenuMeals() {
+    this.googleAnalyticsModel.trackEvent('PLAN', 'ADD_FULL_MENU');
+
     this.weeklyMenuModel.getCurrentWeeklyMenu()
       .then((weeklyMenu: WeeklyMenuDTO) => {
         this.weeklyPlanModel.setMealsForWeeklyPlan(WeeklyPlan.toDTO(this.weeklyPlan), weeklyMenu.mealIds)
@@ -198,6 +204,8 @@ export class MyPlanComponent {
   }
 
   removeFromPlan(meal: MealDTO) {
+    this.googleAnalyticsModel.trackEvent('PLAN', 'RM_MEAL', meal.id);
+
     this.weeklyPlanModel.removeMealFromWeeklyPlan(WeeklyPlan.toDTO(this.weeklyPlan), meal.id)
       .then((weeklyPlan: WeeklyPlanDTO) => {
         _.remove(this.weeklyPlan.meals, ['id', meal.id ]);

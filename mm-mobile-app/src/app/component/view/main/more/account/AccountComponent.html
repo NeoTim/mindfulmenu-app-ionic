@@ -10,12 +10,17 @@
 
   <ion-list id="detail-list" no-lines>
     <ion-item>
+      <div class="item-label">Email</div>
+      <div class="item-value">{{ currentUser.email }}</div>
+    </ion-item>
+    <ion-item>
       <div class="item-label">User ID</div>
       <div class="item-value">{{ currentUser.id }}</div>
     </ion-item>
     <ion-item>
-      <div class="item-label">Email</div>
-      <div class="item-value">{{ currentUser.email }}</div>
+      <div class="item-label">Membership Status</div>
+      <div class="item-value" *ngIf="currentUser.accountStatus == 'SUB_ACTIVE'">Subscribed</div>
+      <div class="item-value" *ngIf="currentUser.accountStatus == 'TRIAL'">Trial period (expires {{ currentUser.trialEndDate | date: 'MMM d' }})</div>
     </ion-item>
   </ion-list>
 

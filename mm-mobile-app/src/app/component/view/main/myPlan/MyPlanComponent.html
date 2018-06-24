@@ -35,24 +35,26 @@
     <ng-container *ngIf="weeklyPlan.meals && (weeklyPlan.meals.length > 0)">
       <ion-grid class="action-buttons">
         <ion-row>
-          <ion-col col-4>
+          <ion-col col-6>
             <button ion-button block type="button" (click)="showPrepList()">
               <span class="prep-list-icon"></span>
               <span>Prep</span>
             </button>
           </ion-col>
-          <ion-col col-4>
+          <ion-col col-6>
             <button ion-button block type="button" (click)="showShoppingList()">
               <span class="shopping-list-icon"></span>
               <span>Shopping</span>
             </button>
           </ion-col>
+          <!--
           <ion-col col-4>
             <button ion-button block type="button" (click)="emailPlan()">
               <span class="email-icon"></span>
               <span>Email</span>
             </button>
           </ion-col>
+          -->
         </ion-row>
       </ion-grid>
 

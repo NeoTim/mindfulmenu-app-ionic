@@ -19,7 +19,6 @@ export class MoreComponent {
   public currentUser: UserDTO;
 
   public applicationVersion: string = this.config.version;
-  public platforms: string[] = this.platformUtil.platforms;
 
   constructor(public navCtrl: NavController,
               public viewUtil: ViewUtil,

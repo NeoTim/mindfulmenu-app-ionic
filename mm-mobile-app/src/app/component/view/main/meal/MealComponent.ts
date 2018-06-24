@@ -13,6 +13,7 @@ import * as _ from "lodash";
 import * as Reveal from "reveal.js/js/reveal.js";
 import { StatusBar } from "@ionic-native/status-bar";
 import { PlatformUtil } from "../../../../util/PlatformUtil";
+import { GoogleAnalyticsModel } from "../../../../model/GoogleAnalyticsModel";
 
 @Component({
   selector: 'meal',
@@ -39,7 +40,8 @@ export class MealComponent {
               public weeklyPlanModel: WeeklyPlanModel,
               public mealModel: MealModel,
               public ingredientModel: IngredientModel,
-              public userModel: UserModel) {
+              public userModel: UserModel,
+              public googleAnalyticsModel: GoogleAnalyticsModel) {
 
     this.currentUser = userModel.currentUser;
     this.mealId = this.navParams.data.mealId;
@@ -47,6 +49,9 @@ export class MealComponent {
 
   ionViewDidLoad() {
     this.init();
+
+    this.googleAnalyticsModel.trackView('MEAL');
+    this.googleAnalyticsModel.trackEvent('MEAL', 'VIEW', this.mealId);
   }
 
   ionViewDidLeave() {

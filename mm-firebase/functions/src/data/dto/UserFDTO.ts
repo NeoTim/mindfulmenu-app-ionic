@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { IdentifiableDTO } from "./IdentifiableDTO";
 import { DateUtil } from "../../util/DateUtil";
 import { AccountStatus } from "../enum/user/AccountStatus";
+import { SubPayService } from "../enum/user/SubPayService";
 
 export class UserFDTO extends IdentifiableDTO {
 
@@ -25,6 +26,17 @@ export class UserFDTO extends IdentifiableDTO {
   @Transform(DateUtil.firebaseCloudFunctionDateConversion)
   lastAutomaticUpdateDate: Date;
 
+  @Transform(DateUtil.firebaseCloudFunctionDateConversion)
+  trialEndDate: Date;
+
+  @Transform(DateUtil.firebaseCloudFunctionDateConversion)
+  lastSubPayDate: Date;
+
+  @Transform(DateUtil.firebaseCloudFunctionDateConversion)
+  subPayExpiresDate: Date;
+
+  subPayService: SubPayService;
+
   automaticUpdateEnabled: boolean;
 
   accountStatus: AccountStatus;
@@ -39,7 +51,7 @@ export class UserFDTO extends IdentifiableDTO {
     let userFDTO = new UserFDTO();
 
     const copiedProperties: string[] =
-      ['id', 'firstName', 'lastName', 'email', 'source', 'favoriteMealIds', 'emailVerified', 'lastLoginDate', 'lastAutomaticUpdateDate', 'automaticUpdateEnabled', 'accountStatus', 'isAdmin', 'isEnabled'];
+      ['id', 'firstName', 'lastName', 'email', 'source', 'favoriteMealIds', 'emailVerified', 'lastLoginDate', 'lastAutomaticUpdateDate', 'trialEndDate', 'lastSubPayDate', 'subPayExpiresDate', 'subPayService', 'automaticUpdateEnabled', 'accountStatus', 'isAdmin', 'isEnabled'];
 
     for (let copiedProperty of copiedProperties) {
       if (_.has(dto, copiedProperty)) {
@@ -54,7 +66,7 @@ export class UserFDTO extends IdentifiableDTO {
     let dto = new UserDTO();
 
     const copiedProperties: string[] =
-      ['id', 'firstName', 'lastName', 'email', 'source', 'favoriteMealIds', 'emailVerified', 'lastLoginDate', 'lastAutomaticUpdateDate', 'automaticUpdateEnabled', 'accountStatus', 'isAdmin', 'isEnabled'];
+      ['id', 'firstName', 'lastName', 'email', 'source', 'favoriteMealIds', 'emailVerified', 'lastLoginDate', 'lastAutomaticUpdateDate', 'trialEndDate', 'lastSubPayDate', 'subPayExpiresDate', 'subPayService', 'automaticUpdateEnabled', 'accountStatus', 'isAdmin', 'isEnabled'];
 
     for (let copiedProperty of copiedProperties) {
       if (_.has(userFDTO, copiedProperty)) {

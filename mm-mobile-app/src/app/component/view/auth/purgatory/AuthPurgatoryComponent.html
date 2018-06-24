@@ -3,14 +3,35 @@
 <ion-content class="with-top-doodad" padding>
 
   <div id="purgatory">
+    <div *ngIf="currentUser.accountStatus == 'EMAIL_UNVERIFIED'">
+        <h1>Account Pending</h1>
+        <p>You're almost done...</p>
+        <p>Just need to verify your email address.  Check your email for a verification link, then come back here and click "Try Again". </p>    
+    </div>
 
-    <h1>Account Pending</h1>
-    <p>You're almost done...</p>
-    <p>Check your email for a verification link and further instructions. Then our team will contact you within 2 days letting you know when your account is active.</p>
+    <div *ngIf="currentUser.accountStatus == 'TRIAL_EXPIRED'">
+        <h1>Trial Ended</h1>
+        <p>Oh no!</p>
+        <p>It looks like the free trial period has ended without a subscription.  Check your email for more information.</p>    
+    </div>
 
+    <div *ngIf="currentUser.accountStatus == 'SUB_EXPIRED'">
+        <h1>Subscription Canceled</h1>
+        <p>It looks like your subscription has been cancelled.</p>
+        <p>If you would like to re-subscribe, just update your memberhsip and check back.</p>
+        <p>If you have any questions or concerns, please contact us at ourmindfulmenu@gmail.com.</p>    
+    </div>
+
+    <div *ngIf="currentUser.accountStatus == 'SUB_ERROR'">
+        <h1>Subscription Error</h1>
+        <p>It looks like there was an issue with your subscription.</p>
+        <p>Check your membership information, and check back.</p>
+        <p>If you have any questions or concerns, please contact us at ourmindfulmenu@gmail.com.</p>    
+    </div>
+    
     <div class="purgatory-button-wrapper-1">
       <div class="button-wrapper">
-        <button ion-button block outline type="button" (click)="tryAgain()">Re-check my account status</button>
+        <button ion-button block outline type="button" (click)="tryAgain()">Try again</button>
       </div>
       <div class="button-wrapper">
         <button ion-button block color="danger" type="button" (click)="logout()" margin-top>Logout</button>

@@ -48,8 +48,15 @@
                 <div *ngIf="passwordRepeat.errors.minlength">Password needs at least 6 characters.</div>
                 <div *ngIf="passwordRepeat.errors.equalTo">Passwords do not match.</div>
               </div>
+
+              <ion-label class="source-label">How did you hear about us?</ion-label>
               <ion-item class="source">
-                <ion-textarea [(ngModel)]="signupData.source" name="source" #source="ngModel" type="text" placeholder="How did you hear about us?"></ion-textarea>
+                <ion-select class="full-width" [(ngModel)]="signupData.source" name="source" #source="ngModel">
+                  <ion-option value="STORE">Found on app store</ion-option>
+                  <ion-option value="SOCIAL_MEDIA">Saw on social media</ion-option>
+                  <ion-option value="FRIEND">Referred by a friend</ion-option>
+                  <ion-option value="OTHER">Other</ion-option>
+                </ion-select>
               </ion-item>
               <div class="error" *ngIf="signUpForm.submitted && source.invalid">
                 <div *ngIf="source.errors.required">This cannot be empty.</div>

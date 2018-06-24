@@ -92,6 +92,7 @@ export class ApplicationComponent implements OnInit {
             this.rootPage = MainComponent;
           }
           else {
+            this.userModel.currentUser = user;
             this.rootPage = AuthPurgatoryComponent;
           }
         })

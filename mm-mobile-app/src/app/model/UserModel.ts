@@ -5,6 +5,7 @@ import { Event } from '../common/Event';
 import { UserDTO } from "../data/dto/user/UserDTO";
 import { UserService } from "../service/UserService";
 import * as _ from "lodash";
+import { GoogleAnalyticsModel } from "./GoogleAnalyticsModel";
 
 @Injectable()
 export class UserModel {
@@ -13,7 +14,8 @@ export class UserModel {
 
   constructor(private events: Events,
               private storage: Storage,
-              private userService: UserService) {
+              private userService: UserService,
+              public googleAnalyticsModel: GoogleAnalyticsModel) {
 
     this.setupListeners();
   }
@@ -62,8 +64,10 @@ export class UserModel {
 
     if (isFavorite) {
       favoriteMealIds.push(mealId);
+      this.googleAnalyticsModel.trackEvent('MEAL', 'FAVORITE', mealId);
     }
     else {
+      this.googleAnalyticsModel.trackEvent('MEAL', 'UNFAVORITE', mealId);
       _.remove(favoriteMealIds, (id: string) => {
         return (id === mealId);
       });

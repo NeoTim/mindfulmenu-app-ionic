@@ -2,6 +2,7 @@ import { IdentifiableDTO } from "../IdentifiableDTO";
 import { Transform } from "class-transformer";
 import { DateUtil } from "../../../util/DateUtil";
 import { AccountStatus } from "../../enum/user/AccountStatus";
+import { SubPayService } from "../../enum/user/SubPayService";
 
 export class UserDTO extends IdentifiableDTO {
 
@@ -22,6 +23,17 @@ export class UserDTO extends IdentifiableDTO {
 
   @Transform(DateUtil.firebaseFirestoreDateConversion)
   lastAutomaticUpdateDate: Date;
+
+  @Transform(DateUtil.firebaseFirestoreDateConversion)
+  trialEndDate: Date;
+
+  @Transform(DateUtil.firebaseFirestoreDateConversion)
+  lastSubPayDate: Date;
+
+  @Transform(DateUtil.firebaseFirestoreDateConversion)
+  subPayExpiresDate: Date;
+
+  subPayService: SubPayService;
 
   automaticUpdateEnabled: boolean;
 
